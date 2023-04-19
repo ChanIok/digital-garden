@@ -5,10 +5,6 @@ import { Venti } from "@/assets";
 const imgArr = [Liyue];
 const imgArrAsync = [Venti];
 
-const store = useStore();
-const isDark = store.isDark;
-const manifest = store.manifest;
-
 export const loadThemeConfig = () => {
   const storageTheme = localStorage.getItem("theme");
   if (storageTheme == undefined || storageTheme == null) {
@@ -43,6 +39,7 @@ export const loadManifest = async () => {
         return getLatestState(txId);
       })
       .then((state) => {
+        const store = useStore();
         store.setManifest(state);
         localStorage.setItem("manifest", JSON.stringify(state));
       });
@@ -50,6 +47,7 @@ export const loadManifest = async () => {
   const storageManifest = localStorage.getItem("manifest");
   if (storageManifest) {
     const manifest = JSON.parse(storageManifest);
+    const store = useStore();
     store.setManifest(manifest);
     setNewManifest();
   } else {
