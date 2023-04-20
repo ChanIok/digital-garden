@@ -19,7 +19,10 @@ import {
   NMessageProvider,
 } from "naive-ui";
 
+import { init } from "@/utils/init";
 const isDark = false;
+
+init();
 </script>
 
 <style lang="less" scoped>

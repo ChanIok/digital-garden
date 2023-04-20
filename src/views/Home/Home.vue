@@ -3,9 +3,12 @@
     <Background />
     <Universe />
     <div class="home-container">
-      <div class="card" :class="{
-        'light-theme': !isDark,
-      }">
+      <div
+        class="card"
+        :class="{
+          'light-theme': !isDark,
+        }"
+      >
         <div class="header">
           <div class="header-left">ChanIok</div>
           <div class="header-right">.eth</div>
@@ -15,7 +18,13 @@
           <span> 这里是我构筑于区块链的一心净土 </span>
           <div class="link">
             <div class="link-item">
-              <n-button text tag="a" href="https://github.com/ChanIok/" target="_blank" color="#ffffffdf">
+              <n-button
+                text
+                tag="a"
+                href="https://github.com/ChanIok/"
+                target="_blank"
+                color="#ffffffdf"
+              >
                 <template #icon>
                   <n-icon>
                     <LogoGithub />
@@ -25,7 +34,13 @@
               </n-button>
             </div>
             <div class="link-item">
-              <n-button text tag="a" href="mailto:chaniok@qq.com" target="_blank" color="#ffffffdf">
+              <n-button
+                text
+                tag="a"
+                href="mailto:chaniok@qq.com"
+                target="_blank"
+                color="#ffffffdf"
+              >
                 <template #icon>
                   <n-icon>
                     <Mail />
@@ -48,9 +63,8 @@ import Background from "@/views/Home/Background.vue";
 import { LogoGithub, Mail } from "@vicons/ionicons5";
 import { useStore } from "@/store";
 
-const store = useStore()
+const store = useStore();
 const isDark = store.isDark;
-
 </script>
 
 <style lang="less" scoped>

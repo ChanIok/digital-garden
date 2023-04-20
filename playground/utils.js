@@ -1,4 +1,8 @@
-import axios from 'axios'
+import path from "path";
+import axios from "axios";
+import * as glob from "glob";
+import fs from "fs";
+
 export const getLatestManifestId = async () => {
   const graphql = {
     query:
@@ -21,4 +25,24 @@ export const getLatestManifestId = async () => {
 
 export const getLatestState = async (txId) => {
   return (await axios.get(`https://arweave.net/${txId}/manifest.json`)).data;
+};
+
+export const generateLocalManifest = (filesPath, outPutPath) => {
+  const resolvedBasePath = path.resolve(filesPath);
+  const filePaths = glob.sync("**/*", {
+    cwd: resolvedBasePath,
+    nodir: true,
+  });
+  const paths = Object.fromEntries(
+    filePaths.map((filePath) => [filePath, { id: "", hash: "" }])
+  );
+  const manifest = {
+    manifest: "arweave/paths",
+    version: "0.1.0",
+    index: {
+      path: "index.html",
+    },
+    paths,
+  };
+  fs.writeFileSync(outPutPath, JSON.stringify(manifest));
 };

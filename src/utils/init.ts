@@ -1,13 +1,8 @@
-import { isLoadCompleted } from "@/store";
-import ClipboardJS from "clipboard";
 import { initHandler } from "./handler";
 import { loadImgs, loadManifest, loadThemeConfig } from "./loader";
 
 export const state = { isLoadManifestCompleted: false };
 
-export const initUtils = () => {
-  const clipboard = new ClipboardJS(".btn");
-};
 
 export const init = async () => {
   window.parent.postMessage(
@@ -15,7 +10,6 @@ export const init = async () => {
     "*"
   );
   initHandler();
-  initUtils();
   loadThemeConfig();
   await loadImgs();
   if (!state.isLoadManifestCompleted) {
@@ -25,5 +19,4 @@ export const init = async () => {
     { app: "PlaneOfEuthymia", event: "loadCompleted" },
     "*"
   );
-  isLoadCompleted.value = true;
 };

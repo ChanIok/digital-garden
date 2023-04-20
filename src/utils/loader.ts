@@ -1,7 +1,11 @@
 import { useStore } from "@/store";
 import { getLatestManifestId, getLatestState } from "./artools";
+import axios from "axios";
+import { appEnv } from "@/config";
 import { Liyue } from "@/assets";
 import { Venti } from "@/assets";
+import { IManifest } from "@/typings";
+
 const imgArr = [Liyue];
 const imgArrAsync = [Venti];
 
@@ -33,24 +37,27 @@ export const loadImgs = async () => {
 };
 
 export const loadManifest = async () => {
-  async function setNewManifest() {
-    await getLatestManifestId()
-      .then(async (txId) => {
-        return getLatestState(txId);
-      })
-      .then((state) => {
-        const store = useStore();
-        store.setManifest(state);
-        localStorage.setItem("manifest", JSON.stringify(state));
-      });
+  const setManifest = (manifest: IManifest) => {
+    const store = useStore();
+    store.setManifest(manifest);
+    localStorage.setItem("manifest", JSON.stringify(manifest));
+  };
+  if (appEnv.VITE_USE_LOCAL_MANIFEST) {
+    const res = await axios.get(appEnv.VITE_LOCAL_MANIFEST_URL);
+    setManifest(res.data);
+    return;
   }
+  async function fetchManifest() {
+    const latestManifestId = await getLatestManifestId();
+    const latestState = await getLatestState(latestManifestId);
+    setManifest(latestState);
+  }
+
   const storageManifest = localStorage.getItem("manifest");
   if (storageManifest) {
     const manifest = JSON.parse(storageManifest);
-    const store = useStore();
-    store.setManifest(manifest);
-    setNewManifest();
+    setManifest(manifest);
   } else {
-    await setNewManifest();
+    await fetchManifest();
   }
 };

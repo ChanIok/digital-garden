@@ -6,7 +6,6 @@ export { useLoadingBarStore } from "@/store/modules/loading-bar";
 export interface IAppState {
   isDark: boolean;
   loadingBarAction: string | null;
-  isLoadCompleted: boolean;
   windowWidth: number;
   currentWritingText: string;
   manifest: IManifest | null;
@@ -16,7 +15,6 @@ export const useStore = defineStore("app", {
   state: (): IAppState => ({
     isDark: false,
     loadingBarAction: null,
-    isLoadCompleted: false,
     windowWidth: 0,
     currentWritingText: "",
     manifest: null,

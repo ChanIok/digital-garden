@@ -11,15 +11,16 @@
 <script setup lang="ts">
 import { onMounted, ref, nextTick, watch } from "vue";
 import axios from "axios";
-import { useStore } from "@/store";
+import { useLoadingBarStore, useStore } from "@/store";
 import Markdown from "@/views/Writings/Markdown.vue";
-
 // import { getFullPath, getWritingsList } from "@/utils/artools";
 import { getWritingLocally } from "@/utils/dev";
 
 import { useRoute } from "vue-router";
 const route = useRoute();
+const loadingBarStore = useLoadingBarStore();
 const store = useStore();
+
 const manifest = store.manifest;
 
 const isListloadCompleted = ref<boolean>(false);
@@ -36,7 +37,7 @@ const loadWriting = async () => {
     return;
   }
   writingListKey.value = path;
-  store.setLoadingBarAction("start");
+  loadingBarStore.startLoadingBar();
 
   if (process.env.NODE_ENV === "development") {
     const text = await getWritingLocally(manifest!.paths[path].id);
@@ -49,7 +50,7 @@ const loadWriting = async () => {
   }
 
   await nextTick();
-  store.setLoadingBarAction("finish");
+  loadingBarStore.finishLoadingBar();
 };
 watch(
   () => route.params.txId,
@@ -59,7 +60,7 @@ watch(
 );
 
 onMounted(async () => {
-  store.startLoadingBar();
+  loadingBarStore.startLoadingBar();
   try {
     // writingList.value = await getWritingsList();
     isListloadCompleted.value = true;
@@ -67,7 +68,7 @@ onMounted(async () => {
   } catch (error) {
     console.log(error);
   }
-  store.finishLoadingBar();
+  loadingBarStore.finishLoadingBar();
 });
 </script>
 
