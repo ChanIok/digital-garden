@@ -18,8 +18,6 @@ import Markdown from "@/views/Writings/Markdown.vue";
 import { getWritingLocally } from "@/utils/dev";
 
 import { useRoute } from "vue-router";
-
-
 const route = useRoute();
 const store = useStore();
 const manifest = store.manifest;
@@ -61,15 +59,15 @@ watch(
 );
 
 onMounted(async () => {
-  store.setLoadingBarAction("start");
+  store.startLoadingBar();
   try {
-    writingList.value = await getWritingsList();
+    // writingList.value = await getWritingsList();
     isListloadCompleted.value = true;
     loadWriting();
   } catch (error) {
     console.log(error);
   }
-  store.setLoadingBarAction("finish");
+  store.finishLoadingBar();
 });
 </script>
 

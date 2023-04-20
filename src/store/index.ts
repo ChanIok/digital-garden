@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { IManifest } from "@/typings";
 
+export { useLoadingBarStore } from "@/store/modules/loading-bar";
+
 export interface IAppState {
   isDark: boolean;
   loadingBarAction: string | null;
@@ -23,11 +25,17 @@ export const useStore = defineStore("app", {
     setCurrentWritingText(val: string) {
       this.currentWritingText = val;
     },
-    setLoadingBarAction(val: string) {
-      this.loadingBarAction = val;
-    },
     setManifest(val: IManifest) {
       this.manifest = val;
+    },
+    startLoadingBar() {
+      this.loadingBarAction = "start";
+    },
+    finishLoadingBar() {
+      this.loadingBarAction = "finish";
+    },
+    errorLoadingBar() {
+      this.loadingBarAction = "error";
     },
   },
 });
