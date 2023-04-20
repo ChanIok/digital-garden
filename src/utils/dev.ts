@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
 import axios from "axios";
 
-export const getWritingLocally = async (txId: string) => {
+export const getLocalWriting = async (txId: string) => {
   let res = "";
   const store = useStore();
   const manifest = store.manifest;

@@ -9,66 +9,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick, watch } from "vue";
-import axios from "axios";
-import { useLoadingBarStore, useStore } from "@/store";
+import { onMounted} from "vue";
 import Markdown from "@/views/Writings/Markdown.vue";
-// import { getFullPath, getWritingsList } from "@/utils/artools";
-import { getWritingLocally } from "@/utils/dev";
-
-import { useRoute } from "vue-router";
-const route = useRoute();
-const loadingBarStore = useLoadingBarStore();
-const store = useStore();
-
-const manifest = store.manifest;
-
-const isListloadCompleted = ref<boolean>(false);
-const writingList = ref<any>([]);
-const writingListKey = ref<string>("about");
-
-const loadWriting = async () => {
-  const txIdTemp = route.params.txId;
-  if (route.params.txId == undefined || route.params.txId == "") {
-    return;
-  }
-  const path = await getFullPath(txIdTemp as string);
-  if (path == "") {
-    return;
-  }
-  writingListKey.value = path;
-  loadingBarStore.startLoadingBar();
-
-  if (process.env.NODE_ENV === "development") {
-    const text = await getWritingLocally(manifest!.paths[path].id);
-    store.setCurrentWritingText(text);
-  } else {
-    const text = (
-      await axios.get(`https://arweave.net/${manifest!.paths[path].id}`)
-    ).data;
-    store.setCurrentWritingText(text);
-  }
-
-  await nextTick();
-  loadingBarStore.finishLoadingBar();
-};
-watch(
-  () => route.params.txId,
-  () => {
-    loadWriting();
-  }
-);
+import { loadWriting } from "@/views/Writings/Writings.js";
 
 onMounted(async () => {
-  loadingBarStore.startLoadingBar();
   try {
-    // writingList.value = await getWritingsList();
-    isListloadCompleted.value = true;
     loadWriting();
   } catch (error) {
     console.log(error);
   }
-  loadingBarStore.finishLoadingBar();
 });
 </script>
 

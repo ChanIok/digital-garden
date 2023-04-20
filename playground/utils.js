@@ -34,7 +34,10 @@ export const generateLocalManifest = (filesPath, outPutPath) => {
     nodir: true,
   });
   const paths = Object.fromEntries(
-    filePaths.map((filePath) => [filePath, { id: "", hash: "" }])
+    filePaths.map((filePath) => [
+      filePath.replace(/\\/g, "/"),
+      { id: "", hash: "" },
+    ])
   );
   const manifest = {
     manifest: "arweave/paths",
@@ -46,3 +49,4 @@ export const generateLocalManifest = (filesPath, outPutPath) => {
   };
   fs.writeFileSync(outPutPath, JSON.stringify(manifest));
 };
+generateLocalManifest("../public", "./manifest.json");
