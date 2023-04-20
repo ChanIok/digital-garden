@@ -1,20 +1,20 @@
-import glob from "glob";
+import * as glob from "glob";
 import path from "path";
 import hash from "object-hash";
 import fs from "fs";
 import Bundlr from "@bundlr-network/client";
 
 export class Uploader {
-  constructor(filesPath) {
+  constructor(filesPath, walletPath) {
     this.filesPath = filesPath;
-    this.jwk = JSON.parse(fs.readFileSync("wallet.json").toString());
+    this.jwk = JSON.parse(fs.readFileSync(walletPath).toString());
     this.bundlr = new Bundlr.default(
       "http://node1.bundlr.network",
       "arweave",
-      jwk
+      this.jwk
     );
     this.resolvedBasePath = path.resolve(filesPath);
-    this.filePaths = glob.sync("**/*", { cwd: resolvedBasePath, nodir: true });
+    this.filePaths = glob.sync("**/*", { cwd: this.resolvedBasePath, nodir: true });
     this.manifest = {
       manifest: "arweave/paths",
       version: "0.1.0",
@@ -52,7 +52,7 @@ export class Uploader {
   }
 
   async uploadManifest() {
-    const manifestPath = path.resolve("./dist/manifest.json");
+    const manifestPath = path.resolve(this.filesPath, "manifest.json");
     fs.writeFileSync(manifestPath, JSON.stringify(this.manifest));
     const manifestHash = hash.sha1(fs.readFileSync(manifestPath).toString());
     const manifestUploadResponse = await this.bundlr.uploadFile(manifestPath);

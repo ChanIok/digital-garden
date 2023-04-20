@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "upload-dist.js",
+  "type": "module",
   "scripts": {
-    "upload": "",
+    "start": "node main.js",
+    "upload": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,7 +14,6 @@
   "license": "ISC",
   "devDependencies": {
     "@bundlr-network/client": "^0.10.5",
-    "dotenv": "^16.0.3",
     "glob": "^10.2.1",
     "object-hash": "^3.0.0"
   }
