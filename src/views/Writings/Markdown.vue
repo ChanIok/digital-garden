@@ -1,21 +1,38 @@
 <template>
   <div id="markdown" ref="markdown">
-    <n-scrollbar>
-      <div v-html="content" v-viewer="{
+    <div
+      v-html="content"
+      v-viewer="{
         movable: false,
         toolbar: false,
         navbar: false,
         title: false,
-      }" class="markdown-content"></div>
-      <n-back-top :right="50" />
-    </n-scrollbar>
+      }"
+      class="markdown-content"
+    ></div>
+    <n-back-top :right="50" />
+
     <div class="markdown-outline">
-      <n-anchor v-if="anchors.length > 0 && anchors[0].node" affix :trigger-top="80" :bound="80" ignore-gap
-        offset-target="#markdown" @click="onClickAnchor">
+      <n-anchor
+        v-if="anchors.length > 0 && anchors[0].node"
+        affix
+        :trigger-top="80"
+        :bound="80"
+        ignore-gap
+        offset-target="#writings"
+        @click="onClickAnchor"
+      >
         <n-ellipsis style="max-width: 240px">
-          <n-anchor-link v-for="item in anchors" :title="item.node.innerText" :href="`#${item.node.id}`">
-            <n-anchor-link v-for="itemChild in item.children" :title="itemChild.node.innerText"
-              :href="`#${itemChild.node.id}`" />
+          <n-anchor-link
+            v-for="item in anchors"
+            :title="item.node.innerText"
+            :href="`#${item.node.id}`"
+          >
+            <n-anchor-link
+              v-for="itemChild in item.children"
+              :title="itemChild.node.innerText"
+              :href="`#${itemChild.node.id}`"
+            />
           </n-anchor-link>
         </n-ellipsis>
       </n-anchor>
@@ -35,7 +52,7 @@ import {
   NEllipsis,
 } from "naive-ui";
 import { useWritingStore } from "@/store";
-const writingStore = useWritingStore()
+const writingStore = useWritingStore();
 
 const onClickAnchor = (e: PointerEvent) => {
   e.preventDefault();
@@ -93,17 +110,25 @@ watch(
 </script>
 
 <style lang="less" scoped>
+@import url("@/styles/md.less");
 #markdown {
-  height: 100%;
-  width: 100%;
   display: flex;
+  justify-content: center;
 
   .markdown-content {
     padding: 30px 40px 0 40px;
     box-sizing: border-box;
     flex: 1;
-    overflow: auto;
 
+    max-width: 880px;
+    margin-bottom: 30px;
+
+    :deep(img) {
+      display: block;
+      // width: 100%;
+      max-width: 720px;
+      cursor: zoom-in;
+    }
     @media only screen and (max-width: 960px) {
       padding: 10px 10px 0 10px;
     }
@@ -111,24 +136,11 @@ watch(
 
   .markdown-outline {
     width: 300px;
-
+    position: fixed;
+    left: calc(50% + 440px);
     @media only screen and (max-width: 1260px) {
       display: none;
     }
-  }
-}
-</style>
-<style lang="less">
-#markdown {
-  .markdown-content {
-    img {
-      display: block;
-      width: 100%;
-      max-width: 720px;
-      cursor: zoom-in;
-    }
-
-    margin-bottom: 30px;
   }
 }
 </style>

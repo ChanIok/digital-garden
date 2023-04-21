@@ -2,7 +2,7 @@
   <div id="writings">
     <div class="writings-container">
       <div class="content">
-        <Markdown />
+        <n-scrollbar> <Markdown /></n-scrollbar>
       </div>
     </div>
   </div>
@@ -11,26 +11,27 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import Markdown from "@/views/Writings/Markdown.vue";
+import { NScrollbar } from "naive-ui";
 import { useStore, useWritingStore } from "@/store";
 import { checkPath, loadWriting } from "@/views/Writings/Writings.js";
 const writingStore = useWritingStore();
-const store = useStore()
+const store = useStore();
 
 onMounted(async () => {
   await checkPath();
 });
 
 writingStore.$subscribe((mutation, state) => {
-  if ((mutation.events as any).key == 'currentWritingPath') {
-    loadWriting()
+  if ((mutation.events as any).key == "currentWritingPath") {
+    loadWriting();
   }
-})
+});
 
 store.$subscribe((mutation, state) => {
-  if ((mutation.events as any).key == 'manifest') {
-    loadWriting()
+  if ((mutation.events as any).key == "manifest") {
+    loadWriting();
   }
-})
+});
 </script>
 
 <style lang="less" scoped>
@@ -79,9 +80,10 @@ store.$subscribe((mutation, state) => {
 
     .content {
       box-sizing: border-box;
-      height: 100%;
       flex: 1;
       overflow: auto;
+      display: flex;
+      justify-content: center;
 
       @media only screen and (max-width: 960px) {
         padding: 10px 10px 0 10px;
