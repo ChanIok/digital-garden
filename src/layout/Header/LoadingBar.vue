@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useLoadingBar } from "naive-ui";
-import { watch } from "vue";
 import { useLoadingBarStore } from "@/store";
 const loadingBar = useLoadingBar();
 const store = useLoadingBarStore();

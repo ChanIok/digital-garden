@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 
-export interface ILoadingBar {
+export interface ILoadingBarStore {
   loadingBarAction: null | "start" | "finish" | "error";
 }
 
 export const useLoadingBarStore = defineStore("loading-bar", {
-  state: (): ILoadingBar => ({
+  state: (): ILoadingBarStore => ({
     loadingBarAction: null,
   }),
   actions: {

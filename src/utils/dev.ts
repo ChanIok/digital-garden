@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
 import axios from "axios";
 
-export const getLocalWriting = async (txId: string) => {
+export const getLocalWritingById = async (txId: string) => {
   let res = "";
   const store = useStore();
   const manifest = store.manifest;
@@ -13,5 +13,16 @@ export const getLocalWriting = async (txId: string) => {
       res = (await axios.get(`./${path}`)).data;
     }
   }
+  return res;
+};
+export const getLocalWritingByPath = async (path: string) => {
+  let res = "";
+  const store = useStore();
+  const manifest = store.manifest;
+  if (!manifest) {
+    return res;
+  }
+  res = (await axios.get(`./${path}`)).data;
+  console.log(res)
   return res;
 };

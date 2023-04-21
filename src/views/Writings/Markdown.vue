@@ -1,38 +1,21 @@
 <template>
   <div id="markdown" ref="markdown">
     <n-scrollbar>
-      <div
-        v-html="content"
-        v-viewer="{
-          movable: false,
-          toolbar: false,
-          navbar: false,
-          title: false,
-        }"
-        class="markdown-content"
-      ></div>
+      <div v-html="content" v-viewer="{
+        movable: false,
+        toolbar: false,
+        navbar: false,
+        title: false,
+      }" class="markdown-content"></div>
       <n-back-top :right="50" />
     </n-scrollbar>
     <div class="markdown-outline">
-      <n-anchor
-        affix
-        :trigger-top="80"
-        :bound="80"
-        ignore-gap
-        offset-target="#markdown"
-        @click="onClickAnchor"
-      >
+      <n-anchor v-if="anchors.length > 0 && anchors[0].node" affix :trigger-top="80" :bound="80" ignore-gap
+        offset-target="#markdown" @click="onClickAnchor">
         <n-ellipsis style="max-width: 240px">
-          <n-anchor-link
-            v-for="item in anchors"
-            :title="item.node.innerText"
-            :href="`#${item.node.id}`"
-          >
-            <n-anchor-link
-              v-for="itemChild in item.children"
-              :title="itemChild.node.innerText"
-              :href="`#${itemChild.node.id}`"
-            />
+          <n-anchor-link v-for="item in anchors" :title="item.node.innerText" :href="`#${item.node.id}`">
+            <n-anchor-link v-for="itemChild in item.children" :title="itemChild.node.innerText"
+              :href="`#${itemChild.node.id}`" />
           </n-anchor-link>
         </n-ellipsis>
       </n-anchor>
@@ -44,7 +27,6 @@
 import { ref, nextTick, watch } from "vue";
 import { getMarkedContent } from "@/utils/marked";
 import { computed } from "@vue/reactivity";
-
 import {
   NScrollbar,
   NBackTop,
@@ -52,15 +34,14 @@ import {
   NAnchorLink,
   NEllipsis,
 } from "naive-ui";
-import { useStore } from "@/store";
-const store = useStore();
-const currentWritingText = store.currentWritingText;
+import { useWritingStore } from "@/store";
+const writingStore = useWritingStore()
 
 const onClickAnchor = (e: PointerEvent) => {
   e.preventDefault();
 };
 const content = computed(() => {
-  return getMarkedContent(currentWritingText);
+  return getMarkedContent(writingStore.currentWritingText);
 });
 const anchors = ref<any>([]);
 const markdown = ref<any>(null);
@@ -87,7 +68,6 @@ const setAnchors = () => {
         parseInt(elements[j].tagName.charAt(1))
       ) {
         nodeLi[j].children.push(t);
-
         flag = true;
         break;
       }
@@ -116,19 +96,22 @@ watch(
 #markdown {
   height: 100%;
   width: 100%;
-
   display: flex;
+
   .markdown-content {
     padding: 30px 40px 0 40px;
     box-sizing: border-box;
     flex: 1;
     overflow: auto;
+
     @media only screen and (max-width: 960px) {
       padding: 10px 10px 0 10px;
     }
   }
+
   .markdown-outline {
     width: 300px;
+
     @media only screen and (max-width: 1260px) {
       display: none;
     }
@@ -144,6 +127,7 @@ watch(
       max-width: 720px;
       cursor: zoom-in;
     }
+
     margin-bottom: 30px;
   }
 }
