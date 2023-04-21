@@ -1,6 +1,13 @@
 import { state } from "./init";
 // import { windowWidth, isDark, manifest } from "@/store";
-import { watch } from "vue";
+import { useWritingStore } from "@/store";
+
+const onWritingPathUpdate = () => {
+  const writingStore = useWritingStore();
+  (window as any).updateWritingPath = (val: string) => {
+    writingStore.setCurrentWritingPath(val);
+  };
+};
 
 const onLoadManifest = () => {
   window.addEventListener("message", function (e) {
@@ -54,4 +61,5 @@ export const initHandler = () => {
   onLoadManifest();
   onResize();
   onThemeChange();
+  onWritingPathUpdate();
 };
