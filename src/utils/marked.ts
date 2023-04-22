@@ -24,7 +24,8 @@ const renderer = {
     if (href === null) {
       return text;
     }
-    let out = `<a href="#" onclick="event.preventDefault();window.updateWritingPath('/writings/${href}')"`;
+    // let out = `<a href="#" onclick="event.preventDefault();window.updateWritingPath('/writings/${href}')"`;
+    let out = `<a path="/writings/${href}"`;
     if (title) {
       out += ' title="' + title + '"';
     }

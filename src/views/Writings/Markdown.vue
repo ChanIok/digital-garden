@@ -52,8 +52,9 @@ import {
   NEllipsis,
 } from "naive-ui";
 import { useWritingStore } from "@/store";
+import { useRouter } from "vue-router";
 const writingStore = useWritingStore();
-
+const router = useRouter();
 const onClickAnchor = (e: PointerEvent) => {
   e.preventDefault();
 };
@@ -65,35 +66,34 @@ const markdown = ref<any>(null);
 
 const setAnchors = () => {
   const elements = markdown.value.querySelectorAll("h1,h2,h3,h4,h5,h6");
-  const tree: any[] = [];
-  tree.push({
-    node: elements[0],
-    children: [],
-  });
-  const nodeLi: any[] = [];
-  nodeLi.push(tree[0]);
+  const tree: any = [{ node: elements[0], children: [] }];
+  const nodeLi = [tree[0]];
+
   for (let i = 1; i < elements.length; i++) {
-    let flag = false;
-    const t = {
-      node: elements[i],
-      children: [],
-    };
-    nodeLi.push(t);
-    for (let j = i - 1; j >= 0; j--) {
+    const t = { node: elements[i], children: [] };
+    nodeLi.some((node, j) => {
       if (
         parseInt(elements[i].tagName.charAt(1)) >
-        parseInt(elements[j].tagName.charAt(1))
+        parseInt(node.node.tagName.charAt(1))
       ) {
-        nodeLi[j].children.push(t);
-        flag = true;
-        break;
+        nodeLi.splice(j + 1, 0, t);
+        node.children.push(t);
+        return true;
       }
-    }
-    if (!flag) {
-      tree.push(t);
-    }
+    }) || tree.push(t);
   }
+
   anchors.value = tree;
+};
+
+const setLinks = () => {
+  const elements = markdown.value.querySelectorAll("a");
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].onclick = () => {
+      const path = elements[i].getAttribute("path");
+      router.push(path);
+    };
+  }
 };
 
 watch(
@@ -102,6 +102,7 @@ watch(
     await nextTick();
     try {
       setAnchors();
+      setLinks();
     } catch (error) {
       console.log(error);
     }

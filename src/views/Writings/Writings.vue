@@ -11,17 +11,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import Markdown from "@/views/Writings/Markdown.vue";
 import { NScrollbar } from "naive-ui";
 import { useStore, useWritingStore } from "@/store";
 import { useRouter, useRoute } from "vue-router";
 import { checkPath, loadWriting } from "@/views/Writings/Writings.js";
-import { watch } from "fs";
+
 const writingStore = useWritingStore();
 const store = useStore();
-const router = useRouter()
-const route = useRoute()
+
+const route = useRoute();
 
 onMounted(async () => {
   await checkPath();
@@ -40,7 +40,14 @@ store.$subscribe((mutation, state) => {
   }
 });
 
-
+watch(
+  () => route.fullPath,
+  (val) => {
+    if (val.startsWith("/writings")) {
+      writingStore.setCurrentWritingPath(val);
+    }
+  }
+);
 </script>
 
 <style lang="less" scoped>
