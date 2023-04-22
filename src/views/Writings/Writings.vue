@@ -2,7 +2,9 @@
   <div id="writings">
     <div class="writings-container">
       <div class="content">
-        <n-scrollbar> <Markdown /></n-scrollbar>
+        <n-scrollbar>
+          <Markdown />
+        </n-scrollbar>
       </div>
     </div>
   </div>
@@ -13,12 +15,17 @@ import { onMounted } from "vue";
 import Markdown from "@/views/Writings/Markdown.vue";
 import { NScrollbar } from "naive-ui";
 import { useStore, useWritingStore } from "@/store";
+import { useRouter, useRoute } from "vue-router";
 import { checkPath, loadWriting } from "@/views/Writings/Writings.js";
+import { watch } from "fs";
 const writingStore = useWritingStore();
 const store = useStore();
+const router = useRouter()
+const route = useRoute()
 
 onMounted(async () => {
   await checkPath();
+  loadWriting();
 });
 
 writingStore.$subscribe((mutation, state) => {
@@ -32,6 +39,8 @@ store.$subscribe((mutation, state) => {
     loadWriting();
   }
 });
+
+
 </script>
 
 <style lang="less" scoped>

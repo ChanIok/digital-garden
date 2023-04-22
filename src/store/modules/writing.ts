@@ -10,6 +10,13 @@ export const useWritingStore = defineStore("writing", {
     currentWritingText: "",
     currentWritingPath: "/writings/index.md",
   }),
+  getters: {
+    currentWritingPathArray: (state) => {
+      const temp = state.currentWritingPath.split("/");
+      temp.shift();
+      return temp;
+    },
+  },
   actions: {
     setCurrentWritingText(val: string) {
       this.currentWritingText = val;

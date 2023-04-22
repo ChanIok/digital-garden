@@ -5,6 +5,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
+    "http":"npx http-server --cors",
     "start": "node main.js",
     "upload": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
