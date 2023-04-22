@@ -23,6 +23,5 @@ export const getLocalWritingByPath = async (path: string) => {
     return res;
   }
   res = (await axios.get(`./${path}`)).data;
-  console.log(res)
   return res;
 };

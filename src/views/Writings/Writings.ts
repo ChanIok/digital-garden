@@ -6,6 +6,7 @@ import { useStore, useWritingStore } from "@/store";
 import { useRoute } from "vue-router";
 import { getLocalWritingByPath } from "@/utils/dev";
 import axios from "axios";
+import { IManifest } from "@/typings";
 
 export const checkPath = async () => {
   const route = useRoute();
@@ -21,12 +22,54 @@ export const checkPath = async () => {
   writingStore.setCurrentWritingPath(path);
 };
 
+const getSubPathsList = (manifest: IManifest, targetPath: string) => {
+  const paths = manifest.paths;
+  const subPaths: any = {};
+  let markdownList = "";
+  for (const path in paths) {
+    if (path.startsWith(targetPath)) {
+      const pathSegments = path.slice(targetPath.length).split("/");
+      if (pathSegments.length > 2) {
+        subPaths[pathSegments[1]] =
+          `${targetPath}/${pathSegments[1]}/index.md`.replace(/\s/g, "%20");
+      } else {
+        subPaths[pathSegments[1]] = `${targetPath}/${pathSegments[1]}`.replace(
+          /\s/g,
+          "%20"
+        );
+      }
+    }
+  }
+  for (const path in subPaths) {
+    markdownList += `[${path}](${subPaths[path].slice(
+      "writings/".length
+    )})\n\n`;
+  }
+  console.log(markdownList);
+  return markdownList;
+};
+
 export const loadWriting = async () => {
   const store = useStore();
   const writingStore = useWritingStore();
   const manifest = store.manifest;
   const currentWritingPath = writingStore.currentWritingPath;
-
+  if (!manifest) {
+    return;
+  }
+  if (currentWritingPath.endsWith("/index.md")) {
+    if (!(currentWritingPath in manifest.paths)) {
+      const text = getSubPathsList(
+        manifest,
+        currentWritingPath.slice(
+          0,
+          currentWritingPath.length - "/index.md".length
+        )
+      );
+      writingStore.setCurrentWritingText(text);
+      return;
+    }
+  }
   const loadingBarStore = useLoadingBarStore();
   loadingBarStore.startLoadingBar();
   if (appEnv.VITE_USE_LOCAL_WRITINGS) {

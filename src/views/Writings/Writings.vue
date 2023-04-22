@@ -15,12 +15,11 @@ import { onMounted, watch } from "vue";
 import Markdown from "@/views/Writings/Markdown.vue";
 import { NScrollbar } from "naive-ui";
 import { useStore, useWritingStore } from "@/store";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { checkPath, loadWriting } from "@/views/Writings/Writings.js";
 
 const writingStore = useWritingStore();
 const store = useStore();
-
 const route = useRoute();
 
 onMounted(async () => {
@@ -44,7 +43,7 @@ watch(
   () => route.fullPath,
   (val) => {
     if (val.startsWith("/writings")) {
-      writingStore.setCurrentWritingPath(val);
+      writingStore.setCurrentWritingPath(val.slice(1));
     }
   }
 );
