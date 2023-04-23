@@ -16,15 +16,20 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { useWritingStore, useStore } from "@/store";
 import { ShareSocialOutline } from "@vicons/ionicons5";
-import { useMessage, NButton,NIcon } from "naive-ui";
-const route = useRoute();
+import { useMessage, NButton, NIcon } from "naive-ui";
+import { appEnv } from "@/config";
+const store = useStore();
+const writingStore = useWritingStore();
 const message = useMessage();
+
 const sharingLink = computed(() => {
+  const manifest = store.manifest;
+  const currentWritingPath = writingStore.currentWritingPath;
   let link = "";
-  link = route.path.replace("/writings/", "").substring(0, 5);
-  if (process.env.NODE_ENV === "development") {
+  link = manifest!.paths[currentWritingPath].hash.substring(0, 5);
+  if (appEnv.MODE == "development") {
     link = `http://localhost:5173/#/${link}`;
   } else {
     link = `http://chaniok.eth.limo/#/${link}`;
