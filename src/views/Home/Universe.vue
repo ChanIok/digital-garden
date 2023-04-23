@@ -4,8 +4,8 @@
 <script setup lang="ts">
 // @ts-nocheck
 import { onMounted, ref } from "vue";
-// import { isDark } from "@/store";
-const isDark = ref(false);
+import { useDark } from "@vueuse/core";
+const isDark = useDark();
 const universe = ref<any>(null);
 
 const load = () => {

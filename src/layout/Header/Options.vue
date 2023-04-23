@@ -3,7 +3,7 @@
     <div class="share-wrapper" v-if="isShareButtonShow">
       <ShareButton></ShareButton>
     </div>
-    <n-switch v-model:value="LightActive" size="medium" :rail-style="railStyle">
+    <n-switch v-model:value="isDark" size="medium" :rail-style="railStyle">
       <template #checked-icon>
         <n-icon :component="SunnyOutline" />
       </template>
@@ -18,10 +18,11 @@
 import { CSSProperties } from "vue";
 import { NIcon, NSwitch } from "naive-ui";
 import { SunnyOutline, MoonSharp } from "@vicons/ionicons5";
+import { useDark } from "@vueuse/core";
 import ShareButton from "./ShareButton.vue";
 const isShareButtonShow = true;
 
-const LightActive = true;
+const isDark = useDark();
 
 const railStyle = ({
   focused,

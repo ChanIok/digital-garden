@@ -14,10 +14,9 @@
 <script setup lang="ts">
 import { Liyue } from "@/assets";
 import { Venti } from "@/assets";
-// import { isDark } from "@/store";
-import { computed, ref } from "vue";
-
-const isDark = ref(false);
+import { computed } from "vue";
+import { useDark } from "@vueuse/core";
+const isDark = useDark();
 
 const backgroundImg = computed(() => {
   if (isDark.value) {

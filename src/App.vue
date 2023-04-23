@@ -5,7 +5,7 @@
   >
     <n-global-style />
     <NMessageProvider>
-      <router-view :class="{ dark: isDark }"></router-view>
+      <router-view></router-view>
     </NMessageProvider>
   </n-config-provider>
 </template>
@@ -20,7 +20,9 @@ import {
 } from "naive-ui";
 
 import { init } from "@/utils/init";
-const isDark = false;
+
+import { useDark } from "@vueuse/core";
+const isDark = useDark();
 
 init();
 </script>

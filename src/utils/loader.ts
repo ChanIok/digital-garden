@@ -40,11 +40,10 @@ export const loadManifest = async () => {
   const setManifest = (manifest: IManifest) => {
     const store = useStore();
     store.setManifest(manifest);
-    localStorage.setItem("manifest", JSON.stringify(manifest));
   };
   if (appEnv.VITE_USE_LOCAL_MANIFEST) {
-    const res = await axios.get(appEnv.VITE_LOCAL_MANIFEST_URL);
-    setManifest(res.data);
+    const res = (await axios.get(appEnv.VITE_LOCAL_MANIFEST_URL)).data;
+    setManifest(res);
     return;
   }
   async function fetchManifest() {
@@ -52,12 +51,8 @@ export const loadManifest = async () => {
     const latestState = await getLatestState(latestManifestId);
     setManifest(latestState);
   }
-
-  const storageManifest = localStorage.getItem("manifest");
-  if (storageManifest) {
-    const manifest = JSON.parse(storageManifest);
-    setManifest(manifest);
-  } else {
+  const store = useStore();
+  if (!store.manifest) {
     await fetchManifest();
   }
 };

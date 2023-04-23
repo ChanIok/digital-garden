@@ -61,10 +61,8 @@ import Universe from "@/views/Home/Universe.vue";
 import { NIcon, NButton } from "naive-ui";
 import Background from "@/views/Home/Background.vue";
 import { LogoGithub, Mail } from "@vicons/ionicons5";
-import { useStore } from "@/store";
-
-const store = useStore();
-const isDark = store.isDark;
+import { useDark } from "@vueuse/core";
+const isDark = useDark();
 </script>
 
 <style lang="less" scoped>

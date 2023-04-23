@@ -1,20 +1,19 @@
 import { defineStore } from "pinia";
 import { IManifest } from "@/typings";
+import { useStorage, RemovableRef, StorageSerializers } from "@vueuse/core";
 
 export { useLoadingBarStore } from "@/store/modules/loading-bar";
 export { useWritingStore } from "@/store/modules/writing";
 
 export interface IAppState {
-  isDark: boolean;
-  windowWidth: number;
-  manifest: IManifest | null;
+  manifest: RemovableRef<IManifest | null>;
 }
 
 export const useStore = defineStore("app", {
   state: (): IAppState => ({
-    isDark: false,
-    windowWidth: 0,
-    manifest: null,
+    manifest: useStorage("manifest", null, localStorage, {
+      serializer: StorageSerializers.object,
+    }),
   }),
   actions: {
     setManifest(val: IManifest) {
