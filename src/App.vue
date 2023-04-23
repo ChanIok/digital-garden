@@ -1,9 +1,10 @@
 <template>
   <n-config-provider
     id="n-config-provider"
-    :theme="isDark ? darkTheme : lightTheme"
+    :theme="store.isDark ? darkTheme : lightTheme"
+    :class="{ dark: store.isDark }"
   >
-    <n-global-style />
+    <!-- <n-global-style /> -->
     <NMessageProvider>
       <router-view></router-view>
     </NMessageProvider>
@@ -20,9 +21,8 @@ import {
 } from "naive-ui";
 
 import { init } from "@/utils/init";
-
-import { useDark } from "@vueuse/core";
-const isDark = useDark();
+import { useStore } from "@/store";
+const store = useStore();
 
 init();
 </script>

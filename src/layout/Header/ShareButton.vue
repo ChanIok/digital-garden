@@ -1,5 +1,5 @@
 <template>
-  <div id="share-button">
+  <div id="share-button" v-if="isButtonVisible">
     <n-button
       size="small"
       quaternary
@@ -24,10 +24,19 @@ const store = useStore();
 const writingStore = useWritingStore();
 const message = useMessage();
 
+const isButtonVisible = computed(() => {
+  const manifest = store.manifest;
+  const currentWritingPath = writingStore.currentWritingPath;
+  return manifest!.paths[currentWritingPath];
+});
+
 const sharingLink = computed(() => {
   const manifest = store.manifest;
   const currentWritingPath = writingStore.currentWritingPath;
   let link = "";
+  if (!manifest!.paths[currentWritingPath]) {
+    return;
+  }
   link = manifest!.paths[currentWritingPath].hash.substring(0, 5);
   if (appEnv.MODE == "development") {
     link = `http://localhost:5173/#/${link}`;

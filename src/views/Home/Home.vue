@@ -6,7 +6,7 @@
       <div
         class="card"
         :class="{
-          'light-theme': !isDark,
+          'light-theme': !store.isDark,
         }"
       >
         <div class="header">
@@ -61,8 +61,8 @@ import Universe from "@/views/Home/Universe.vue";
 import { NIcon, NButton } from "naive-ui";
 import Background from "@/views/Home/Background.vue";
 import { LogoGithub, Mail } from "@vicons/ionicons5";
-import { useDark } from "@vueuse/core";
-const isDark = useDark();
+import { useStore } from "@/store";
+const store = useStore();
 </script>
 
 <style lang="less" scoped>

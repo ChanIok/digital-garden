@@ -3,7 +3,7 @@
     <div
       class="background-img"
       :class="{
-        'light-theme': !isDark,
+        'light-theme': !store.isDark,
       }"
       :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
     ></div>
@@ -15,14 +15,16 @@
 import { Liyue } from "@/assets";
 import { Venti } from "@/assets";
 import { computed } from "vue";
-import { useDark } from "@vueuse/core";
-const isDark = useDark();
+import { useStore } from "@/store";
+const store = useStore();
+const backgroundUrls = [Liyue, Venti];
 
 const backgroundImg = computed(() => {
-  if (isDark.value) {
-    return Liyue;
+  const isDark = store.isDark;
+  if (isDark) {
+    return backgroundUrls[0];
   } else {
-    return Venti;
+    return backgroundUrls[1];
   }
 });
 </script>

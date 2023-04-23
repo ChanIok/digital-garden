@@ -1,5 +1,5 @@
 <template>
-  <div id="markdown" ref="markdown">
+  <div id="markdown" ref="markdown" class="vp-doc">
     <div
       v-html="content"
       v-viewer="{
@@ -16,11 +16,12 @@
       <n-anchor
         v-if="anchors.length > 0 && anchors[0].node"
         affix
-        :trigger-top="80"
+        :trigger-top="100"
         :bound="80"
         ignore-gap
         offset-target="#writings"
         @click="onClickAnchor"
+        :show-background="false"
       >
         <n-ellipsis style="max-width: 240px">
           <n-anchor-link
@@ -44,13 +45,7 @@
 import { ref, nextTick, watch } from "vue";
 import { getMarkedContent } from "@/utils/marked";
 import { computed } from "@vue/reactivity";
-import {
-  NScrollbar,
-  NBackTop,
-  NAnchor,
-  NAnchorLink,
-  NEllipsis,
-} from "naive-ui";
+import { NBackTop, NAnchor, NAnchorLink, NEllipsis } from "naive-ui";
 import { useWritingStore } from "@/store";
 import { useRouter } from "vue-router";
 const writingStore = useWritingStore();
