@@ -107,6 +107,11 @@ watch(
         padding: 10px 10px 0 10px;
         flex-shrink: 0;
       }
+
+      @media only screen and (max-width: 480px) {
+        padding: 10px 0px 0 0px;
+        flex-shrink: 0;
+      }
     }
   }
 }

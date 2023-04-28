@@ -14,7 +14,7 @@
 
     <n-breadcrumb-item v-for="(item, index) in visibleList" :key="index" @click="goToPath(item, index)">
       <n-ellipsis style="max-width: 100%">
-        {{ item.replace(/%20/g, " ") }}
+        {{ item.label }}
       </n-ellipsis>
     </n-breadcrumb-item>
   </n-breadcrumb>
@@ -24,7 +24,7 @@
 import { NBreadcrumb, NBreadcrumbItem, NDropdown, NEllipsis } from "naive-ui";
 import { useWritingStore } from "@/store";
 import { useRouter, useRoute } from "vue-router";
-import { nextTick, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { loadWritingData } from "./NavBar";
 
 const router = useRouter();
@@ -55,12 +55,12 @@ watch(
   }
 );
 
-const goToPath = (pathName: string, clickIndex: number) => {
+const goToPath = (item: any, clickIndex: number) => {
   if (clickIndex == writingStore.currentWritingPathArray.length - 1) {
     return;
   }
   const pathArray = writingStore.currentWritingPathArray;
-  const index = pathArray.indexOf(pathName);
+  const index = pathArray.indexOf(item.key);
   if (index != -1) {
     const temp = pathArray.slice(0, index + 1);
     temp.push("index.md");

@@ -1,22 +1,26 @@
 import { useWritingStore } from "@/store";
 import { nextTick } from "vue";
 
-type ListItem = {
-  label: string;
-  key: string;
-};
-
 export const loadWritingData = async (visibleList: any, hiddenList: any) => {
-  const offset = 50;
+  const offset = 100;
   const writingStore = useWritingStore();
   await nextTick();
   visibleList.value = writingStore.currentWritingPathArray.slice();
+  visibleList.value = visibleList.value.map((item: any, index: number) => {
+    let label = item.replace(/%20/g, " ");
+    if (index == 0) {
+      label = "数字花园";
+    } else if (index == visibleList.value.length - 1 && item == "index.md") {
+      label = "目录";
+    }
+    return { label, key: item };
+  });
   hiddenList.value = [];
   await nextTick();
 
   const navBarUlWidth = getNavBarUlWidth();
   const navBarLiEls = getNavBarLiEls();
-  const totalWidth = getTotalWidth(navBarLiEls)
+  const totalWidth = getTotalWidth(navBarLiEls);
   if (totalWidth > navBarUlWidth) {
     adjustVisibleList(
       navBarUlWidth,
@@ -54,13 +58,10 @@ const adjustVisibleList = (
   hiddenList: any
 ) => {
   totalWidth += offset;
-  for (let i = 2; i < navBarLiEls.length ; i++) {
+  for (let i = 2; i < navBarLiEls.length; i++) {
     totalWidth -= (navBarLiEls[i] as any).offsetWidth;
     const item = visibleList.value.shift();
-    hiddenList.value.push({
-      label: item,
-      key: item,
-    });
+    hiddenList.value.push(item);
 
     if (totalWidth < navBarUlWidth) {
       return;

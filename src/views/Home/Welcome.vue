@@ -1,5 +1,5 @@
 <template>
-    <div id="welcome">
+    <div id="welcome" :class="{ light: !store.isDark }">
         <div class="container">
             <div class="content">
                 <n-h1> Hi，欢迎来到本站</n-h1>
@@ -57,9 +57,42 @@ import { NIcon, NButton, NH1, NUl, NLi, NP, NA } from "naive-ui";
 import { LogoGithub, Mail } from "@vicons/ionicons5";
 import { useStore } from "@/store";
 const store = useStore();
+
+import { SelectProps, ButtonProps } from 'naive-ui'
+
+type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>
+type ButtonThemeOverrides = NonNullable<ButtonProps['themeOverrides']>
+
+const selectThemeOverrides: SelectThemeOverrides = {
+    menuBoxShadow:
+        '0 6px 16px -9px rgba(0, 0, 0, .08), 0 9px 28px 0 rgba(0, 0, 0, .05), 0 12px 48px 16px rgba(0, 0, 0, .03)',
+    peers: {
+        InternalSelection: {
+            textColor: '#FF0000',
+            heightMedium: '42px'
+        }
+    }
+}
+const buttonThemeOverrides: ButtonThemeOverrides = {
+    heightMedium: '40px',
+    textColor: 'rgba(24, 127, 231, 1)'
+}
+
 </script>
   
 <style lang="less" scoped>
+@import url("@/styles/varibles.less");
+@color: rgba(247, 247, 248, 0.8);
+
+.light .content :deep(h1),
+.light .content :deep(li),
+.light .content :deep(p) {
+    color: @color;
+    text-shadow: 3px 3px 5px rgba(78, 78, 78, 0.3);
+}
+
+
+
 #welcome {
     width: 100%;
     height: 100%;
@@ -80,6 +113,7 @@ const store = useStore();
         .content {
             z-index: inherit;
         }
+
         .link {
             margin-top: 10px;
             display: flex;
