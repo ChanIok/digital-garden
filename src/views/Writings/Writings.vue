@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import { nextTick, onMounted, watch } from "vue";
 import Markdown from "@/views/Writings/Markdown.vue";
 import { NScrollbar } from "naive-ui";
 import { useStore, useWritingStore } from "@/store";
@@ -41,9 +41,12 @@ store.$subscribe((mutation, state) => {
 
 watch(
   () => route.fullPath,
-  (val) => {
+  async (val) => {
     if (val.startsWith("/writings")) {
       writingStore.setCurrentWritingPath(val.slice(1));
+    } else if (val == '/') {
+      await nextTick()
+      writingStore.$reset()
     }
   }
 );

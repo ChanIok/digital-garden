@@ -23,5 +23,7 @@ import { NLoadingBarProvider } from "naive-ui";
   box-sizing: border-box;
   padding: 0 10px 0 10px;
   height: 30px;
+
+
 }
 </style>

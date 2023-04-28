@@ -12,7 +12,7 @@ export interface IAppState {
 
 export const useStore = defineStore("app", {
   state: (): IAppState => ({
-    isDark: useStorage("isDark", false, localStorage),
+    isDark: useStorage("isDark", true, localStorage),
     manifest: useStorage("manifest", null, localStorage, {
       serializer: StorageSerializers.object,
     }),

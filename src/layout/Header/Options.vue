@@ -3,16 +3,12 @@
     <div class="share-wrapper" v-if="isShareButtonShow">
       <ShareButton></ShareButton>
     </div>
-    <n-switch
-      v-model:value="store.isDark"
-      size="medium"
-      :rail-style="railStyle"
-    >
+    <n-switch v-model:value="store.isDark" size="medium" :rail-style="railStyle">
       <template #checked-icon>
-        <n-icon :component="SunnyOutline" />
+        <n-icon :component="MoonSharp" />
       </template>
       <template #unchecked-icon>
-        <n-icon :component="MoonSharp" />
+        <n-icon :component="SunnyOutline" />
       </template>
     </n-switch>
   </div>
@@ -55,6 +51,7 @@ const railStyle = ({
 #options {
   display: flex;
   align-items: center;
+
   .share-wrapper {
     margin-right: 5px;
   }

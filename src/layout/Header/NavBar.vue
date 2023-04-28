@@ -13,52 +13,52 @@
     </n-breadcrumb-item>
 
     <n-breadcrumb-item v-for="(item, index) in visibleList" :key="index" @click="goToPath(item, index)">
-      {{ item.replace(/%20/g, " ") }}
+      <n-ellipsis style="max-width: 100%">
+        {{ item.replace(/%20/g, " ") }}
+      </n-ellipsis>
     </n-breadcrumb-item>
-
   </n-breadcrumb>
 </template>
 
 <script setup lang="ts">
-import { NBreadcrumb, NBreadcrumbItem, NDropdown } from "naive-ui";
+import { NBreadcrumb, NBreadcrumbItem, NDropdown, NEllipsis } from "naive-ui";
 import { useWritingStore } from "@/store";
-import { useRouter } from "vue-router";
-import { nextTick, onMounted, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { nextTick, onMounted, ref, watch } from "vue";
+import { loadWritingData } from "./NavBar";
+
 const router = useRouter();
+const route = useRoute();
 const writingStore = useWritingStore();
 
 const visibleList = ref<any>([]);
 const hiddenList = ref<any>([]);
 
 const loadBreadcrumbData = async () => {
-  visibleList.value = writingStore.currentWritingPathArray.slice()
-  hiddenList.value = []
-  await nextTick()
-  const navBarUl = document.querySelector('#nav-bar>ul');
-  while ((navBarUl as any).offsetWidth > window.innerWidth - 100) {
-    const item = visibleList.value.shift()
-    hiddenList.value.push({
-      label: item,
-      key: item
-    });
-    await nextTick()
+  if (route.fullPath == "/") {
+    visibleList.value = []
+    hiddenList.value = []
+  } else if (route.fullPath.startsWith("/writings")) {
+    await loadWritingData(visibleList, hiddenList)
+    console.log(visibleList.value)
   }
 }
+
 onMounted(async () => {
-  loadBreadcrumbData();
+  await loadBreadcrumbData()
 })
 
-writingStore.$subscribe((mutation, state) => {
-  if ((mutation.events as any).key == "currentWritingPath") {
-    loadBreadcrumbData();
+watch(
+  () => route.fullPath,
+  async (val) => {
+    loadBreadcrumbData()
   }
-});
+);
 
 const goToPath = (pathName: string, clickIndex: number) => {
   if (clickIndex == writingStore.currentWritingPathArray.length - 1) {
     return;
   }
-  console.log(pathName)
   const pathArray = writingStore.currentWritingPathArray;
   const index = pathArray.indexOf(pathName);
   if (index != -1) {
@@ -70,7 +70,6 @@ const goToPath = (pathName: string, clickIndex: number) => {
 const handleSelect = (key: string) => {
   const pathArray = writingStore.currentWritingPathArray;
   const index = pathArray.indexOf(key);
-  console.log(key, pathArray)
   if (index != -1) {
     const temp = pathArray.slice(0, index + 1);
     temp.push("index.md");
@@ -83,9 +82,23 @@ const handleSelect = (key: string) => {
 <style lang="less" scoped>
 #nav-bar {
   max-width: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: hidden;
 
   :deep(>ul) {
     display: flex;
+  }
+
+  :deep(>ul>li:last-child) {
+    min-width: 80px;
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+
+  :deep(>ul>li:last-child>.n-breadcrumb-item__link) {
+    flex-shrink: 1;
+    overflow: hidden;
   }
 
   .trigger {

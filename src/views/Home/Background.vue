@@ -1,12 +1,8 @@
 <template>
   <div id="background">
-    <div
-      class="background-img"
-      :class="{
+    <div class="background-img" :class="{
         'light-theme': !store.isDark,
-      }"
-      :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
-    ></div>
+      }" :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"></div>
     <div class="background-mask"></div>
   </div>
 </template>
@@ -33,21 +29,27 @@ const backgroundImg = computed(() => {
 #background {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
+  top: 0;
+
   .background-img {
     position: fixed;
     width: 100%;
     height: 100%;
     background-size: cover;
     background-position: 50% 50%;
+
     @media only screen and (max-width: 480px) {
       background-position: 25% 50%;
     }
+
     transition: all 1s;
   }
+
   .light-theme {
     background-position: 85% 50%;
   }
+
   .background-mask {
     width: 100%;
     height: 100%;
