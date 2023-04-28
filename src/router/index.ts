@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Layout from "@/layout/Layout.vue";
 import Home from "@/views/Home/Home.vue";
 import Writings from "@/views/Writings/Writings.vue";
+import Comments from "@/views/Comments/Comments.vue";
 const routes = [
   {
     path: "/",
@@ -12,6 +13,7 @@ const routes = [
       { path: "", component: Home },
       { path: ":txId?", component: Writings },
       { path: "/writings/:path*", component: Writings },
+      { path: "comments", component: Comments },
     ],
   },
 ];

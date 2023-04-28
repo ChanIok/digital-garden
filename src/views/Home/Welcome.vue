@@ -2,8 +2,6 @@
     <div id="welcome">
         <div class="container">
             <div class="content">
-
-
                 <n-h1> Hi，欢迎来到本站</n-h1>
                 <n-p>
                     这里是我构筑于区块链的一心净土
@@ -13,22 +11,20 @@
                 </n-p>
                 <n-ul>
                     <n-li>
-                        <router-link to="/" #="{ navigate, href }" custom>
+                        <router-link to="/writings" #="{ navigate, href }" custom>
                             <n-a :href="href" @click="navigate">
                                 数字花园
                             </n-a>
                         </router-link>
                     </n-li>
                     <n-li>
-                        <router-link to="/" #="{ navigate, href }" custom>
+                        <router-link to="/comments" #="{ navigate, href }" custom>
                             <n-a :href="href" @click="navigate">
                                 留言板
                             </n-a>
                         </router-link>
                     </n-li>
                 </n-ul>
-
-
             </div>
             <div class="link">
                 <div class="link-item">
@@ -84,7 +80,6 @@ const store = useStore();
         .content {
             z-index: inherit;
         }
-
         .link {
             margin-top: 10px;
             display: flex;

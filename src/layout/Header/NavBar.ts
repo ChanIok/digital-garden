@@ -16,8 +16,7 @@ export const loadWritingData = async (visibleList: any, hiddenList: any) => {
 
   const navBarUlWidth = getNavBarUlWidth();
   const navBarLiEls = getNavBarLiEls();
-  const totalWidth = getTotalWidth(navBarLiEls);
-  console.log(totalWidth, navBarUlWidth);
+  const totalWidth = getTotalWidth(navBarLiEls)
   if (totalWidth > navBarUlWidth) {
     adjustVisibleList(
       navBarUlWidth,
