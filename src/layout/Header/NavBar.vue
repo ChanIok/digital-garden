@@ -23,15 +23,12 @@
 import { NBreadcrumb, NBreadcrumbItem, NDropdown } from "naive-ui";
 import { useWritingStore } from "@/store";
 import { useRouter } from "vue-router";
-import { computed, nextTick, onMounted, ref, unref } from "vue";
-import { watch } from "fs";
+import { nextTick, onMounted, ref } from "vue";
 const router = useRouter();
 const writingStore = useWritingStore();
-const navBar = ref<any>(null);
+
 const visibleList = ref<any>([]);
 const hiddenList = ref<any>([]);
-
-
 
 const loadBreadcrumbData = async () => {
   visibleList.value = writingStore.currentWritingPathArray.slice()
