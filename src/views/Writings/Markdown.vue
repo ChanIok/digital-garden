@@ -1,42 +1,26 @@
 <template>
   <div id="markdown" ref="markdown" class="vp-doc">
-    <div
-      v-html="content"
-      v-viewer="{
+    <div v-html="content" v-viewer="{
         movable: false,
         toolbar: false,
         navbar: false,
         title: false,
-      }"
-      class="markdown-content"
-    ></div>
+      }" class="markdown-content"></div>
     <n-back-top :right="50" />
 
     <div class="markdown-outline">
-      <n-anchor
-        v-if="anchors.length > 0 && anchors[0].node"
-        affix
-        :trigger-top="100"
-        :bound="80"
-        ignore-gap
-        offset-target="#writings"
-        @click="onClickAnchor"
-        :show-background="false"
-      >
+      <n-anchor v-if="anchors.length > 0 && anchors[0].node" affix :trigger-top="100" :bound="80" ignore-gap
+        offset-target="#writings" @click="onClickAnchor" :show-background="false">
         <n-ellipsis style="max-width: 240px">
-          <n-anchor-link
-            v-for="item in anchors"
-            :title="item.node.innerText"
-            :href="`#${item.node.id}`"
-          >
-            <n-anchor-link
-              v-for="itemChild in item.children"
-              :title="itemChild.node.innerText"
-              :href="`#${itemChild.node.id}`"
-            />
+          <n-anchor-link v-for="item in anchors" :title="item.node.innerText" :href="`#${item.node.id}`">
+            <n-anchor-link v-for="itemChild in item.children" :title="itemChild.node.innerText"
+              :href="`#${itemChild.node.id}`" />
           </n-anchor-link>
         </n-ellipsis>
       </n-anchor>
+    </div>
+    <div class="markdown-popover">
+
     </div>
   </div>
 </template>
@@ -45,11 +29,10 @@
 import { ref, nextTick, watch } from "vue";
 import { getMarkedContent } from "@/utils/marked";
 import { computed } from "@vue/reactivity";
-import { NBackTop, NAnchor, NAnchorLink, NEllipsis } from "naive-ui";
+import { NBackTop, NAnchor, NAnchorLink, NEllipsis, NPopover, NButton } from "naive-ui";
 import { useWritingStore } from "@/store";
-import { useRouter } from "vue-router";
+import { setAnchors, setLinks } from "./Markdown";
 const writingStore = useWritingStore();
-const router = useRouter();
 const onClickAnchor = (e: PointerEvent) => {
   e.preventDefault();
 };
@@ -59,45 +42,15 @@ const content = computed(() => {
 const anchors = ref<any>([]);
 const markdown = ref<any>(null);
 
-const setAnchors = () => {
-  const elements = markdown.value.querySelectorAll("h1,h2,h3,h4,h5,h6");
-  const tree: any = [{ node: elements[0], children: [] }];
-  const nodeLi = [tree[0]];
 
-  for (let i = 1; i < elements.length; i++) {
-    const t = { node: elements[i], children: [] };
-    nodeLi.some((node, j) => {
-      if (
-        parseInt(elements[i].tagName.charAt(1)) >
-        parseInt(node.node.tagName.charAt(1))
-      ) {
-        nodeLi.splice(j + 1, 0, t);
-        node.children.push(t);
-        return true;
-      }
-    }) || tree.push(t);
-  }
-
-  anchors.value = tree;
-};
-
-const setLinks = () => {
-  const elements = markdown.value.querySelectorAll("a");
-  for (let i = 0; i < elements.length; i++) {
-    elements[i].onclick = () => {
-      const path = elements[i].getAttribute("path");
-      router.push(path);
-    };
-  }
-};
 
 watch(
   () => content.value,
   async () => {
     await nextTick();
     try {
-      setAnchors();
-      setLinks();
+      setAnchors(anchors, markdown);
+      setLinks(markdown);
     } catch (error) {
       console.log(error);
     }
@@ -107,6 +60,7 @@ watch(
 
 <style lang="less" scoped>
 @import url("@/styles/md.less");
+
 #markdown {
   display: flex;
   justify-content: center;
@@ -125,6 +79,7 @@ watch(
       max-width: 720px;
       cursor: zoom-in;
     }
+
     @media only screen and (max-width: 960px) {
       padding: 10px 10px 0 10px;
     }
@@ -134,6 +89,7 @@ watch(
     width: 300px;
     position: fixed;
     left: calc(50% + 440px);
+
     @media only screen and (max-width: 1260px) {
       display: none;
     }
