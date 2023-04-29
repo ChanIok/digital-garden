@@ -1,5 +1,5 @@
 <template>
-  <div id="markdown" ref="markdown" class="vp-doc">
+  <div id="markdown" ref="markdown">
     <div v-html="content" v-viewer="{
         movable: false,
         toolbar: false,
@@ -19,20 +19,48 @@
         </n-ellipsis>
       </n-anchor>
     </div>
-    <div class="markdown-popover">
-
+    <div ref="previewWrapper" id="preview-wrapper"
+      :style="{ left: `${previewPosition.left}px`, top: `${previewPosition.top}px` }">
+      <Preview :previewLink='previewLink' :isPreviewVisible="isPreviewVisible" :onmouseenter="stopHidePreview"
+        :onmouseleave="startHidePreview" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch } from "vue";
+import { ref, nextTick, watch, reactive } from "vue";
 import { getMarkedContent } from "@/utils/marked";
 import { computed } from "@vue/reactivity";
-import { NBackTop, NAnchor, NAnchorLink, NEllipsis, NPopover, NButton } from "naive-ui";
+import { NBackTop, NAnchor, NAnchorLink, NEllipsis } from "naive-ui";
 import { useWritingStore } from "@/store";
 import { setAnchors, setLinks } from "./Markdown";
+import { useRouter } from "vue-router";
+import Preview from "./Preview.vue";
+import { IPosition } from "@/typings";
+
+const previewLink = ref<string>('')
+const isPreviewVisible = ref<boolean>(false)
+
 const writingStore = useWritingStore();
+const router = useRouter();
+
+const previewWrapper = ref(null)
+
+const previewPosition = reactive<IPosition>({
+  left: 0,
+  top: 0
+})
+
+const hidePreviewTimeout = ref<number>(0)
+
+const stopHidePreview = () => {
+  clearTimeout(hidePreviewTimeout.value)
+}
+const startHidePreview = () => {
+  isPreviewVisible.value = false
+}
+
+
 const onClickAnchor = (e: PointerEvent) => {
   e.preventDefault();
 };
@@ -42,15 +70,13 @@ const content = computed(() => {
 const anchors = ref<any>([]);
 const markdown = ref<any>(null);
 
-
-
 watch(
   () => content.value,
   async () => {
     await nextTick();
     try {
       setAnchors(anchors, markdown);
-      setLinks(markdown);
+      setLinks(markdown, router, previewLink, isPreviewVisible, previewPosition, hidePreviewTimeout);
     } catch (error) {
       console.log(error);
     }
@@ -93,6 +119,11 @@ watch(
     @media only screen and (max-width: 1260px) {
       display: none;
     }
+  }
+
+  #preview-wrapper {
+    position: absolute;
+
   }
 }
 </style>

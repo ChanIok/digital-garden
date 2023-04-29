@@ -1,5 +1,7 @@
-import { useRouter } from "vue-router";
-
+import { Ref } from "vue";
+import { Router } from "vue-router";
+import { UseMouseInElementReturn, useMouseInElement } from "@vueuse/core";
+import { IPosition } from "@/typings";
 export const setAnchors = (anchors: any, markdown: any) => {
   const elements = markdown.value.querySelectorAll("h1,h2,h3,h4,h5,h6");
   const tree: any = [{ node: elements[0], children: [] }];
@@ -21,13 +23,31 @@ export const setAnchors = (anchors: any, markdown: any) => {
   anchors.value = tree;
 };
 
-export const setLinks = (markdown: any) => {
-  const router = useRouter();
+export const setLinks = (
+  markdown: any,
+  router: Router,
+  previewLink: Ref<string>,
+  isPreviewVisible: Ref<boolean>,
+  previewPosition: IPosition,
+  hidePreviewTimeout: Ref<number>
+) => {
   const elements = markdown.value.querySelectorAll("a");
   for (let i = 0; i < elements.length; i++) {
+    const path = elements[i].getAttribute("path");
     elements[i].onclick = () => {
-      const path = elements[i].getAttribute("path");
       router.push(path);
+    };
+    elements[i].onmouseover = () => {
+      previewLink.value = path;
+      isPreviewVisible.value = true;
+      previewPosition.top = elements[i].offsetTop + elements[i].clientHeight;
+      previewPosition.left = elements[i].offsetLeft;
+    };
+    elements[i].onmouseout = () => {
+      (hidePreviewTimeout.value as any) = setTimeout(() => {
+        previewLink.value = "";
+        isPreviewVisible.value = false;
+      }, 10);
     };
   }
 };

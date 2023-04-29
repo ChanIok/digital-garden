@@ -22,7 +22,7 @@ export const checkPath = async () => {
   writingStore.setCurrentWritingPath(path);
 };
 
-const getSubPathsList = (manifest: IManifest, targetPath: string) => {
+export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
   const paths = manifest.paths;
   const subPaths: any = {};
   let markdownList = "";
