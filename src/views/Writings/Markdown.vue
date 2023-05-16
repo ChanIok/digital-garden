@@ -5,7 +5,7 @@
         toolbar: false,
         navbar: false,
         title: false,
-      }" class="markdown-content"></div>
+      }" class="markdown-content vp-doc"></div>
     <n-back-top :right="50" />
 
     <div class="markdown-outline">

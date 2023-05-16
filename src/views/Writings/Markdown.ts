@@ -31,12 +31,21 @@ export const setLinks = (
   previewPosition: IPosition,
   hidePreviewTimeout: Ref<number>
 ) => {
+  const hide = () => {
+    previewLink.value = "";
+    isPreviewVisible.value = false;
+  };
   const elements = markdown.value.querySelectorAll("a");
   for (let i = 0; i < elements.length; i++) {
     const path = elements[i].getAttribute("path");
     elements[i].onclick = () => {
+      hide();
       router.push(path);
     };
+    if (!path || path.endsWith("index.md")) {
+      console.log(path);
+      continue;
+    }
     elements[i].onmouseover = () => {
       previewLink.value = path;
       isPreviewVisible.value = true;
@@ -45,8 +54,7 @@ export const setLinks = (
     };
     elements[i].onmouseout = () => {
       (hidePreviewTimeout.value as any) = setTimeout(() => {
-        previewLink.value = "";
-        isPreviewVisible.value = false;
+        hide();
       }, 10);
     };
   }

@@ -1,8 +1,12 @@
 <template>
     <div id="preview">
-        <div class="markdown-popover" v-if="isPreviewVisible">
-            <div v-html="content"></div>
-        </div>
+        <transition name="fade">
+            <div class="markdown-popover" v-if="isPreviewVisible">
+                <n-scrollbar>
+                    <div v-html="content" class="content"></div>
+                </n-scrollbar>
+            </div>
+        </transition>
     </div>
 </template>
   
@@ -13,6 +17,7 @@ import { computed, nextTick, ref, watch } from 'vue';
 import { getSubPathsList } from './Writings';
 import { appEnv } from '@/config';
 import { getLocalWritingByPath } from '@/utils/dev';
+import { NScrollbar } from "naive-ui";
 import axios from 'axios';
 
 
@@ -67,11 +72,41 @@ watch(() => props.previewLink, (val: string) => {
   
 <style lang="less" scoped>
 #preview {
+
+
+    // transition: all .3s;
+
+
     .markdown-popover {
-        max-width: 300px;
-        max-height: 300px;
-        background: aliceblue;
+        width: 420px;
+        height: 420px;
+        background-color: #fff;
+        box-shadow: 0 0 6px 6px rgba(0, 0, 0, 0.05);
         overflow: auto;
+
+        .content {
+
+            font-size: 13px;
+            padding: 10px;
+            box-sizing: border-box;
+            // overflow: auto;
+        }
+    }
+
+    .fade-enter-active {
+        transition: opacity .3s;
+    }
+
+    .fade-enter {
+        opacity: 0;
+    }
+
+    .fade-leave-active {
+        transition: opacity .3s;
+    }
+
+    .fade-leave-to {
+        opacity: 0;
     }
 
 }
