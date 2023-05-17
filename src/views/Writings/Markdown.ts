@@ -49,7 +49,7 @@ export const setLinks = (
     elements[i].onmouseover = () => {
       previewLink.value = path;
       isPreviewVisible.value = true;
-      previewPosition.top = elements[i].offsetTop + elements[i].clientHeight;
+      previewPosition.top = elements[i].offsetTop + elements[i].offsetHeight;
       previewPosition.left = elements[i].offsetLeft;
     };
     elements[i].onmouseout = () => {
