@@ -20,7 +20,6 @@ import { getLocalWritingByPath } from '@/utils/dev';
 import { NScrollbar } from "naive-ui";
 import axios from 'axios';
 
-
 const props = defineProps(['previewLink', 'isPreviewVisible'])
 const writingText = ref<string>('')
 const loadWriting = async (currentWritingPath: string) => {
@@ -41,8 +40,6 @@ const loadWriting = async (currentWritingPath: string) => {
             return;
         }
     }
-    // const loadingBarStore = useLoadingBarStore();
-    // loadingBarStore.startLoadingBar();
     if (appEnv.VITE_USE_LOCAL_WRITINGS) {
         writingText.value = await getLocalWritingByPath(currentWritingPath);
 
@@ -55,7 +52,6 @@ const loadWriting = async (currentWritingPath: string) => {
 
     }
     await nextTick();
-    // loadingBarStore.finishLoadingBar();
 };
 
 
@@ -73,42 +69,32 @@ watch(() => props.previewLink, (val: string) => {
 <style lang="less" scoped>
 #preview {
 
-
-    // transition: all .3s;
-
-
     .markdown-popover {
         width: 420px;
         height: 420px;
         background-color: #fff;
         box-shadow: 0 0 6px 6px rgba(0, 0, 0, 0.05);
         overflow: auto;
-
         .content {
 
             font-size: 13px;
             padding: 10px;
             box-sizing: border-box;
-            // overflow: auto;
         }
     }
 
     .fade-enter-active {
         transition: opacity .3s;
     }
-
     .fade-enter {
         opacity: 0;
     }
-
     .fade-leave-active {
         transition: opacity .3s;
     }
-
     .fade-leave-to {
         opacity: 0;
     }
-
 }
 </style>
   

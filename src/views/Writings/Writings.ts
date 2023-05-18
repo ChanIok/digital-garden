@@ -45,7 +45,6 @@ export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
       "writings/".length
     )})\n\n`;
   }
-  console.log(markdownList);
   return markdownList;
 };
 

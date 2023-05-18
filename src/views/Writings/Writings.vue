@@ -48,7 +48,7 @@ watch(
       await nextTick()
       writingStore.$reset()
     }
-  }
+  }, { immediate: true }
 );
 </script>
 

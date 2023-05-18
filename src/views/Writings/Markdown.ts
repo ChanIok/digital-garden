@@ -1,6 +1,5 @@
 import { Ref } from "vue";
 import { Router } from "vue-router";
-import { UseMouseInElementReturn, useMouseInElement } from "@vueuse/core";
 import { IPosition } from "@/typings";
 export const setAnchors = (anchors: any, markdown: any) => {
   const elements = markdown.value.querySelectorAll("h1,h2,h3,h4,h5,h6");
@@ -43,13 +42,19 @@ export const setLinks = (
       router.push(path);
     };
     if (!path || path.endsWith("index.md")) {
-      console.log(path);
       continue;
     }
     elements[i].onmouseover = () => {
       previewLink.value = path;
       isPreviewVisible.value = true;
-      previewPosition.top = elements[i].offsetTop + elements[i].offsetHeight;
+
+      // previewPosition.top =
+      // elements[i].getBoundingClientRect().top - 30 + elements[i].offsetHeight;
+      previewPosition.top =
+        elements[i].offsetTop +
+        elements[i].offsetHeight -
+        elements[i].getBoundingClientRect().top +
+        window.scrollY;
       previewPosition.left = elements[i].offsetLeft;
     };
     elements[i].onmouseout = () => {
