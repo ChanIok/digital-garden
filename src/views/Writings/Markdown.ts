@@ -35,6 +35,9 @@ export const setLinks = (
     isPreviewVisible.value = false;
   };
   const elements = markdown.value.querySelectorAll("a");
+  const scrollbar = document.querySelector(
+    ".writings-container .n-scrollbar-container"
+  );
   for (let i = 0; i < elements.length; i++) {
     const path = elements[i].getAttribute("path");
     elements[i].onclick = () => {
@@ -47,16 +50,31 @@ export const setLinks = (
     elements[i].onmouseover = () => {
       previewLink.value = path;
       isPreviewVisible.value = true;
-
-      // previewPosition.top =
-      // elements[i].getBoundingClientRect().top - 30 + elements[i].offsetHeight;
-      previewPosition.top =
+      previewPosition.height = 420;
+      if (window.innerWidth < 420) {
+        previewPosition.width = 240;
+      }
+      if (
         elements[i].offsetTop +
-        elements[i].offsetHeight -
-        elements[i].getBoundingClientRect().top +
-        window.scrollY;
-      previewPosition.left = elements[i].offsetLeft;
+          elements[i].offsetHeight -
+          scrollbar!.scrollTop +
+          previewPosition.height >
+        window.innerHeight
+      ) {
+        previewPosition.top =
+          elements[i].offsetTop - scrollbar!.scrollTop - previewPosition.height;
+      } else {
+        previewPosition.top =
+          elements[i].offsetTop +
+          elements[i].offsetHeight -
+          scrollbar!.scrollTop;
+      }
+      previewPosition.left =
+        elements[i].offsetLeft +
+        elements[i].offsetWidth -
+        previewPosition.width / 2;
     };
+
     elements[i].onmouseout = () => {
       (hidePreviewTimeout.value as any) = setTimeout(() => {
         hide();

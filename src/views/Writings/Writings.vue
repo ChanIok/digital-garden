@@ -42,7 +42,7 @@ store.$subscribe((mutation, state) => {
 watch(
   () => route.fullPath,
   async (val) => {
-    if (val.startsWith("/writings")) {
+    if (val.startsWith("/writings") && val != '/writings') {
       writingStore.setCurrentWritingPath(val.slice(1));
     } else if (val == '/') {
       await nextTick()

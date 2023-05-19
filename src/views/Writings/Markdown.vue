@@ -1,11 +1,11 @@
 <template>
   <div id="markdown" ref="markdown">
     <div v-html="content" v-viewer="{
-        movable: false,
-        toolbar: false,
-        navbar: false,
-        title: false,
-      }" class="markdown-content vp-doc"></div>
+      movable: false,
+      toolbar: false,
+      navbar: false,
+      title: false,
+    }" class="markdown-content vp-doc"></div>
     <n-back-top :right="50" />
 
     <div class="markdown-outline">
@@ -22,7 +22,7 @@
     <div ref="previewWrapper" id="preview-wrapper"
       :style="{ left: `${previewPosition.left}px`, top: `${previewPosition.top}px` }">
       <Preview :previewLink='previewLink' :isPreviewVisible="isPreviewVisible" :onmouseenter="stopHidePreview"
-        :onmouseleave="startHidePreview" />
+        :previewPosition="previewPosition" :onmouseleave="startHidePreview" />
     </div>
   </div>
 </template>
@@ -48,7 +48,9 @@ const previewWrapper = ref(null)
 
 const previewPosition = reactive<IPosition>({
   left: 0,
-  top: 0
+  top: 0,
+  width: 420,
+  height: 420
 })
 
 const hidePreviewTimeout = ref<number>(0)

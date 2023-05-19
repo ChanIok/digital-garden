@@ -1,7 +1,8 @@
 <template>
     <div id="preview">
         <transition name="fade">
-            <div class="markdown-popover" v-if="isPreviewVisible">
+            <div class="markdown-popover" v-if="isPreviewVisible"
+                :style="{ width: `${previewPosition.width}px`, height: `${previewPosition.height}px` }">
                 <n-scrollbar>
                     <div v-html="content" class="content"></div>
                 </n-scrollbar>
@@ -20,7 +21,7 @@ import { getLocalWritingByPath } from '@/utils/dev';
 import { NScrollbar } from "naive-ui";
 import axios from 'axios';
 
-const props = defineProps(['previewLink', 'isPreviewVisible'])
+const props = defineProps(['previewLink', 'isPreviewVisible', 'previewPosition'])
 const writingText = ref<string>('')
 const loadWriting = async (currentWritingPath: string) => {
     const store = useStore();
@@ -70,13 +71,12 @@ watch(() => props.previewLink, (val: string) => {
 #preview {
 
     .markdown-popover {
-        width: 420px;
-        height: 420px;
+
         background-color: #fff;
         box-shadow: 0 0 6px 6px rgba(0, 0, 0, 0.05);
         overflow: auto;
-        .content {
 
+        .content {
             font-size: 13px;
             padding: 10px;
             box-sizing: border-box;
@@ -86,12 +86,15 @@ watch(() => props.previewLink, (val: string) => {
     .fade-enter-active {
         transition: opacity .3s;
     }
+
     .fade-enter {
         opacity: 0;
     }
+
     .fade-leave-active {
         transition: opacity .3s;
     }
+
     .fade-leave-to {
         opacity: 0;
     }
