@@ -49,4 +49,3 @@ export const generateLocalManifest = (filesPath, outPutPath) => {
   };
   fs.writeFileSync(outPutPath, JSON.stringify(manifest));
 };
-generateLocalManifest("../public", "./manifest.json");

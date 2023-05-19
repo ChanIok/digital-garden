@@ -1,99 +1,95 @@
 <template>
-    <div id="welcome" :class="{ light: !store.isDark }">
-        <div class="container">
-            <div class="content">
-                <n-h1> Hi，欢迎来到本站</n-h1>
-                <n-p>
-                    这里是我构筑于区块链的一心净土
-                </n-p>
-                <n-p>
-
-                </n-p>
-                <n-ul>
-                    <n-li>
-                        <router-link to="/writings" #="{ navigate, href }" custom>
-                            <n-a :href="href" @click="navigate">
-                                数字花园
-                            </n-a>
-                        </router-link>
-                    </n-li>
-                    <n-li>
-                        <router-link to="/comments" #="{ navigate, href }" custom>
-                            <n-a :href="href" @click="navigate">
-                                留言板
-                            </n-a>
-                        </router-link>
-                    </n-li>
-                </n-ul>
-            </div>
-            <div class="link">
-                <div class="link-item">
-                    <n-button text tag="a" href="https://github.com/ChanIok/" target="_blank" color="#ffffffdf">
-                        <template #icon>
-                            <n-icon>
-                                <LogoGithub />
-                            </n-icon>
-                        </template>
-                        Github
-                    </n-button>
-                </div>
-                <div class="link-item">
-                    <n-button text tag="a" href="mailto:chaniok@qq.com" target="_blank" color="#ffffffdf">
-                        <template #icon>
-                            <n-icon>
-                                <Mail />
-                            </n-icon>
-                        </template>
-                        Mail
-                    </n-button>
-                </div>
-            </div>
+  <div id="welcome" :class="{ light: !store.isDark }">
+    <div class="container">
+      <div class="content">
+        <n-h1> Hi，欢迎来到本站</n-h1>
+        <n-p> 这里是我构筑于区块链的一心净土 </n-p>
+        <n-p> </n-p>
+        <n-ul>
+          <n-li>
+            <router-link to="/writings" #="{ navigate, href }" custom>
+              <n-a :href="href" @click="navigate"> 数字花园 </n-a>
+            </router-link>
+          </n-li>
+          <n-li>
+            <router-link to="/comments" #="{ navigate, href }" custom>
+              <n-a :href="href" @click="navigate"> 留言板 </n-a>
+            </router-link>
+          </n-li>
+        </n-ul>
+      </div>
+      <div class="link">
+        <div class="link-item">
+          <n-button
+            text
+            tag="a"
+            href="https://github.com/ChanIok/"
+            target="_blank"
+            color="#ffffffdf"
+          >
+            <template #icon>
+              <n-icon>
+                <LogoGithub />
+              </n-icon>
+            </template>
+            Github
+          </n-button>
         </div>
+        <div class="link-item">
+          <n-button text tag="a" href="mailto:chaniok@qq.com" target="_blank" color="#ffffffdf">
+            <template #icon>
+              <n-icon>
+                <Mail />
+              </n-icon>
+            </template>
+            Mail
+          </n-button>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
-  
+
 <script setup lang="ts">
-import { NIcon, NButton, NH1, NUl, NLi, NP, NA } from "naive-ui";
-import { LogoGithub, Mail } from "@vicons/ionicons5";
-import { useStore } from "@/store";
-const store = useStore();
+  import { NIcon, NButton, NH1, NUl, NLi, NP, NA } from 'naive-ui';
+  import { LogoGithub, Mail } from '@vicons/ionicons5';
+  import { useStore } from '@/store';
+  import { SelectProps, ButtonProps } from 'naive-ui';
 
-import { SelectProps, ButtonProps } from 'naive-ui'
+  const store = useStore();
 
-type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>
-type ButtonThemeOverrides = NonNullable<ButtonProps['themeOverrides']>
+  type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
+  type ButtonThemeOverrides = NonNullable<ButtonProps['themeOverrides']>;
 
-const selectThemeOverrides: SelectThemeOverrides = {
+  const selectThemeOverrides: SelectThemeOverrides = {
     menuBoxShadow:
-        '0 6px 16px -9px rgba(0, 0, 0, .08), 0 9px 28px 0 rgba(0, 0, 0, .05), 0 12px 48px 16px rgba(0, 0, 0, .03)',
+      '0 6px 16px -9px rgba(0, 0, 0, .08), 0 9px 28px 0 rgba(0, 0, 0, .05), 0 12px 48px 16px rgba(0, 0, 0, .03)',
     peers: {
-        InternalSelection: {
-            textColor: '#FF0000',
-            heightMedium: '42px'
-        }
-    }
-}
-const buttonThemeOverrides: ButtonThemeOverrides = {
+      InternalSelection: {
+        textColor: '#FF0000',
+        heightMedium: '42px',
+      },
+    },
+  };
+
+  const buttonThemeOverrides: ButtonThemeOverrides = {
     heightMedium: '40px',
-    textColor: 'rgba(24, 127, 231, 1)'
-}
-
+    textColor: 'rgba(24, 127, 231, 1)',
+  };
 </script>
-  
-<style lang="less" scoped>
-@import url("@/styles/varibles.less");
-@color: rgba(247, 247, 248, 0.8);
 
-.light .content :deep(h1),
-.light .content :deep(li),
-.light .content :deep(p) {
+<style lang="less" scoped>
+  @import url('@/styles/varibles.less');
+  @color: rgba(247, 247, 248, 0.8);
+
+  .light .content :deep(h1),
+  .light .content :deep(li),
+  .light .content :deep(p) {
     color: @color;
     text-shadow: 3px 3px 5px rgba(78, 78, 78, 0.3);
-}
+  }
 
-
-
-#welcome {
+  #welcome {
     width: 100%;
     height: 100%;
     z-index: 1;
@@ -101,37 +97,36 @@ const buttonThemeOverrides: ButtonThemeOverrides = {
     justify-content: center;
 
     .container {
-        display: flex;
-        flex-direction: column;
-        width: 50%;
-        max-width: 800px;
-        height: 100%;
-        justify-content: center;
-        align-items: start;
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      max-width: 800px;
+      height: 100%;
+      justify-content: center;
+      align-items: start;
+      z-index: inherit;
+
+      .content {
         z-index: inherit;
+      }
 
-        .content {
-            z-index: inherit;
+      .link {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-around;
+
+        .link-item {
+          margin-right: 20px;
         }
+      }
 
-        .link {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-around;
+      @media only screen and (max-width: 480px) {
+        width: 80%;
+      }
 
-            .link-item {
-                margin-right: 20px;
-            }
-        }
-
-        @media only screen and (max-width: 480px) {
-            width: 80%;
-        }
-
-        @media only screen and (max-width: 360px) {
-            width: 350;
-        }
+      @media only screen and (max-width: 360px) {
+        width: 350;
+      }
     }
-}
+  }
 </style>
-  

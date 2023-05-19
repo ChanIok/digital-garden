@@ -5,7 +5,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "http":"npx http-server --cors",
+    "http": "npx http-server ../dist --cors",
     "start": "node main.js",
     "upload": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,9 +18,7 @@
     "axios": "^1.3.6",
     "glob": "^10.2.1",
     "http-server": "^14.1.1",
-    "object-hash": "^3.0.0"
-  },
-  "dependencies": {
+    "object-hash": "^3.0.0",
     "@types/glob": "^8.1.0"
   }
 }
