@@ -80,7 +80,14 @@ watch(() => props.previewLink, (val: string) => {
             font-size: 13px;
             padding: 10px;
             box-sizing: border-box;
+
+            :deep(img) {
+                max-width: 100%;
+            }
+
         }
+
+
     }
 
     .fade-enter-active {

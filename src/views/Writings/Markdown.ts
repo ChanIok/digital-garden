@@ -69,10 +69,14 @@ export const setLinks = (
           elements[i].offsetHeight -
           scrollbar!.scrollTop;
       }
-      previewPosition.left =
-        elements[i].offsetLeft +
-        elements[i].offsetWidth -
-        previewPosition.width / 2;
+      if (elements[i].offsetLeft < previewPosition.width / 2) {
+        previewPosition.left = elements[i].offsetLeft;
+      } else {
+        previewPosition.left =
+          elements[i].offsetLeft +
+          elements[i].offsetWidth -
+          previewPosition.width / 2;
+      }
     };
 
     elements[i].onmouseout = () => {
