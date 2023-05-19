@@ -1,10 +1,6 @@
 <template>
   <div id="markdown" ref="markdown">
-    <div
-      v-html="content"
-
-      class="markdown-content vp-doc"
-    ></div>
+    <div v-html="content" class="markdown-content vp-doc"></div>
     <n-back-top :right="50" />
 
     <div class="markdown-outline">
@@ -38,26 +34,19 @@
       id="preview-wrapper"
       :style="{ left: `${previewPosition.left}px`, top: `${previewPosition.top}px` }"
     >
-      <Preview
-        :previewLink="previewLink"
-        :isPreviewVisible="isPreviewVisible"
-        :onmouseenter="stopHidePreview"
-        :previewPosition="previewPosition"
-        :onmouseleave="startHidePreview"
-      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, nextTick, watch, reactive } from 'vue';
+  import { ref, nextTick, watch, reactive, onMounted, h, render } from 'vue';
   import { getMarkedContent } from '@/utils/marked';
   import { computed } from '@vue/reactivity';
-  import { NBackTop, NAnchor, NAnchorLink, NEllipsis } from 'naive-ui';
+  import { NBackTop, NAnchor, NAnchorLink, NEllipsis, NPopover } from 'naive-ui';
   import { useWritingStore } from '@/store';
   import { setAnchors, setLinks, setImgs } from './Markdown';
   import { useRouter } from 'vue-router';
-  import Preview from './Preview.vue';
+
   import { IPosition } from '@/typings';
 
   const previewLink = ref<string>('');
@@ -99,14 +88,7 @@
       await nextTick();
       try {
         setAnchors(anchors, markdown);
-        setLinks(
-          markdown,
-          router,
-          previewLink,
-          isPreviewVisible,
-          previewPosition,
-          hidePreviewTimeout
-        );
+        setLinks(markdown, router, previewLink);
         setImgs(markdown);
       } catch (error) {
         console.log(error);
