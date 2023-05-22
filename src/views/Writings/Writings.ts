@@ -55,12 +55,12 @@ export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
   return markdownList;
 };
 
-export const loadWriting = async (isUsingProgressBar = true, isUsingWritingStore = true) => {
+export const loadWriting = async (isReturnTextDirectly = false, path = '/index.md') => {
   const store = useStore();
   const writingStore = useWritingStore();
   const loadingBarStore = useLoadingBarStore();
   const manifest = store.manifest;
-  const currentWritingPath = writingStore.currentWritingPath;
+  const currentWritingPath = isReturnTextDirectly ? path : writingStore.currentWritingPath;
   if (!manifest) {
     return;
   }
@@ -69,28 +69,28 @@ export const loadWriting = async (isUsingProgressBar = true, isUsingWritingStore
       manifest,
       currentWritingPath.slice(0, currentWritingPath.length - '/index.md'.length)
     );
-    if (isUsingWritingStore) {
+    if (isReturnTextDirectly) {
+      return text;
+    } else {
       writingStore.setCurrentWritingText(text);
       return;
-    } else {
-      return text;
     }
   }
-  if (isUsingProgressBar) {
+  if (!isReturnTextDirectly) {
     loadingBarStore.startLoadingBar();
   }
   const url = appEnv.VITE_USE_LOCAL_WRITINGS
     ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${currentWritingPath}`
     : `https://arweave.net/${manifest?.paths[currentWritingPath]?.id}`;
   const { data } = await axios.get(url);
-  if (isUsingWritingStore) {
-    writingStore.setCurrentWritingText(data);
-    await nextTick();
-  } else {
+  if (isReturnTextDirectly) {
     await nextTick();
     return data;
+  } else {
+    writingStore.setCurrentWritingText(data);
+    await nextTick();
   }
-  if (isUsingProgressBar) {
+  if (!isReturnTextDirectly) {
     loadingBarStore.finishLoadingBar();
   }
 };

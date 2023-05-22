@@ -48,7 +48,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
       continue;
     }
 
-    const writingText = await loadWriting(false, false);
+    const writingText = await loadWriting(true, path);
     const popverInstance = h(
       NPopover,
       { trigger: 'hover', scrollable: true, style: 'max-height: 420px;max-width: 720px' },
