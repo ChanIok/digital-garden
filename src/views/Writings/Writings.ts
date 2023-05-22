@@ -1,21 +1,31 @@
-import { appEnv } from "@/config";
-import { useLoadingBarStore } from "@/store/modules/loading-bar";
-import { getFullPath } from "@/utils/artools";
-import { nextTick } from "vue";
-import { useStore, useWritingStore } from "@/store";
-import { useRoute } from "vue-router";
-import { getLocalWritingByPath } from "@/utils/dev";
-import axios from "axios";
-import { IManifest } from "@/typings";
+import { appEnv } from '@/config';
+import { useLoadingBarStore } from '@/store/modules/loading-bar';
+import { getFullPath } from '@/utils/artools';
+import { nextTick } from 'vue';
+import { useStore, useWritingStore } from '@/store';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { IManifest } from '@/typings';
+
+export const getLocalWritingByPath = async (path: string) => {
+  let res = '';
+  const store = useStore();
+  const manifest = store.manifest;
+  if (!manifest) {
+    return res;
+  }
+  res = (await axios.get(`${appEnv.VITE_LOCAL_REQUEST_URL}/${path}`)).data;
+  return res;
+};
 
 export const checkPath = async () => {
   const route = useRoute();
   const txIdTemp = route.params.txId;
-  if (route.params.txId == undefined || route.params.txId == "") {
+  if (route.params.txId == undefined || route.params.txId == '') {
     return;
   }
   const path = await getFullPath(txIdTemp as string);
-  if (path == "") {
+  if (path == '') {
     return;
   }
   const writingStore = useWritingStore();
@@ -25,63 +35,62 @@ export const checkPath = async () => {
 export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
   const paths = manifest.paths;
   const subPaths: any = {};
-  let markdownList = "";
+  let markdownList = '';
   for (const path in paths) {
     if (path.startsWith(targetPath)) {
-      const pathSegments = path.slice(targetPath.length).split("/");
+      const pathSegments = path.slice(targetPath.length).split('/');
       if (pathSegments.length > 2) {
-        subPaths[pathSegments[1]] =
-          `${targetPath}/${pathSegments[1]}/index.md`.replace(/\s/g, "%20");
-      } else {
-        subPaths[pathSegments[1]] = `${targetPath}/${pathSegments[1]}`.replace(
+        subPaths[pathSegments[1]] = `${targetPath}/${pathSegments[1]}/index.md`.replace(
           /\s/g,
-          "%20"
+          '%20'
         );
+      } else {
+        subPaths[pathSegments[1]] = `${targetPath}/${pathSegments[1]}`.replace(/\s/g, '%20');
       }
     }
   }
   for (const path in subPaths) {
-    markdownList += `[${path}](${subPaths[path].slice(
-      "writings/".length
-    )})\n\n`;
+    markdownList += `[${path}](${subPaths[path].slice('writings/'.length)})\n\n`;
   }
   return markdownList;
 };
 
-export const loadWriting = async () => {
+export const loadWriting = async (isUsingProgressBar = true, isUsingWritingStore = true) => {
   const store = useStore();
   const writingStore = useWritingStore();
+  const loadingBarStore = useLoadingBarStore();
   const manifest = store.manifest;
   const currentWritingPath = writingStore.currentWritingPath;
   if (!manifest) {
     return;
   }
-  if (currentWritingPath.endsWith("/index.md")) {
-    if (!(currentWritingPath in manifest.paths)) {
-      const text = getSubPathsList(
-        manifest,
-        currentWritingPath.slice(
-          0,
-          currentWritingPath.length - "/index.md".length
-        )
-      );
+  if (currentWritingPath.endsWith('/index.md') && !(currentWritingPath in manifest.paths)) {
+    const text = getSubPathsList(
+      manifest,
+      currentWritingPath.slice(0, currentWritingPath.length - '/index.md'.length)
+    );
+    if (isUsingWritingStore) {
       writingStore.setCurrentWritingText(text);
       return;
+    } else {
+      return text;
     }
   }
-  const loadingBarStore = useLoadingBarStore();
-  loadingBarStore.startLoadingBar();
-  if (appEnv.VITE_USE_LOCAL_WRITINGS) {
-    const text = await getLocalWritingByPath(currentWritingPath);
-    writingStore.setCurrentWritingText(text);
-  } else {
-    const text = (
-      await axios.get(
-        `https://arweave.net/${manifest!.paths[currentWritingPath].id}`
-      )
-    ).data;
-    writingStore.setCurrentWritingText(text);
+  if (isUsingProgressBar) {
+    loadingBarStore.startLoadingBar();
   }
-  await nextTick();
-  loadingBarStore.finishLoadingBar();
+  const url = appEnv.VITE_USE_LOCAL_WRITINGS
+    ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${currentWritingPath}`
+    : `https://arweave.net/${manifest?.paths[currentWritingPath]?.id}`;
+  const { data } = await axios.get(url);
+  if (isUsingWritingStore) {
+    writingStore.setCurrentWritingText(data);
+    await nextTick();
+  } else {
+    await nextTick();
+    return data;
+  }
+  if (isUsingProgressBar) {
+    loadingBarStore.finishLoadingBar();
+  }
 };

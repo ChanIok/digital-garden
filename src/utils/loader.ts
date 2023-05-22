@@ -42,7 +42,7 @@ export const loadManifest = async () => {
     store.setManifest(manifest);
   };
   if (appEnv.VITE_USE_LOCAL_MANIFEST) {
-    const res = (await axios.get(appEnv.VITE_LOCAL_MANIFEST_URL)).data;
+    const res = (await axios.get(`${appEnv.VITE_LOCAL_REQUEST_URL}/manifest.json`)).data;
     setManifest(res);
     return;
   }

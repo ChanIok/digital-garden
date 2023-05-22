@@ -6,5 +6,5 @@ export const appEnv = {
   MODE: import.meta.env.MODE,
   VITE_USE_LOCAL_MANIFEST: import.meta.env.VITE_USE_LOCAL_MANIFEST,
   VITE_USE_LOCAL_WRITINGS: import.meta.env.VITE_USE_LOCAL_WRITINGS,
-  VITE_LOCAL_MANIFEST_URL: import.meta.env.VITE_LOCAL_MANIFEST_URL,
+  VITE_LOCAL_REQUEST_URL: import.meta.env.VITE_LOCAL_REQUEST_URL,
 };
