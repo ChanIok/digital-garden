@@ -1,9 +1,11 @@
 import { Ref, h, render } from 'vue';
 import { Router } from 'vue-router';
-import { NImage, NPopover } from 'naive-ui';
+import { NImage, NPopover, NConfigProvider, darkTheme } from 'naive-ui';
 import Preview from './Preview.vue';
 import { loadWriting } from './Writings';
 import { getMarkedContent } from '@/utils/marked';
+import { useStore } from '@/store';
+
 export const setAnchors = (anchors: any, markdown: any) => {
   const elements = markdown.value.querySelectorAll('h1,h2,h3,h4,h5,h6');
   const tree: any = [{ node: elements[0], children: [] }];
@@ -34,6 +36,7 @@ export const setImgs = (markdown: Ref<HTMLElement>) => {
 };
 
 export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
+  const store = useStore();
   const elements = Array.from(markdown.value.querySelectorAll<HTMLAnchorElement>('a'));
   for (const link of elements) {
     const path = link.getAttribute('path');
@@ -49,18 +52,26 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     }
 
     const writingText = await loadWriting(true, path);
+    const maxWidth = Math.min(window.innerWidth - link.offsetLeft - 20, 720);
+    const nPStyle = `max-height: 420px;max-width: ${maxWidth}px`;
     const popverInstance = h(
-      NPopover,
+      NConfigProvider,
+      { theme: store.isDark ? darkTheme : undefined },
       {
-        trigger: 'hover',
-        scrollable: true,
-        style: 'max-height: 420px;max-width: 720px',
-        class: 'pv-doc',
-      },
-      {
-        default: () => h(Preview, { content: getMarkedContent(writingText) }),
-        trigger: () =>
-          h('a', { style: 'border-color:#8b88e6;background-color:#efefff' }, link.innerHTML),
+        default: () =>
+          h(
+            NPopover,
+            {
+              trigger: 'hover',
+              scrollable: true,
+              style: nPStyle,
+              class: 'pv-doc',
+            },
+            {
+              default: () => h(Preview, { content: getMarkedContent(writingText) }),
+              trigger: () => h('a', { class: 'internal-link' }, link.innerHTML),
+            }
+          ),
       }
     );
     let linkElement = document.createElement('div');

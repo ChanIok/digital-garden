@@ -14,9 +14,6 @@
         </n-ellipsis>
       </n-anchor>
     </div>
-    <div ref="previewWrapper" id="preview-wrapper"
-      :style="{ left: `${previewPosition.left}px`, top: `${previewPosition.top}px` }">
-    </div>
   </div>
 </template>
 
@@ -29,19 +26,8 @@ import { useWritingStore } from '@/store';
 import { setAnchors, setLinks, setImgs } from './Markdown';
 import { useRouter } from 'vue-router';
 
-import { IPosition } from '@/typings';
-
 const writingStore = useWritingStore();
 const router = useRouter();
-
-const previewWrapper = ref(null);
-
-const previewPosition = reactive<IPosition>({
-  left: 0,
-  top: 0,
-  width: 420,
-  height: 420,
-});
 
 const onClickAnchor = (e: PointerEvent) => {
   e.preventDefault();
@@ -108,5 +94,4 @@ watch(
   #preview-wrapper {
     position: absolute;
   }
-}
-</style>
+}</style>
