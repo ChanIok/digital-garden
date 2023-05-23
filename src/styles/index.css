@@ -1,5 +1,6 @@
-@import url("@/styles/varibles.less");
-@import url("@/styles/md.less");
+@import url('@/styles/varibles.less');
+@import url('@/styles/md.less');
+@import url('@/styles/pv.less');
 
 html,
 body,
@@ -11,7 +12,12 @@ body,
   border: 0;
 }
 
+html{
+  overflow-x: hidden;
+}
+
 body {
   font-size: 16px;
   font-weight: 400;
 }
+

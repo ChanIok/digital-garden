@@ -51,10 +51,16 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     const writingText = await loadWriting(true, path);
     const popverInstance = h(
       NPopover,
-      { trigger: 'hover', scrollable: true, style: 'max-height: 420px;max-width: 720px' },
+      {
+        trigger: 'hover',
+        scrollable: true,
+        style: 'max-height: 420px;max-width: 720px',
+        class: 'pv-doc',
+      },
       {
         default: () => h(Preview, { content: getMarkedContent(writingText) }),
-        trigger: () => h('a', link.innerHTML),
+        trigger: () =>
+          h('a', { style: 'border-color:#8b88e6;background-color:#efefff' }, link.innerHTML),
       }
     );
     let linkElement = document.createElement('div');

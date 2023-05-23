@@ -84,7 +84,6 @@ export const loadWriting = async (isReturnTextDirectly = false, path = '/index.m
     : `https://arweave.net/${manifest?.paths[currentWritingPath]?.id}`;
   const { data } = await axios.get(url);
   if (isReturnTextDirectly) {
-    await nextTick();
     return data;
   } else {
     writingStore.setCurrentWritingText(data);
