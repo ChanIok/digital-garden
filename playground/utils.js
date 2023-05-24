@@ -15,7 +15,7 @@ export const getLatestManifestId = async () => {
           values: ["PlaneOfEuthymia"],
         },
       ],
-      first: 10,
+      first: 1,
     },
     operationName: "getTransactions",
   };

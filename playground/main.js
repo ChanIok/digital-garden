@@ -1,18 +1,38 @@
 import { Uploader } from './Uploader.js';
 import { getLatestManifestId, getLatestState, generateLocalManifest } from './utils.js';
-const config = {
-  distPath: '../dist',
-  walletPath: '../wallet.json',
-};
-const args = process.argv.slice(2);
 
-if (args[0] == 'upload') {
-  const uploader = new Uploader(config.distPath, config.walletPath);
-  uploader.uploadMissingFiles();
-} else if (args[0] == 'getId') {
-  console.log(await getLatestManifestId());
-} else if (args[0] == 'getMF') {
-  console.log(await getLatestState(args[1]));
-} else if (args[0] == 'genMF') {
-  generateLocalManifest('../dist', '../dist/manifest.json');
+const type = 'writings';
+
+const config = {
+  uploadPath: type=='app'?'../dist':'',
+  walletPath: '../wallet.json',
+  appName: 'PlaneOfEuthymia',
+  appWritingsName: 'PlaneOfEuthymiaWritings',
+};
+const [command, arg1] = process.argv.slice(2);
+
+const uploader = new Uploader(config.uploadPath, config.walletPath);
+const latestManifestId = await getLatestManifestId();
+const latestState = await getLatestState(latestManifestId);
+
+switch (command) {
+  case 'upload':
+    uploader.uploadMissingFiles(latestState, type);
+    break;
+
+  case 'getId':
+    console.log(await getLatestManifestId());
+    break;
+
+  case 'getMF':
+    console.log(await getLatestState(arg1));
+    break;
+
+  case 'genMF':
+    generateLocalManifest(config.uploadPath, `${config.uploadPath}/manifest.json`);
+    break;
+
+  default:
+    console.log('Invalid command');
+    break;
 }

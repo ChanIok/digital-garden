@@ -1,9 +1,7 @@
 import axios from "axios";
-import { nextTick, h } from "vue";
 import { loadManifest } from "./loader";
-import { NEllipsis } from "naive-ui";
 import { useStore } from "@/store";
-import { gatewayUrl, owner, appName } from "@/config";
+import { gatewayUrl, owner, appWritingsName } from "@/config";
 
 export const getLatestManifestId = async () => {
   const graphql = {
@@ -14,7 +12,7 @@ export const getLatestManifestId = async () => {
       tags: [
         {
           name: "App-Name",
-          values: [appName],
+          values: [appWritingsName],
         },
       ],
       first: 10,
@@ -27,60 +25,6 @@ export const getLatestManifestId = async () => {
 
 export const getLatestState = async (txId: string) => {
   return (await axios.get(`${gatewayUrl}/${txId}/manifest.json`)).data;
-};
-
-export const getWritingsList = async () => {
-  const store = useStore();
-  const manifest = store.manifest;
-  if (!manifest) {
-    await loadManifest();
-  }
-  const paths = manifest?.paths;
-  const catalogue: any[] = [];
-  const writingList: any[] = [];
-  writingList.push({
-    label: () => h(NEllipsis, null, { default: () => "关于" }),
-    key: "about",
-  });
-  for (const key in paths) {
-    if (key.indexOf("writings/") != 0) {
-      continue;
-    }
-    if (key.indexOf("writings/attachments") == 0) {
-      continue;
-    }
-    await nextTick();
-    const keys = key.split("/");
-    keys.shift();
-    keys.reduce((pre, cur, i) => {
-      if (i === keys.length - 1) {
-        pre.push({
-          label: () =>
-            h(NEllipsis, null, {
-              default: () => keys[keys.length - 1],
-            }),
-          key,
-        });
-        return pre;
-      }
-      for (const index in pre) {
-        if (pre[index].key == cur) {
-          return pre[index].children;
-        }
-      }
-      pre.push({
-        label: () => h(NEllipsis, null, { default: () => cur }),
-        key: cur,
-        children: [],
-      });
-      return pre[pre.length - 1].children;
-    }, catalogue);
-  }
-  for (const key in catalogue) {
-    writingList.push(catalogue[key]);
-  }
-  writingList.sort();
-  return writingList;
 };
 
 export const getFullPath = async (prefix: string) => {
