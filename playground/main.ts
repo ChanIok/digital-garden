@@ -5,7 +5,7 @@ const type = 'writings';
 let command = 'upload';
 
 const config = {
-  uploadPath: 'C:\\Users\\CH\\OneDrive\\Writings',
+  uploadPath: 'C:/Users/CH/OneDrive/Writings',
   walletPath: 'D:\\Environment\\arweave\\wallet.json',
   appName: 'PlaneOfEuthymia',
   appWritingsName: 'PlaneOfEuthymiaWritings',

@@ -52,6 +52,7 @@ export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
   for (const path in subPaths) {
     markdownList += `[${path}](${subPaths[path].slice('writings/'.length)})\n\n`;
   }
+  console.log(manifest, targetPath);
   return markdownList;
 };
 
@@ -61,6 +62,7 @@ export const loadWriting = async (isReturnTextDirectly = false, path = '/index.m
   const loadingBarStore = useLoadingBarStore();
   const manifest = store.manifest;
   const currentWritingPath = isReturnTextDirectly ? path : writingStore.currentWritingPath;
+  console.log(1);
   if (!manifest) {
     return;
   }

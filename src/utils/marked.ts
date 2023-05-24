@@ -8,18 +8,6 @@ marked.setOptions({
 });
 
 const renderer = {
-  image(href: string, title: string, text: string) {
-    if (href === null) {
-      return text;
-    }
-
-    let out = `<img οnclick="showMarkedImage(event, '${href}')" src="./writings/${href}" alt="${text}"`;
-    if (title) {
-      out += ` title="${title}"`;
-    }
-    out += ">";
-    return out;
-  },
   link(href: string, title: string, text: string) {
     if (href === null) {
       return text;

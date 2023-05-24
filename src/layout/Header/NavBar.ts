@@ -1,17 +1,18 @@
-import { useWritingStore } from "@/store";
-import { nextTick } from "vue";
+import { useWritingStore } from '@/store';
+import { nextTick } from 'vue';
 
 export const loadWritingData = async (visibleList: any, hiddenList: any) => {
   const offset = 100;
   const writingStore = useWritingStore();
   await nextTick();
   visibleList.value = writingStore.currentWritingPathArray.slice();
+  visibleList.value.unshift('writings');
   visibleList.value = visibleList.value.map((item: any, index: number) => {
-    let label = item.replace(/%20/g, " ");
+    let label = item.replace(/%20/g, ' ');
     if (index == 0) {
-      label = "数字花园";
-    } else if (index == visibleList.value.length - 1 && item == "index.md") {
-      label = "目录";
+      label = '数字花园';
+    } else if (index == visibleList.value.length - 1 && item == 'index.md') {
+      label = '目录';
     }
     return { label, key: item };
   });
@@ -22,23 +23,16 @@ export const loadWritingData = async (visibleList: any, hiddenList: any) => {
   const navBarLiEls = getNavBarLiEls();
   const totalWidth = getTotalWidth(navBarLiEls);
   if (totalWidth > navBarUlWidth) {
-    adjustVisibleList(
-      navBarUlWidth,
-      totalWidth,
-      offset,
-      navBarLiEls,
-      visibleList,
-      hiddenList
-    );
+    adjustVisibleList(navBarUlWidth, totalWidth, offset, navBarLiEls, visibleList, hiddenList);
   }
 };
 
 const getNavBarUlWidth = (): number => {
-  return (document.querySelector("#nav-bar>ul") as any).offsetWidth;
+  return (document.querySelector('#nav-bar>ul') as any).offsetWidth;
 };
 
 const getNavBarLiEls = (): NodeListOf<Element> => {
-  return document.querySelectorAll("#nav-bar>ul>li");
+  return document.querySelectorAll('#nav-bar>ul>li');
 };
 
 const getTotalWidth = (navBarLiEls: NodeListOf<Element>): number => {

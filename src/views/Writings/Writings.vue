@@ -43,7 +43,7 @@ watch(
   () => route.fullPath,
   async (val) => {
     if (val.startsWith("/writings") && val != '/writings') {
-      writingStore.setCurrentWritingPath(val.slice(1));
+      writingStore.setCurrentWritingPath(val.slice(10));
     } else if (val == '/') {
       await nextTick()
       writingStore.$reset()

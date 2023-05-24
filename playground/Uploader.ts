@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import * as glob from 'glob';
+import { sync } from 'glob';
 import hash from 'object-hash';
 import Bundlr from '@bundlr-network/client';
 
@@ -26,11 +26,12 @@ export class Uploader {
     this.jwk = JSON.parse(fs.readFileSync(walletPath).toString());
     this.bundlr = new Bundlr('http://node1.bundlr.network', 'arweave', this.jwk);
     this.resolvedBasePath = path.resolve(filesPath);
-    this.filePaths = glob.sync('**/*', {
+    this.filePaths = sync('**/*', {
       cwd: this.resolvedBasePath,
       nodir: true,
       ignore: ignore,
     });
+    this.filePaths = this.filePaths.map((file) => file.replace(/\\/g, '/'));
     this.manifest = {
       manifest: 'arweave/paths',
       version: '0.1.0',
