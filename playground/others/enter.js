@@ -1,11 +1,14 @@
-import { Uploader } from './Uploader.js';
+import { Uploader } from '../Uploader-old.js';
 import { getLatestManifestId, getLatestState, generateLocalManifest } from './utils.js';
 
 const type = 'writings';
+const writingsPath = '';
+const appDistPath = '../dist';
+const walletPath = '../wallet.json';
 
 const config = {
-  uploadPath: type=='app'?'../dist':'',
-  walletPath: '../wallet.json',
+  uploadPath: type == 'app' ? appDistPath : writingsPath,
+  walletPath: walletPath,
   appName: 'PlaneOfEuthymia',
   appWritingsName: 'PlaneOfEuthymiaWritings',
 };

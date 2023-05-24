@@ -57,7 +57,7 @@ export class Uploader {
     };
   }
 
-  async uploadMissingFiles(latestManifest, type = 'app') {
+  async uploadMissingFiles(latestManifest) {
     const hashToPath = {};
     for (const key in latestManifest.paths) {
       const { hash, id } = latestManifest.paths[key];
@@ -77,7 +77,7 @@ export class Uploader {
     const finalManifestContent = JSON.stringify(this.manifest);
     const tags = [
       { name: 'Content-type', value: 'application/x.arweave-manifest+json' },
-      { name: 'App-Name', value: type == 'app' ? 'PlaneOfEuthymia' : 'PlaneOfEuthymiaWritings' },
+      { name: 'App-Name', value: 'PlaneOfEuthymiaWritings' },
     ];
 
     const finalManifestUploadResponse = await this.bundlr.upload(finalManifestContent, {
