@@ -65,31 +65,6 @@ watch(
     flex-direction: column;
   }
 
-  .sidebar-wrapper {
-    width: 250px;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 0px;
-    border-right: 1px solid var(--theme-border);
-
-    @media only screen and (max-width: 960px) {
-      display: none;
-    }
-  }
-
-  .local-nav-wrapper {
-    display: none;
-    z-index: 99;
-    width: 100%;
-    border-bottom: 1px solid var(--theme-border);
-    box-sizing: border-box;
-    flex: 0;
-
-    @media only screen and (max-width: 960px) {
-      display: block;
-    }
-  }
-
   .writings-container {
     display: flex;
     width: 100%;

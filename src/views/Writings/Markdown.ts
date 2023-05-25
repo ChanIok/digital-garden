@@ -5,6 +5,7 @@ import Preview from './Preview.vue';
 import { loadWriting } from './Writings';
 import { getMarkedContent } from '@/utils/marked';
 import { useStore } from '@/store';
+import { appEnv } from '@/config';
 
 export const setAnchors = (anchors: any, markdown: any) => {
   const elements = markdown.value.querySelectorAll('h1,h2,h3,h4,h5,h6');
@@ -26,9 +27,13 @@ export const setAnchors = (anchors: any, markdown: any) => {
 
 export const setImgs = (markdown: Ref<HTMLElement>) => {
   const images = Array.from(markdown.value.querySelectorAll<HTMLImageElement>('img'));
-
+  const store = useStore();
   for (const image of images) {
-    const nImageInstance = h(NImage, { src: image.src });
+    const path = image.getAttribute('path');
+    const url = appEnv.VITE_USE_LOCAL_WRITINGS
+      ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${path}`
+      : `https://arweave.net/${store.manifest?.paths[path!]?.id}`;
+    const nImageInstance = h(NImage, { src: url });
     let imgElement = document.createElement('div');
     render(nImageInstance, imgElement);
     image.replaceWith(imgElement);
@@ -45,7 +50,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     }
 
     link.onclick = () => {
-      router.push(path);
+      router.push(`/writings/${path}`);
     };
     if (path.endsWith('index.md')) {
       continue;
@@ -78,7 +83,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     render(popverInstance, linkElement);
     link.replaceWith(linkElement);
     linkElement.onclick = () => {
-      router.push(path);
+      router.push(`/writings/${path}`);
       console.log(path);
     };
   }

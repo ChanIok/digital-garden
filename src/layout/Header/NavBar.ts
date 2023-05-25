@@ -6,11 +6,12 @@ export const loadWritingData = async (visibleList: any, hiddenList: any) => {
   const writingStore = useWritingStore();
   await nextTick();
   visibleList.value = writingStore.currentWritingPathArray.slice();
-  visibleList.value.unshift('writings');
+  visibleList.value.unshift('');
   visibleList.value = visibleList.value.map((item: any, index: number) => {
     let label = item.replace(/%20/g, ' ');
     if (index == 0) {
       label = '数字花园';
+      return { label, key: '/' };
     } else if (index == visibleList.value.length - 1 && item == 'index.md') {
       label = '目录';
     }

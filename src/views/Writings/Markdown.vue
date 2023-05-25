@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch, reactive, } from 'vue';
+import { ref, nextTick, watch, } from 'vue';
 import { getMarkedContent } from '@/utils/marked';
 import { computed } from '@vue/reactivity';
 import { NBackTop, NAnchor, NAnchorLink, NEllipsis, } from 'naive-ui';
@@ -94,4 +94,5 @@ watch(
   #preview-wrapper {
     position: absolute;
   }
-}</style>
+}
+</style>
