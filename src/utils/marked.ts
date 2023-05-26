@@ -1,3 +1,5 @@
+import { appEnv } from '@/config';
+import { useStore } from '@/store';
 import { marked } from 'marked';
 
 const render = new marked.Renderer();
@@ -12,8 +14,12 @@ const renderer = {
     if (href === null) {
       return text;
     }
+    const store = useStore();
+    const url = appEnv.VITE_USE_LOCAL_WRITINGS
+      ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${href}`
+      : `https://arweave.net/${store.manifest?.paths[href!]?.id}`;
 
-    let out = `<img path="${href}" alt="${text}"`;
+    let out = `<img src="${url}" path="${href}" alt="${text}"`;
     if (title) {
       out += ` title="${title}"`;
     }

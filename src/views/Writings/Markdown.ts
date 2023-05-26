@@ -43,17 +43,17 @@ export const setImgs = (markdown: Ref<HTMLElement>) => {
 export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
   const store = useStore();
   const elements = Array.from(markdown.value.querySelectorAll<HTMLAnchorElement>('a'));
-  for (const link of elements) {
+  const promises = elements.map(async (link) => {
     const path = link.getAttribute('path');
     if (!path) {
-      continue;
+      return;
     }
 
     link.onclick = () => {
       router.push(`/writings/${path}`);
     };
     if (path.endsWith('index.md')) {
-      continue;
+      return;
     }
 
     const writingText = await loadWriting(true, path);
@@ -84,7 +84,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     link.replaceWith(linkElement);
     linkElement.onclick = () => {
       router.push(`/writings/${path}`);
-      console.log(path);
     };
-  }
+  });
+  await Promise.all(promises);
 };

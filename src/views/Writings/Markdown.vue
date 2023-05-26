@@ -44,7 +44,7 @@ watch(
     await nextTick();
     try {
       setAnchors(anchors, markdown);
-      setLinks(markdown, router);
+      await setLinks(markdown, router);
       setImgs(markdown);
     } catch (error) {
       console.log(error);

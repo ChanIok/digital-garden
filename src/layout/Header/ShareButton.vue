@@ -27,14 +27,14 @@ const message = useMessage();
 const isButtonVisible = computed(() => {
   const manifest = store.manifest;
   const currentWritingPath = writingStore.currentWritingPath;
-  return manifest!.paths[currentWritingPath];
+  return manifest?.paths[currentWritingPath];
 });
 
 const sharingLink = computed(() => {
   const manifest = store.manifest;
   const currentWritingPath = writingStore.currentWritingPath;
   let link = "";
-  if (!manifest!.paths[currentWritingPath]) {
+  if (!manifest?.paths[currentWritingPath]) {
     return;
   }
   link = manifest!.paths[currentWritingPath].id.substring(0, 6);

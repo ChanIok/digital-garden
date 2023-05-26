@@ -38,7 +38,6 @@ const loadBreadcrumbData = async () => {
     hiddenList.value = [];
   } else if (route.fullPath.startsWith('/writings')) {
     await loadWritingData(visibleList, hiddenList);
-    console.log(visibleList.value);
   }
 };
 
