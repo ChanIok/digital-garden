@@ -37,7 +37,7 @@ const sharingLink = computed(() => {
   if (!manifest!.paths[currentWritingPath]) {
     return;
   }
-  link = manifest!.paths[currentWritingPath].hash.substring(0, 5);
+  link = manifest!.paths[currentWritingPath].id.substring(0, 6);
   if (appEnv.MODE == "development") {
     link = `http://localhost:5173/#/${link}`;
   } else {
@@ -48,6 +48,7 @@ const sharingLink = computed(() => {
 
 const onClickShare = () => {
   message.success(`已复制链接到剪贴板：${sharingLink.value}`);
+  console.log()
 };
 </script>
 

@@ -1,19 +1,19 @@
-import { useStore } from "@/store";
-import { getLatestManifestId, getLatestState } from "./artools";
-import axios from "axios";
-import { appEnv } from "@/config";
-import { Liyue } from "@/assets";
-import { Venti } from "@/assets";
-import { IManifest } from "@/typings";
+import { useStore } from '@/store';
+import { getLatestManifestId, getLatestState } from './artools';
+import axios from 'axios';
+import { appEnv } from '@/config';
+import { Liyue } from '@/assets';
+import { Venti } from '@/assets';
+import { IManifest } from '@/typings';
 
 const imgArr = [Liyue];
 const imgArrAsync = [Venti];
 
 export const loadThemeConfig = () => {
-  const storageTheme = localStorage.getItem("theme");
+  const storageTheme = localStorage.getItem('theme');
   if (storageTheme == undefined || storageTheme == null) {
-    localStorage.setItem("theme", "dark");
-  } else if (storageTheme == "dark") {
+    localStorage.setItem('theme', 'dark');
+  } else if (storageTheme == 'dark') {
     // isDark = true;
   } else {
     // isDark = false;
@@ -37,8 +37,8 @@ export const loadImgs = async () => {
 };
 
 export const loadManifest = async () => {
+  const store = useStore();
   const setManifest = (manifest: IManifest) => {
-    const store = useStore();
     store.setManifest(manifest);
   };
   if (appEnv.VITE_USE_LOCAL_MANIFEST) {
@@ -51,7 +51,6 @@ export const loadManifest = async () => {
     const latestState = await getLatestState(latestManifestId);
     setManifest(latestState);
   }
-  const store = useStore();
   if (!store.manifest) {
     await fetchManifest();
   }

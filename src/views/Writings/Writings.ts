@@ -6,6 +6,7 @@ import { useStore, useWritingStore } from '@/store';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { IManifest } from '@/typings';
+import { useRouter } from 'vue-router';
 
 export const getLocalWritingByPath = async (path: string) => {
   let res = '';
@@ -20,16 +21,16 @@ export const getLocalWritingByPath = async (path: string) => {
 
 export const checkPath = async () => {
   const route = useRoute();
-  const txIdTemp = route.params.txId;
-  if (route.params.txId == undefined || route.params.txId == '') {
+  const router = useRouter();
+  const txId = route.params.txId;
+  if (txId == undefined || txId == '') {
     return;
   }
-  const path = await getFullPath(txIdTemp as string);
+  const path = await getFullPath(txId as string);
   if (path == '') {
     return;
   }
-  const writingStore = useWritingStore();
-  writingStore.setCurrentWritingPath(path);
+  router.push(`/writings/${path}`);
 };
 
 export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
