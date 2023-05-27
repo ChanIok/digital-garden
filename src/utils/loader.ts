@@ -51,7 +51,5 @@ export const loadManifest = async () => {
     const latestState = await getLatestState(latestManifestId);
     setManifest(latestState);
   }
-  if (!store.manifest) {
-    await fetchManifest();
-  }
+  await fetchManifest();
 };

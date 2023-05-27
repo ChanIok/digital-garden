@@ -40,15 +40,53 @@ export const setImgs = (markdown: Ref<HTMLElement>) => {
   }
 };
 
+const createPopover = (writingText: string, link: HTMLAnchorElement) => {
+  const maxWidth = Math.min(window.innerWidth - link.offsetLeft - 20, 720);
+  const nPStyle = `max-height: 420px;max-width: ${maxWidth}px`;
+  return h(
+    NPopover,
+    window.innerWidth < 480
+      ? {
+          trigger: 'hover',
+          scrollable: true,
+          style: nPStyle,
+          class: 'pv-doc',
+          show: false,
+        }
+      : {
+          trigger: 'hover',
+          scrollable: true,
+          style: nPStyle,
+          class: 'pv-doc',
+        },
+    {
+      default: () => h(Preview, { content: getMarkedContent(writingText) }),
+      trigger: () =>
+        h(
+          'a',
+          {
+            class: 'internal-link',
+            onclick: () => {
+              const previewElement = document.querySelector('.pv-doc');
+              (previewElement as any).style.display = 'none';
+            },
+          },
+          link.innerHTML
+        ),
+    }
+  );
+};
+
 export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
   const store = useStore();
   const elements = Array.from(markdown.value.querySelectorAll<HTMLAnchorElement>('a'));
+
   const promises = elements.map(async (link) => {
     const path = link.getAttribute('path');
+
     if (!path) {
       return;
     }
-
     link.onclick = () => {
       router.push(`/writings/${path}`);
     };
@@ -57,36 +95,12 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     }
 
     const writingText = await loadWriting(true, path);
-    const maxWidth = Math.min(window.innerWidth - link.offsetLeft - 20, 720);
-    const nPStyle = `max-height: 420px;max-width: ${maxWidth}px`;
     const popverInstance = h(
       NConfigProvider,
       { theme: store.isDark ? darkTheme : undefined },
-      {
-        default: () =>
-          h(
-            NPopover,
-            window.innerWidth < 480
-              ? {
-                  trigger: 'hover',
-                  scrollable: true,
-                  style: nPStyle,
-                  class: 'pv-doc',
-                  show: false,
-                }
-              : {
-                  trigger: 'hover',
-                  scrollable: true,
-                  style: nPStyle,
-                  class: 'pv-doc',
-                },
-            {
-              default: () => h(Preview, { content: getMarkedContent(writingText) }),
-              trigger: () => h('a', { class: 'internal-link' }, link.innerHTML),
-            }
-          ),
-      }
+      { default: () => createPopover(writingText, link) }
     );
+
     let linkElement = document.createElement('div');
     render(popverInstance, linkElement);
     link.replaceWith(linkElement);
@@ -94,5 +108,6 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
       router.push(`/writings/${path}`);
     };
   });
+
   await Promise.all(promises);
 };

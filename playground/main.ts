@@ -9,7 +9,7 @@ const config = {
   walletPath: 'D:\\Environment\\arweave\\wallet.json',
   appName: 'PlaneOfEuthymia',
   appWritingsName: 'PlaneOfEuthymiaWritings',
-  ignore: ['.obsidian/**', '.trash/**', 'attachments/**'],
+  ignore: ['.obsidian/**', '.trash/**'],
 };
 
 const main = async () => {
