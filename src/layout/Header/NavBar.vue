@@ -24,6 +24,9 @@ import { useWritingStore } from '@/store';
 import { useRouter, useRoute } from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
 import { loadWritingData } from './NavBar';
+import { useWindowSize } from '@vueuse/core'
+
+const { width } = useWindowSize()
 
 const router = useRouter();
 const route = useRoute();
@@ -31,6 +34,8 @@ const writingStore = useWritingStore();
 
 const visibleList = ref<any>([]);
 const hiddenList = ref<any>([]);
+
+const isLoadingBreadcrumb = ref<boolean>(false)
 
 const loadBreadcrumbData = async () => {
   if (route.fullPath == '/') {
@@ -40,6 +45,7 @@ const loadBreadcrumbData = async () => {
     await loadWritingData(visibleList, hiddenList);
   }
 };
+
 
 onMounted(async () => {
   await loadBreadcrumbData();
@@ -51,6 +57,24 @@ watch(
     loadBreadcrumbData();
   }
 );
+
+
+
+watch(
+  () => width.value,
+  async (val) => {
+    if (isLoadingBreadcrumb.value) {
+      return
+    }
+    isLoadingBreadcrumb.value = true;
+    loadBreadcrumbData();
+    setTimeout(() => {
+      isLoadingBreadcrumb.value = false
+    }, 100);
+  }
+);
+
+
 
 const goToPath = (item: any, clickIndex: number) => {
   if (clickIndex == writingStore.currentWritingPathArray.length) {
@@ -94,7 +118,7 @@ const handleSelect = (key: string) => {
   }
 
   :deep(> ul > li:last-child) {
-    min-width: 80px;
+    min-width: 40px;
     flex-shrink: 1;
     overflow: hidden;
   }

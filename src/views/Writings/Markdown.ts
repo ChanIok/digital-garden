@@ -66,12 +66,20 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
         default: () =>
           h(
             NPopover,
-            {
-              trigger: 'hover',
-              scrollable: true,
-              style: nPStyle,
-              class: 'pv-doc',
-            },
+            window.innerWidth < 480
+              ? {
+                  trigger: 'hover',
+                  scrollable: true,
+                  style: nPStyle,
+                  class: 'pv-doc',
+                  show: false,
+                }
+              : {
+                  trigger: 'hover',
+                  scrollable: true,
+                  style: nPStyle,
+                  class: 'pv-doc',
+                },
             {
               default: () => h(Preview, { content: getMarkedContent(writingText) }),
               trigger: () => h('a', { class: 'internal-link' }, link.innerHTML),
