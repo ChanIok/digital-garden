@@ -14,6 +14,7 @@ const renderer = {
     if (href === null) {
       return text;
     }
+    href = decodeURIComponent(href);
     const store = useStore();
     const url = appEnv.VITE_USE_LOCAL_WRITINGS
       ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${href}`
