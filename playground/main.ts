@@ -2,7 +2,7 @@ import { Uploader } from './Uploader';
 import { getLatestManifestId, getLatestState, generateLocalManifest } from './utils';
 
 const type = 'writings';
-let command = 'upload';
+let command = 'genMF';
 
 const config = {
   uploadPath: 'C:/Users/CH/OneDrive/Writings',
@@ -13,15 +13,14 @@ const config = {
 };
 
 const main = async () => {
-  const uploader = new Uploader(config.uploadPath, config.walletPath, config.ignore);
-
-  const latestManifestId = await getLatestManifestId();
-  const latestState = await getLatestState(latestManifestId);
-  const defaultManifest = { manifest: 'arweave/paths', version: '0.1.0', paths: {} };
+  // const uploader = new Uploader(config.uploadPath, config.walletPath, config.ignore);
 
   switch (command) {
     case 'upload':
-      uploader.uploadMissingFiles(latestState);
+      const latestManifestId = await getLatestManifestId();
+      const latestState = await getLatestState(latestManifestId);
+      const defaultManifest = { manifest: 'arweave/paths', version: '0.1.0', paths: {} };
+      // uploader.uploadMissingFiles(latestState);
       break;
 
     case 'getId':
