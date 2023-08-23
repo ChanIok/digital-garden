@@ -1,11 +1,16 @@
 import { Uploader } from './Uploader';
 import { getLatestManifestId, getLatestState, generateLocalManifest } from './utils';
 
-const type = 'writings';
+// 在这里改变命令
 let command = 'upload';
+// 是否只上传文章，否则上传dist
+let isUploadWritings = true;
 
 const config = {
-  uploadPath: 'C:/Users/CH/OneDrive/Writings',
+  isUploadWritings: true,
+  filesPath: '',
+  distPath: 'D:\\code\\digital-garden\\dist',
+  writingsPath: 'C:\\Users\\CH\\OneDrive\\Writings',
   walletPath: 'D:\\Environment\\arweave\\wallet.json',
   appName: 'PlaneOfEuthymia',
   appWritingsName: 'PlaneOfEuthymiaWritings',
@@ -13,19 +18,41 @@ const config = {
 };
 
 const main = async () => {
-  const uploader = new Uploader(config.uploadPath, config.walletPath, config.ignore);
+  if (isUploadWritings) {
+    config.isUploadWritings = true;
+    config.filesPath = config.writingsPath;
+  } else {
+    config.isUploadWritings = false;
+    config.filesPath = config.distPath;
+  }
 
-  const latestManifestId = await getLatestManifestId();
-  const latestState = await getLatestState(latestManifestId);
-  const defaultManifest = { manifest: 'arweave/paths', version: '0.1.0', paths: {} };
+  const uploader = new Uploader(
+    config.isUploadWritings,
+    config.filesPath,
+    config.walletPath,
+    config.ignore
+  );
+
+  const defaultManifest = {
+    manifest: 'arweave/paths',
+    version: '0.1.0',
+    index: { path: 'index.html' },
+    paths: {},
+  };
 
   switch (command) {
     case 'upload':
+      const latestManifestId = await getLatestManifestId(isUploadWritings);
+      const latestState = await getLatestState(latestManifestId);
       uploader.uploadMissingFiles(latestState);
       break;
 
+    case 'uploadAll':
+      uploader.uploadMissingFiles(defaultManifest);
+      break;
+
     case 'getId':
-      console.log(await getLatestManifestId());
+      console.log(await getLatestManifestId(isUploadWritings));
       break;
 
     case 'getMF':
@@ -33,7 +60,7 @@ const main = async () => {
       break;
 
     case 'genMF':
-      generateLocalManifest(config.uploadPath, `${config.uploadPath}/manifest.json`);
+      generateLocalManifest(config.writingsPath, `${config.writingsPath}/manifest.json`);
       break;
 
     default:

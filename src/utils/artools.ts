@@ -25,7 +25,7 @@ export const getLatestManifestId = async () => {
 };
 
 export const getLatestState = async (txId: string) => {
-  return (await axios.get(`${gatewayUrl}/${txId}/manifest.json`)).data;
+  return (await axios.get(`${gatewayUrl}/${txId}/manifest`)).data;
 };
 
 export const getFullPath = async (prefix: string) => {

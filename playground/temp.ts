@@ -9,8 +9,10 @@ const bundlr = new Bundlr('http://node1.bundlr.network', 'arweave', privateKey);
 
 // Fund the node
 const main = async () => {
-  const fundTx = await bundlr.fund(300000000000);
-  console.log(fundTx);
+  // const fundTx = await bundlr.fund(300000000000);
+  // console.log(fundTx);
+  const res = await bundlr.uploadFile('./src/assets/Venti.webp');
+  console.log(res);
 };
 
 main();

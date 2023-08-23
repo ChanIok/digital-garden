@@ -1,4 +1,4 @@
 export const Liyue =
-  "https://arweave.net/-fmxFHx92VmmASrP7UZbdetwUbqSCf3J8t0Y3f6AXEo";
+  "https://arweave.net/KIk1gfSD58T4gboLnFp-GG1OmI4mHMnm5XVc3ZVaiaY";
 export const Venti =
-  "https://arweave.net/FNF3YZDtcbga1cQQncdRi2Jbt3BfegigXnbeTfpksus";
+  "https://arweave.net/N9TKxXuezMvA6TPf1LaQjZadvaXZU-L2EK0sTnccVQw";
