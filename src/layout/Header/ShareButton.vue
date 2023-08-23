@@ -1,14 +1,10 @@
 <template>
   <div id="share-button" v-if="isButtonVisible">
-    <n-button
-      size="small"
-      quaternary
-      class="btn"
-      :data-clipboard-text="sharingLink"
-      @click="onClickShare"
-    >
+    <n-button size="small" quaternary class="copyBtn" :data-clipboard-text="sharingLink" @click="onClickShare">
       <template #icon>
-        <n-icon><ShareSocialOutline /></n-icon>
+        <n-icon>
+          <ShareSocialOutline />
+        </n-icon>
       </template>
     </n-button>
   </div>
@@ -48,7 +44,6 @@ const sharingLink = computed(() => {
 
 const onClickShare = () => {
   message.success(`已复制链接到剪贴板：${sharingLink.value}`);
-  console.log()
 };
 </script>
 

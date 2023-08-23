@@ -3,6 +3,7 @@ import { loadManifest } from './loader';
 import { gatewayUrl, owner, appWritingsName } from '@/config';
 import { IManifest } from '@/typings';
 import { useStore } from '@/store';
+import { nextTick } from 'vue';
 
 export const getLatestManifestId = async () => {
   const graphql = {
@@ -30,7 +31,10 @@ export const getLatestState = async (txId: string) => {
 
 export const getFullPath = async (prefix: string) => {
   const store = useStore();
-  if (!store.manifest) await loadManifest();
+  if (!store.manifest) {
+    await loadManifest();
+    await nextTick();
+  }
   const paths = store.manifest!.paths;
   const path = Object.keys(paths || {}).find((key) => paths[key].id.includes(prefix)) || '';
   return path;
