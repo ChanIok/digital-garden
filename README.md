@@ -1,18 +1,19 @@
-# Vue 3 + TypeScript + Vite
+# 我的数字花园
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+这是一个建立在 [Arweave](https://www.arweave.org/) 上的数字花园，整个项目被我高度定制化，仅供参考
 
-## Recommended IDE Setup
+## 灵感来源
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+第一次见到数字花园是这个网站：[**oldwinterの数字花园**](https://notes.oldwinter.top/)。我日常记录内容本来就是用 `Obsidian` 进行管理的，所以我想以这个为参照，建立我自己的数字花园。
 
-## Type Support For `.vue` Imports in TS
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## 技术框架
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+- 前端部分：Vue3 + Vite2 + TypeScript + Navie UI
+- 区块链部分：Arweave + Bundlr
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## 主要设计
+
+不同于传统的博客框架，我把网站本体和文章内容拆分成两部分，存放到不同的 `manifest` 中进行管理，加载网站本体时，通过 [`Arweave GraphQL`](https://arweave.net/graphql) 获取最新的 `Markdown` 文章内容，再由 `marked.js` 渲染到页面中。
+
+这样设计的原因是避免日常更新文章时，项目需要被重新打包然后重新上传到 `Arweave`，造成额外开销。在利用 `Bundlr` 的上传脚本中，我在 `manifest.json` 加入了哈希值校验，只上传有变化的文件。
