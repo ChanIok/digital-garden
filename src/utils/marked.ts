@@ -31,6 +31,14 @@ const renderer = {
     if (href === null) {
       return text;
     }
+    if (href.startsWith('http')) {
+      let out = `<a href="${href}" path="${href}" target="_blank"`;
+      if (title) {
+        out += ' title="' + title + '"';
+      }
+      out += '>' + text + '</a>';
+      return out;
+    }
     let out = `<a path="${href}"`;
     if (title) {
       out += ' title="' + title + '"';

@@ -84,7 +84,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
   const promises = elements.map(async (link) => {
     const path = link.getAttribute('path');
 
-    if (!path) {
+    if (!path || path?.startsWith('http')) {
       return;
     }
     link.onclick = () => {
