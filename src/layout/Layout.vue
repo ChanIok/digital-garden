@@ -1,5 +1,6 @@
 <template>
   <n-layout id="layout">
+    <LoadingMask />
     <div id="layout-container">
       <n-layout-header>
         <Header></Header>
@@ -12,22 +13,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { NLayoutHeader, NLayoutContent, NLayout } from "naive-ui";
-import Header from "@/layout/Header/Header.vue";
-import Main from "@/layout/Main/Main.vue";
-const a = ref(0);
+  import { NLayoutHeader, NLayoutContent, NLayout } from 'naive-ui';
+  import Header from '@/layout/Header/Header.vue';
+  import Main from '@/layout/Main/Main.vue';
+  import LoadingMask from '@/layout/Main/LoadingMask.vue';
 </script>
 
 <style lang="less" scoped>
-#layout {
-  width: 100%;
-  height: 100%;
-  #layout-container {
+  #layout {
     width: 100%;
     height: 100%;
-    flex-direction: column;
-    display: flex;
+    #layout-container {
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      display: flex;
+    }
   }
-}
 </style>

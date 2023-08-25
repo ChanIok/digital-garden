@@ -1,22 +1,10 @@
-import { initHandler } from "./handler";
-import { loadImgs, loadManifest, loadThemeConfig } from "./loader";
-
-export const state = { isLoadManifestCompleted: false };
-
+import { loadImgs, loadManifest } from './loader';
+import { useStore } from '@/store';
 
 export const init = async () => {
-  window.parent.postMessage(
-    { app: "PlaneOfEuthymia", event: "continueLoading" },
-    "*"
-  );
-  initHandler();
-  loadThemeConfig();
+  const store = useStore();
+  store.continueLoading();
   await loadImgs();
-  if (!state.isLoadManifestCompleted) {
-    await loadManifest();
-  }
-  window.parent.postMessage(
-    { app: "PlaneOfEuthymia", event: "loadCompleted" },
-    "*"
-  );
+  await loadManifest();
+  store.loadCompleted();
 };

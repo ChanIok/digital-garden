@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { loadManifest } from './loader';
 import { gatewayUrl, owner, appWritingsName } from '@/config';
-import { IManifest } from '@/typings';
 import { useStore } from '@/store';
 import { nextTick } from 'vue';
 

@@ -12,17 +12,6 @@ const clipboard = new Clipboard('.copyBtn');
 const imgArr = [Liyue];
 const imgArrAsync = [Venti];
 
-export const loadThemeConfig = () => {
-  const storageTheme = localStorage.getItem('theme');
-  if (storageTheme == undefined || storageTheme == null) {
-    localStorage.setItem('theme', 'dark');
-  } else if (storageTheme == 'dark') {
-    // isDark = true;
-  } else {
-    // isDark = false;
-  }
-};
-
 export const loadImgs = async () => {
   imgArrAsync.map((path) => {
     const image = new Image();
