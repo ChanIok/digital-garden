@@ -8,7 +8,7 @@ export interface IWritingStore {
 export const useWritingStore = defineStore("writing", {
   state: (): IWritingStore => ({
     currentWritingText: "",
-    currentWritingPath: "index.md",
+    currentWritingPath: "",
   }),
   getters: {
     currentWritingPathArray: (state) => {

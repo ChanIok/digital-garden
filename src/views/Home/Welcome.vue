@@ -7,7 +7,7 @@
         <n-p> </n-p>
         <n-ul>
           <n-li>
-            <router-link to="/writings" #="{ navigate, href }" custom>
+            <router-link to="/writings/index.md" #="{ navigate, href }" custom>
               <n-a :href="href" @click="navigate"> 数字花园 </n-a>
             </router-link>
           </n-li>
