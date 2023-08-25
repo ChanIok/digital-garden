@@ -7,16 +7,19 @@ export const loadWritingData = async (visibleList: any, hiddenList: any) => {
   await nextTick();
   visibleList.value = writingStore.currentWritingPathArray.slice();
   visibleList.value.unshift('');
-  visibleList.value = visibleList.value.map((item: any, index: number) => {
+  visibleList.value = visibleList.value.map((item: string, index: number) => {
     let label = item.replace(/%20/g, ' ');
     if (index == 0) {
       label = '数字花园';
       return { label, key: '/' };
-    } else if (index == visibleList.value.length - 1 && item == 'index.md') {
-      label = '目录';
+    } else if (index == visibleList.value.length - 1 && label.endsWith('.md')) {
+      label =  label.replace(/.md/g, ' ');
     }
     return { label, key: item };
   });
+  if (visibleList.value[visibleList.value.length - 1].key == 'index.md') {
+    visibleList.value.pop();
+  }
   hiddenList.value = [];
   await nextTick();
 
