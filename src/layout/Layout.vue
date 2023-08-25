@@ -16,7 +16,7 @@
   import { NLayoutHeader, NLayoutContent, NLayout } from 'naive-ui';
   import Header from '@/layout/Header/Header.vue';
   import Main from '@/layout/Main/Main.vue';
-  import LoadingMask from '@/layout/Main/LoadingMask.vue';
+  import LoadingMask from '@/layout/LoadingMask.vue';
 </script>
 
 <style lang="less" scoped>
