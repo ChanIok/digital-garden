@@ -1,6 +1,8 @@
 <template>
   <div id="writings">
     <div class="writings-container">
+      <div class="header">
+      </div>
       <div class="content">
         <n-scrollbar>
           <Markdown />

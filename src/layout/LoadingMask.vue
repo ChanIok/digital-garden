@@ -66,10 +66,10 @@
   };
 
   const finish = () => {
-    updateAnimation(100, 1);
+    updateAnimation(100, 0.2);
     setTimeout(() => {
       isShow.value = false;
-    }, 1000);
+    }, 300);
   };
 
  
