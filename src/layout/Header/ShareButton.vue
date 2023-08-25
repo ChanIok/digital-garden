@@ -21,7 +21,7 @@
   import { useWritingStore, useStore } from '@/store';
   import { ShareSocialOutline } from '@vicons/ionicons5';
   import { useMessage, NButton, NIcon } from 'naive-ui';
-  import { appEnv } from '@/config';
+
   const store = useStore();
   const writingStore = useWritingStore();
   const message = useMessage();

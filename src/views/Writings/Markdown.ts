@@ -8,7 +8,8 @@ import { useStore } from '@/store';
 import { appEnv } from '@/config';
 
 export const setAnchors = (anchors: any, markdown: any) => {
-  const elements = markdown.value.querySelectorAll('h1,h2,h3,h4,h5,h6');
+  const content=markdown.value.querySelector('.markdown-content');
+  const elements =content.querySelectorAll('h1,h2,h3,h4,h5,h6');
   const tree: any = [{ node: elements[0], children: [] }];
   const nodeLi = [tree[0]];
 

@@ -13,7 +13,7 @@ export const loadWritingData = async (visibleList: any, hiddenList: any) => {
       label = '数字花园';
       return { label, key: '/' };
     } else if (index == visibleList.value.length - 1 && label.endsWith('.md')) {
-      label =  label.replace(/.md/g, ' ');
+      label = label.replace(/\.md$/, '');
     }
     return { label, key: item };
   });

@@ -1,7 +1,17 @@
 <template>
   <div id="markdown" ref="markdown">
-    <div v-html="content" class="markdown-content vp-doc"></div>
-    <n-back-top :right="50" />
+    <div class="markdown-container">
+      <div class="markdown-header vp-doc">
+        <h1 class="title">{{ title }}</h1>
+        <n-p v-if="date">Date: {{ date }}</n-p>
+        <n-a class="tx-id" :href="`https://viewblock.io/arweave/tx/${txId}`" target="_blank">
+          Transaction: {{ txId }}
+        </n-a>
+      </div>
+      <n-divider />
+      <div v-html="content" class="markdown-content vp-doc"></div>
+      <n-back-top :right="50" />
+    </div>
 
     <div class="markdown-outline">
       <n-anchor
@@ -36,13 +46,35 @@
   import { ref, nextTick, watch } from 'vue';
   import { getMarkedContent } from '@/utils/marked';
   import { computed } from '@vue/reactivity';
-  import { NBackTop, NAnchor, NAnchorLink, NEllipsis } from 'naive-ui';
-  import { useWritingStore } from '@/store';
+  import { NBackTop, NAnchor, NAnchorLink, NEllipsis, NH1, NP, NDivider, NA } from 'naive-ui';
+  import { useStore, useWritingStore } from '@/store';
   import { setAnchors, setLinks, setImgs } from './Markdown';
   import { useRouter } from 'vue-router';
 
   const writingStore = useWritingStore();
   const router = useRouter();
+  const store = useStore();
+
+  const txId = computed(() => {
+    return store.manifest?.paths[writingStore.currentWritingPath]?.id;
+  });
+  const date = computed(() => {
+    return store.manifest?.paths[writingStore.currentWritingPath]?.date;
+  });
+  const title = computed(() => {
+    if (writingStore.currentWritingPathArray.length == 1) {
+      return 'ChanIok 的数字花园';
+    }
+    if (
+      writingStore.currentWritingPathArray[writingStore.currentWritingPathArray.length - 1] ==
+      'index.md'
+    ) {
+      return writingStore.currentWritingPathArray[writingStore.currentWritingPathArray.length - 2];
+    }
+    return writingStore.currentWritingPathArray[
+      writingStore.currentWritingPathArray.length - 1
+    ].replace(/\.md$/, '');
+  });
 
   const onClickAnchor = (e: PointerEvent) => {
     e.preventDefault();
@@ -75,28 +107,34 @@
     display: flex;
     justify-content: center;
 
-    .markdown-content {
+    .markdown-container {
       padding: 30px 40px 0 40px;
       box-sizing: border-box;
       flex: 1;
-
       max-width: 880px;
       margin-bottom: 30px;
-
-      :deep(img) {
-        display: block;
-        max-width: 100%;
-        cursor: zoom-in;
-      }
-
-      :deep(a) {
-        text-decoration: none;
-      }
-
-      overflow: hidden;
-
       @media only screen and (max-width: 960px) {
         padding: 10px 10px 0 10px;
+      }
+      .markdown-header {
+        .title {
+        }
+        .tx-id {
+          font-size: 13px;
+          text-decoration: none;
+          border-bottom: 0;
+        }
+      }
+      .markdown-content {
+        :deep(img) {
+          display: block;
+          max-width: 100%;
+          cursor: zoom-in;
+        }
+        :deep(a) {
+          text-decoration: none;
+        }
+        overflow: hidden;
       }
     }
 
@@ -104,7 +142,6 @@
       width: 300px;
       position: fixed;
       left: calc(50% + 440px);
-
       @media only screen and (max-width: 1260px) {
         display: none;
       }

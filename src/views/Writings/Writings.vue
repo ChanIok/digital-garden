@@ -1,8 +1,6 @@
 <template>
   <div id="writings">
     <div class="writings-container">
-      <div class="header">
-      </div>
       <div class="content">
         <n-scrollbar>
           <Markdown />
@@ -78,7 +76,7 @@
         overflow: auto;
         display: flex;
         justify-content: center;
-
+        align-items: center;
         @media only screen and (max-width: 960px) {
           padding: 10px 10px 0 10px;
           flex-shrink: 0;
