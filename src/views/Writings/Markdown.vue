@@ -3,7 +3,7 @@
     <div class="markdown-container">
       <div class="markdown-header vp-doc">
         <h1 class="title">{{ title }}</h1>
-        <n-p v-if="date">Date: {{ date }}</n-p>
+        <n-p v-if="date" class="date">Date: {{ date }}</n-p>
         <n-a class="tx-id" :href="`https://viewblock.io/arweave/tx/${txId}`" target="_blank">
           Transaction: {{ txId }}
         </n-a>
@@ -117,12 +117,14 @@
         padding: 10px 10px 0 10px;
       }
       .markdown-header {
-        .title {
-        }
         .tx-id {
-          font-size: 13px;
+          font-size: 12px;
           text-decoration: none;
           border-bottom: 0;
+        }
+        .date {
+          font-size: 12px;
+          margin-bottom: 0;
         }
       }
       .markdown-content {

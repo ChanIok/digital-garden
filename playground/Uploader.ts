@@ -3,6 +3,7 @@ import path from 'path';
 import { sync } from 'glob';
 import hash from 'object-hash';
 import Bundlr from '@bundlr-network/client';
+import dayjs from 'dayjs';
 
 interface HashToPath {
   [hash: string]: { id: any; path: string };
@@ -12,7 +13,7 @@ interface Manifest {
   manifest: string;
   version: string;
   index?: { path: string };
-  paths: { [path: string]: { id: any; hash: string } };
+  paths: { [path: string]: { id: any; hash: string; date: string } };
 }
 
 export class Uploader {
@@ -57,6 +58,7 @@ export class Uploader {
       this.manifest.paths[item] = {
         id: hashToPath[itemHash].id,
         hash: itemHash,
+        date: dayjs(fs.statSync(itemPath).mtime).format('YYYY-MM-DD HH:mm:ss'),
       };
     } else {
       const res = await this.bundlr.uploadFile(itemPath);
@@ -67,6 +69,7 @@ export class Uploader {
       this.manifest.paths[item] = {
         id: res.id,
         hash: hash(fs.readFileSync(itemPath).toString()),
+        date: dayjs(fs.statSync(itemPath).mtime).format('YYYY-MM-DD HH:mm:ss'),
       };
     }
   }
@@ -74,7 +77,7 @@ export class Uploader {
   async uploadMissingFiles(latestManifest: Manifest) {
     const hashToPath: HashToPath = {};
     for (const key in latestManifest.paths) {
-      const { hash, id } = latestManifest.paths[key];
+      const { hash, id, date } = latestManifest.paths[key];
       hashToPath[hash] = { path: key, id };
     }
 
@@ -98,6 +101,7 @@ export class Uploader {
       this.manifest.paths.manifest = {
         id: res.id,
         hash: hash(fs.readFileSync(manifestDistPath).toString()),
+        date: dayjs(fs.statSync(manifestDistPath).mtime).format('YYYY-MM-DD HH:mm:ss'),
       };
     }
 

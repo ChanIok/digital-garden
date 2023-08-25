@@ -19,5 +19,8 @@
     "glob": "^10.2.1",
     "http-server": "^14.1.1",
     "object-hash": "^3.0.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.9"
   }
 }
