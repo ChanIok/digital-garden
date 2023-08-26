@@ -8,22 +8,36 @@ import { useStore } from '@/store';
 import { appEnv, gatewayUrl } from '@/config';
 
 export const setAnchors = (anchors: any, markdown: any) => {
-  const content=markdown.value.querySelector('.markdown-content');
-  const elements =content.querySelectorAll('h1,h2,h3,h4,h5,h6');
-  const tree: any = [{ node: elements[0], children: [] }];
-  const nodeLi = [tree[0]];
-
-  for (let i = 1; i < elements.length; i++) {
-    const t = { node: elements[i], children: [] };
-    nodeLi.some((node, j) => {
-      if (parseInt(elements[i].tagName.charAt(1)) > parseInt(node.node.tagName.charAt(1))) {
-        nodeLi.splice(j + 1, 0, t);
-        node.children.push(t);
-        return true;
+  const content = markdown.value.querySelector('.markdown-content');
+  const headers = Array.from(content.querySelectorAll('h1,h2,h3,h4,h5,h6'));
+  // 创建一个虚拟的根节点
+  let root = { node: null, children: [] };
+  // 定义递归函数
+  function createTree(headers: HTMLElement[], parent: Record<string, any>) {
+    while (headers.length > 0) {
+      let current = headers[0];
+      let anchor = {
+        node: current,
+        children: [],
+      };
+      parent.children.push(anchor);
+      // 检查下一个元素的级别
+      if (headers[1] && headers[1].tagName > current.tagName) {
+        // 下一个元素的级别更高，所以将其作为子节点
+        headers.shift();
+        createTree(headers, anchor);
+      } else if (!headers[1] || headers[1].tagName == current.tagName) {
+        // 下一个元素的级别相同，所以将其作为兄弟节点
+        headers.shift();
+      } else {
+        // 下一个元素的级别更低，跳出
+        headers.shift();
+        return;
       }
-    }) || tree.push(t);
+    }
   }
-  anchors.value = tree;
+  createTree(headers as HTMLElement[], root);
+  anchors.value = root.children;
 };
 
 export const setImgs = (markdown: Ref<HTMLElement>) => {
