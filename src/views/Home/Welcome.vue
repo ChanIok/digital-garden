@@ -16,6 +16,11 @@
               <n-a :href="href" @click="navigate"> 留言板 </n-a>
             </router-link>
           </n-li>
+          <n-li>
+            <router-link to="/status" #="{ navigate, href }" custom>
+              <n-a :href="href" @click="navigate"> 区块状态 </n-a>
+            </router-link>
+          </n-li>
         </n-ul>
       </div>
       <div class="link">

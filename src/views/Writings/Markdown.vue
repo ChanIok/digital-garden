@@ -5,7 +5,7 @@
         <h1 class="title">{{ title }}</h1>
         <n-p v-if="date" class="date">Date: {{ date }}</n-p>
         <n-a class="tx-id" :href="`https://viewblock.io/arweave/tx/${txId}`" target="_blank">
-          Transaction: {{ txId }}
+          Transaction: <span> {{ txId }}</span>
         </n-a>
       </div>
       <n-divider />
@@ -121,6 +121,9 @@
           font-size: 12px;
           text-decoration: none;
           border-bottom: 0;
+          span {
+            word-wrap: unset;
+          }
         }
         .date {
           font-size: 12px;
