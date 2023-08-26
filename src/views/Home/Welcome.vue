@@ -89,8 +89,7 @@ const buttonThemeOverrides: ButtonThemeOverrides = {
 }
 
 .light .content li :deep(a) {
-  color: #197a47;
-  text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.7);
+  text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
 
 #welcome {

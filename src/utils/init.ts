@@ -3,7 +3,6 @@ import { useStore } from '@/store';
 
 export const init = async () => {
   const store = useStore();
-  store.continueLoading();
   await loadImgs();
   await loadManifest();
   store.loadCompleted();

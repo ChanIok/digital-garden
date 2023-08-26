@@ -25,11 +25,8 @@ export const useStore = defineStore('app', {
     setManifest(val: IManifest) {
       this.manifest = val;
     },
-    continueLoading() {
-      this.loadingProgress = 1;
-    },
     loadCompleted() {
-      this.loadingProgress = 2;
+      this.loadingProgress = 1;
     },
   },
 });
