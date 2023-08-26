@@ -4,7 +4,7 @@
       <div class="container">
 
         <div class="content">
-          <n-h1>区块状态</n-h1>
+          <n-h1>交易状态</n-h1>
           <n-h2>文章入口</n-h2>
           <n-timeline>
             <n-timeline-item v-for="(item, index) in writingsEdges" :type="index == 0 ? 'success' : 'info'" :key="index"

@@ -18,20 +18,14 @@
           </n-li>
           <n-li>
             <router-link to="/status" #="{ navigate, href }" custom>
-              <n-a :href="href" @click="navigate"> 区块状态 </n-a>
+              <n-a :href="href" @click="navigate"> 交易状态 </n-a>
             </router-link>
           </n-li>
         </n-ul>
       </div>
       <div class="link">
         <div class="link-item">
-          <n-button
-            text
-            tag="a"
-            href="https://github.com/ChanIok/"
-            target="_blank"
-            color="#ffffffdf"
-          >
+          <n-button text tag="a" href="https://github.com/ChanIok/" target="_blank" color="#ffffffdf">
             <template #icon>
               <n-icon>
                 <LogoGithub />
@@ -56,82 +50,87 @@
 </template>
 
 <script setup lang="ts">
-  import { NIcon, NButton, NH1, NUl, NLi, NP, NA } from 'naive-ui';
-  import { LogoGithub, Mail } from '@vicons/ionicons5';
-  import { useStore } from '@/store';
-  import { SelectProps, ButtonProps } from 'naive-ui';
+import { NIcon, NButton, NH1, NUl, NLi, NP, NA } from 'naive-ui';
+import { LogoGithub, Mail } from '@vicons/ionicons5';
+import { useStore } from '@/store';
+import { SelectProps, ButtonProps } from 'naive-ui';
 
-  const store = useStore();
+const store = useStore();
 
-  type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
-  type ButtonThemeOverrides = NonNullable<ButtonProps['themeOverrides']>;
+type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
+type ButtonThemeOverrides = NonNullable<ButtonProps['themeOverrides']>;
 
-  const selectThemeOverrides: SelectThemeOverrides = {
-    menuBoxShadow:
-      '0 6px 16px -9px rgba(0, 0, 0, .08), 0 9px 28px 0 rgba(0, 0, 0, .05), 0 12px 48px 16px rgba(0, 0, 0, .03)',
-    peers: {
-      InternalSelection: {
-        textColor: '#FF0000',
-        heightMedium: '42px',
-      },
+const selectThemeOverrides: SelectThemeOverrides = {
+  menuBoxShadow:
+    '0 6px 16px -9px rgba(0, 0, 0, .08), 0 9px 28px 0 rgba(0, 0, 0, .05), 0 12px 48px 16px rgba(0, 0, 0, .03)',
+  peers: {
+    InternalSelection: {
+      textColor: '#FF0000',
+      heightMedium: '42px',
     },
-  };
+  },
+};
 
-  const buttonThemeOverrides: ButtonThemeOverrides = {
-    heightMedium: '40px',
-    textColor: 'rgba(24, 127, 231, 1)',
-  };
+const buttonThemeOverrides: ButtonThemeOverrides = {
+  heightMedium: '40px',
+  textColor: 'rgba(24, 127, 231, 1)',
+};
 </script>
 
 <style lang="less" scoped>
-  @import url('@/styles/varibles.less');
-  @color: rgba(247, 247, 248, 0.8);
+@import url('@/styles/varibles.less');
+@color: rgba(247, 247, 248, 0.8);
 
-  .light .content :deep(h1),
-  .light .content :deep(li),
-  .light .content :deep(p) {
-    color: @color;
-    text-shadow: 3px 3px 5px rgba(78, 78, 78, 0.3);
-  }
+.light .content :deep(h1),
+.light .content :deep(li),
+.light .content :deep(p) {
+  color: @color;
+  text-shadow: 3px 3px 5px rgba(196, 196, 196, 0.6);
+}
 
-  #welcome {
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+.light .content li :deep(a) {
+  color: #197a47;
+  text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.7);
+}
+
+#welcome {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+
+  .container {
     display: flex;
+    flex-direction: column;
+    width: 50%;
+    max-width: 800px;
+    height: 100%;
     justify-content: center;
+    align-items: start;
+    z-index: inherit;
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      width: 50%;
-      max-width: 800px;
-      height: 100%;
-      justify-content: center;
-      align-items: start;
+    .content {
       z-index: inherit;
+    }
 
-      .content {
-        z-index: inherit;
-      }
+    .link {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-around;
 
-      .link {
-        margin-top: 10px;
-        display: flex;
-        justify-content: space-around;
-
-        .link-item {
-          margin-right: 20px;
-        }
-      }
-
-      @media only screen and (max-width: 480px) {
-        width: 80%;
-      }
-
-      @media only screen and (max-width: 360px) {
-        width: 350;
+      .link-item {
+        margin-right: 20px;
       }
     }
+
+    @media only screen and (max-width: 480px) {
+      width: 80%;
+    }
+
+    @media only screen and (max-width: 360px) {
+      width: 350;
+    }
   }
+}
 </style>

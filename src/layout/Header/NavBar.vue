@@ -41,7 +41,7 @@ const loadBreadcrumbData = async () => {
   } else if (route.fullPath.startsWith('/comments')) {
     visibleList.value = [{ label: '留言板', key: 'comments' }];
   } else if (route.fullPath.startsWith('/status')) {
-    visibleList.value = [{ label: '区块状态', key: 'status' }];
+    visibleList.value = [{ label: '交易状态', key: 'status' }];
   } else if (route.fullPath.startsWith('/writings')) {
     await loadWritingData(visibleList, hiddenList);
   }
