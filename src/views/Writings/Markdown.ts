@@ -5,7 +5,7 @@ import Preview from './Preview.vue';
 import { loadWriting } from './Writings';
 import { getMarkedContent } from '@/utils/marked';
 import { useStore } from '@/store';
-import { appEnv } from '@/config';
+import { appEnv, gatewayUrl } from '@/config';
 
 export const setAnchors = (anchors: any, markdown: any) => {
   const content=markdown.value.querySelector('.markdown-content');
@@ -33,7 +33,7 @@ export const setImgs = (markdown: Ref<HTMLElement>) => {
     const path = image.getAttribute('path');
     const url = appEnv.VITE_USE_LOCAL_WRITINGS
       ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${path}`
-      : `https://arweave.net/${store.manifest?.paths[path!]?.id}`;
+      : `${gatewayUrl}/${store.manifest?.paths[path!]?.id}`;
     const nImageInstance = h(NImage, { src: url });
     let imgElement = document.createElement('div');
     render(nImageInstance, imgElement);
