@@ -3,7 +3,11 @@ import { useStore } from '@/store';
 
 export const init = async () => {
   const store = useStore();
-  await loadImgs();
-  await loadManifest();
+  try {
+    await loadImgs();
+    await loadManifest();
+  } catch (error) {
+    store.isLoadError = true;
+  }
   store.loadCompleted();
 };
