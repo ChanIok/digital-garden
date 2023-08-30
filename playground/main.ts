@@ -4,7 +4,7 @@ import { getLatestManifestId, getLatestState, generateLocalManifest } from './ut
 // 在这里改变命令
 let command = 'upload';
 // 是否只上传文章，否则上传dist
-let isUploadWritings = true;
+let isUploadWritings = false;
 
 const config = {
   isUploadWritings: true,

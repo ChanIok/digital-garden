@@ -40,7 +40,7 @@
   watch(
     () => route.fullPath,
     async (val) => {
-      if (val.startsWith('/writings') && val != '/writings') {
+      if (val.startsWith('/writings')) {
         writingStore.setCurrentWritingPath(decodeURIComponent(val.slice(10)));
       } else if (val == '/') {
         await nextTick();
