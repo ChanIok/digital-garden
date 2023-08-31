@@ -120,7 +120,7 @@
       max-width: 880px;
       margin-bottom: 30px;
       @media only screen and (max-width: 960px) {
-        padding: 10px 10px 0 10px;
+        padding: 10px 20px 0 20px;
       }
       .markdown-header {
         .tx-id {
