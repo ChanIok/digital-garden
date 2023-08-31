@@ -105,7 +105,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     link.onclick = () => {
       router.push(`/writings/${path}`);
     };
-    if (path.endsWith('index.md')) {
+    if (path.endsWith('index.md') && !(path in store.manifest!.paths)) {
       return;
     }
 
