@@ -50,7 +50,7 @@ export async function checkValidGateway() {
       axios
         .get(url)
         .then(() => resolve(url))
-        .catch(()=>{});
+        .catch(() => reject(url));
     });
   };
   const store = useStore();
