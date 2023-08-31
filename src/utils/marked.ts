@@ -1,4 +1,4 @@
-import { appEnv, gatewayUrl } from '@/config';
+import { appEnv } from '@/config';
 import { useStore } from '@/store';
 import { marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
@@ -53,7 +53,7 @@ const renderer = {
     const store = useStore();
     const url = appEnv.VITE_USE_LOCAL_WRITINGS
       ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${href}`
-      : `${gatewayUrl}/${store.manifest?.paths[href!]?.id}`;
+      : `${store.gateway}/${store.manifest?.paths[href!]?.id}`;
 
     let out = `<img src="${url}" path="${href}" alt="${text}"`;
     if (title) {

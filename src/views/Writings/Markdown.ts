@@ -5,7 +5,7 @@ import Preview from './Preview.vue';
 import { loadWriting } from './Writings';
 import { getMarkedContent } from '@/utils/marked';
 import { useStore } from '@/store';
-import { appEnv, gatewayUrl } from '@/config';
+import { appEnv } from '@/config';
 
 export const setAnchors = (anchors: any, markdown: any) => {
   const content = markdown.value.querySelector('.markdown-content');
@@ -47,7 +47,7 @@ export const setImgs = (markdown: Ref<HTMLElement>) => {
     const path = image.getAttribute('path');
     const url = appEnv.VITE_USE_LOCAL_WRITINGS
       ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${path}`
-      : `${gatewayUrl}/${store.manifest?.paths[path!]?.id}`;
+      : `${store.gateway}/${store.manifest?.paths[path!]?.id}`;
     const nImageInstance = h(NImage, { src: url });
     let imgElement = document.createElement('div');
     render(nImageInstance, imgElement);

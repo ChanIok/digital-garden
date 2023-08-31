@@ -1,4 +1,4 @@
-import { appEnv, gatewayUrl } from '@/config';
+import { appEnv } from '@/config';
 import { useLoadingBarStore } from '@/store/modules/loading-bar';
 import { getFullPath } from '@/utils/artools';
 import { nextTick } from 'vue';
@@ -83,7 +83,7 @@ export const loadWriting = async (isReturnTextDirectly = false, path = '/index.m
   }
   const url = appEnv.VITE_USE_LOCAL_WRITINGS
     ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${currentWritingPath}`
-    : `${gatewayUrl}/${manifest?.paths[currentWritingPath]?.id}`;
+    : `${store.gateway}/${manifest?.paths[currentWritingPath]?.id}`;
   const { data } = await axios.get(url);
   if (isReturnTextDirectly) {
     return data;

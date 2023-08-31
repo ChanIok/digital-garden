@@ -50,13 +50,13 @@ export async function checkValidGateway() {
       axios
         .get(url)
         .then(() => resolve(url))
-        .catch(() => reject(url));
+        .catch(()=>{});
     });
   };
   const store = useStore();
   const promises = gateways.map((gateway) => testGatewayAvailability(gateway));
 
-  Promise.race(promises).then((availableUrl) => {
+  return Promise.race(promises).then((availableUrl) => {
     store.setGateWay(availableUrl);
   });
 }
