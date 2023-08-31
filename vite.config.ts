@@ -19,6 +19,23 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      manualChunks: (id) => {
+        if (
+          id.includes('node_modules/highlight.js') ||
+          id.includes('node_modules/naive-ui') ||
+          id.includes('node_modules/marked') ||
+          id.includes('node_modules/clipboard')||
+          id.includes('node_modules/dayjs')
+        ) {
+          return 'library';
+        } else if (id.includes('node_modules')) {
+          return 'vendor';
+        }
+      },
+    },
+  },
   server: {
     port: 5173,
     host: '0.0.0.0',
