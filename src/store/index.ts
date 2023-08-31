@@ -10,6 +10,7 @@ export interface IAppState {
   manifest: RemovableRef<IManifest | null>;
   loadingProgress: number;
   isLoadError: boolean;
+  gateway: RemovableRef<string>;
 }
 
 export const useStore = defineStore('app', {
@@ -20,6 +21,7 @@ export const useStore = defineStore('app', {
     }),
     loadingProgress: 0,
     isLoadError: false,
+    gateway: useStorage('gateway', 'https://arweave.net', localStorage),
   }),
   actions: {
     setManifest(val: IManifest) {
@@ -27,6 +29,9 @@ export const useStore = defineStore('app', {
     },
     loadCompleted() {
       this.loadingProgress = 1;
+    },
+    setGateWay(val: string) {
+      this.gateway = val;
     },
   },
 });

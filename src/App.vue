@@ -29,9 +29,8 @@
     async (val) => {
       let title = '一心净土 - 无念无想，四海归寂';
       if (val.startsWith('/writings')) {
-        await nextTick()
+        await nextTick();
         const pathArray = writingStore.currentWritingPathArray;
-        console.log(pathArray)
         if (val == '/writings/index.md') {
           title = '数字花园 | 一心净土';
         } else if (

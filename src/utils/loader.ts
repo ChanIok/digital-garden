@@ -13,15 +13,16 @@ const imgArr = [Liyue];
 const imgArrAsync = [Venti];
 
 export const loadImgs = async () => {
-  imgArrAsync.map((path) => {
+  const store = useStore();
+  imgArrAsync.map((txId) => {
     const image = new Image();
-    image.src = path;
+    image.src = `${store.gateway}/${txId}`;
   });
   return await Promise.all(
-    imgArr.map((path) => {
+    imgArr.map((txId) => {
       return new Promise((resolve) => {
         const image = new Image();
-        image.src = path;
+        image.src = `${store.gateway}/${txId}`;
         image.onload = () => resolve(image);
       });
     })
