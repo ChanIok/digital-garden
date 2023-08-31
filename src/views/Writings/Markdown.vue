@@ -4,7 +4,12 @@
       <div class="markdown-header vp-doc">
         <h1 class="title">{{ title }}</h1>
         <n-p v-if="date" class="date">Date: {{ date }}</n-p>
-        <n-a class="tx-id" :href="`https://viewblock.io/arweave/tx/${txId}`" target="_blank">
+        <n-a
+          class="tx-id"
+          :href="`https://viewblock.io/arweave/tx/${txId}`"
+          target="_blank"
+          v-if="txId"
+        >
           Transaction: <span> {{ txId }}</span>
         </n-a>
       </div>
@@ -111,6 +116,7 @@
       padding: 30px 40px 0 40px;
       box-sizing: border-box;
       flex: 1;
+      width: 100%;
       max-width: 880px;
       margin-bottom: 30px;
       @media only screen and (max-width: 960px) {
@@ -122,7 +128,9 @@
           text-decoration: none;
           border-bottom: 0;
           span {
-            word-wrap: unset;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
         .date {

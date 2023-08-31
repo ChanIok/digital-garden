@@ -6,13 +6,37 @@
 .vp-doc .internal-link {
   color: rgb(24, 160, 88);
   background-color: rgba(180, 180, 180, 0.1);
- 
 }
-.vp-doc div{
+.vp-doc div {
   display: inline;
 }
 
 .dark .vp-doc .internal-link {
   color: rgb(99, 226, 183);
   background-color: rgba(180, 180, 180, 0.15);
+}
+
+.vp-doc pre {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f6f6f6;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #747474;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #f6f6f6;
+  }
 }
