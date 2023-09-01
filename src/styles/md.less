@@ -21,7 +21,7 @@
 
 .vp-doc h2 {
   margin: 48px 0 16px;
-  border-top: 1px solid var(--vp-c-divider);
+  /** border-top: 1px solid var(--vp-c-divider); **/
   padding-top: 24px;
   letter-spacing: -0.02em;
   line-height: 32px;
@@ -33,35 +33,6 @@
   letter-spacing: -0.01em;
   line-height: 28px;
   font-size: 20px;
-}
-
-.vp-doc .header-anchor {
-  float: left;
-  margin-left: -0.87em;
-  padding-right: 0.23em;
-  font-weight: 500;
-  user-select: none;
-  opacity: 0;
-  transition: color 0.25s, opacity 0.25s;
-}
-
-.vp-doc .header-anchor:before {
-  content: var(--vp-header-anchor-symbol);
-}
-
-.vp-doc h1:hover .header-anchor,
-.vp-doc h1 .header-anchor:focus,
-.vp-doc h2:hover .header-anchor,
-.vp-doc h2 .header-anchor:focus,
-.vp-doc h3:hover .header-anchor,
-.vp-doc h3 .header-anchor:focus,
-.vp-doc h4:hover .header-anchor,
-.vp-doc h4 .header-anchor:focus,
-.vp-doc h5:hover .header-anchor,
-.vp-doc h5 .header-anchor:focus,
-.vp-doc h6:hover .header-anchor,
-.vp-doc h6 .header-anchor:focus {
-  opacity: 1;
 }
 
 @media (min-width: 768px) {
@@ -101,18 +72,18 @@
 
 .vp-doc a {
   font-weight: 500;
-  color: var(--vp-c-brand);
-  text-decoration-style: dotted;
+  color: var(--vp-c-brand); 
+  text-decoration-style: none;
   transition: color 0.25s;
   border-bottom: 1px solid #d9d9d9;
   cursor: pointer;
 }
-/** 
+
 .vp-doc a:hover {
   color: var(--vp-c-brand-dark); 
   text-decoration: underline;
 }
- **/
+
 .vp-doc strong {
   font-weight: 600;
 }
@@ -260,7 +231,7 @@
   border-radius: 4px;
   padding: 3px 6px;
   color: var(--vp-c-text-code);
-  background-color: var(--vp-c-mute);
+  background-color: var(--vp-c-bg-mute);
   transition: color 0.5s, background-color 0.5s;
 }
 

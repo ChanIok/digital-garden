@@ -121,6 +121,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     link.replaceWith(linkElement);
     linkElement.onclick = () => {
       router.push(`/writings/${path}`);
+      document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;
     };
   });
 

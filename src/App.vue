@@ -1,9 +1,5 @@
 <template>
-  <n-config-provider
-    id="n-config-provider"
-    :theme="store.isDark ? darkTheme : lightTheme"
-    :class="{ dark: store.isDark }"
-  >
+  <n-config-provider id="n-config-provider" :theme="store.isDark ? darkTheme : lightTheme">
     <!-- <n-global-style /> -->
     <NMessageProvider>
       <router-view></router-view>
@@ -23,6 +19,18 @@
   const writingStore = useWritingStore();
 
   init();
+
+  watch(
+    () => store.isDark,
+    (val) => {
+      if (val) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    },
+    { immediate: true }
+  );
 
   watch(
     () => route.fullPath,

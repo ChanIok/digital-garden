@@ -15,7 +15,7 @@
       </div>
       <n-divider />
       <div v-html="content" class="markdown-content vp-doc"></div>
-      <n-back-top :right="50" />
+      <n-back-top :right="width < 480 ? 30 : 50" />
     </div>
 
     <div class="markdown-outline">
@@ -55,6 +55,8 @@
   import { useStore, useWritingStore } from '@/store';
   import { setAnchors, setLinks, setImgs } from './Markdown';
   import { useRouter } from 'vue-router';
+  import { useWindowSize } from '@vueuse/core';
+  const { width } = useWindowSize();
 
   const writingStore = useWritingStore();
   const router = useRouter();
