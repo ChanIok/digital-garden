@@ -19,19 +19,7 @@ export const getLocalWritingByPath = async (path: string) => {
   return res;
 };
 
-export const checkPath = async () => {
-  const route = useRoute();
-  const router = useRouter();
-  const txId = route.params.txId;
-  if (txId == undefined || txId == '') {
-    return;
-  }
-  const path = await getFullPath(txId as string);
-  if (path == '') {
-    return;
-  }
-  router.push(`/writings/${path}`);
-};
+
 
 export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
   const paths = manifest.paths;

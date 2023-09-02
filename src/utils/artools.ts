@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { loadManifest } from './loader';
 import { gateways, owner, appWritingsName, appName } from '@/config';
 import { useStore } from '@/store';
-import { nextTick } from 'vue';
 
 export const getLatestManifest = async (isAppName = false) => {
   const store = useStore();
@@ -36,8 +34,7 @@ export const getLatestState = async (txId: string) => {
 export const getFullPath = async (prefix: string) => {
   const store = useStore();
   if (!store.manifest) {
-    await loadManifest();
-    await nextTick();
+    return '';
   }
   const paths = store.manifest!.paths;
   const path = Object.keys(paths || {}).find((key) => paths[key].id.includes(prefix)) || '';

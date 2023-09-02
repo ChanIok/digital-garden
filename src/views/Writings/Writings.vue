@@ -11,21 +11,31 @@
 </template>
 
 <script setup lang="ts">
-  import { nextTick, onMounted, watch } from 'vue';
+  import { nextTick, watch } from 'vue';
   import Markdown from '@/views/Writings/Markdown.vue';
   import { NScrollbar } from 'naive-ui';
   import { useStore, useWritingStore } from '@/store';
-  import { useRoute } from 'vue-router';
-  import { checkPath, loadWriting } from '@/views/Writings/Writings.js';
+  import { useRoute, useRouter } from 'vue-router';
+  import { loadWriting } from '@/views/Writings/Writings.js';
+  import { getFullPath } from '@/utils/artools';
 
   const writingStore = useWritingStore();
   const store = useStore();
   const route = useRoute();
+  const router = useRouter();
 
-  onMounted(async () => {
-    await checkPath();
-    loadWriting();
-  });
+  const checkPath = async () => {
+    const txId = route.params.txId;
+    if (txId == undefined || txId == '') {
+      return;
+    }
+    const path = await getFullPath(txId as string);
+    if (path == '' || path == undefined) {
+      return;
+    }
+    await nextTick();
+    router.push(`/writings/${path}`);
+  };
 
   watch(
     () => writingStore.currentWritingPath,
@@ -34,7 +44,9 @@
 
   watch(
     () => store.manifest,
-    () => loadWriting()
+    async () => {
+      await checkPath();
+    }
   );
 
   watch(
