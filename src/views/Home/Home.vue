@@ -8,7 +8,6 @@
 
 <script setup lang="ts">
   import Universe from '@/views/Home/Universe.vue';
-
   import Background from '@/views/Home/Background.vue';
   import Welcome from '@/views/Home/Welcome.vue';
 </script>
