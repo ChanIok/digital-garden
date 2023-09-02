@@ -1,7 +1,7 @@
 interface IManifestPath {
   id: string;
   hash: string;
-  date?: string;
+  date?: number;
 }
 export interface IManifest {
   manifest: 'arweave/paths';

@@ -56,8 +56,8 @@
   import { setAnchors, setLinks, setImgs } from './Markdown';
   import { useRouter } from 'vue-router';
   import { useWindowSize } from '@vueuse/core';
+  import dayjs from 'dayjs';
   const { width } = useWindowSize();
-
   const writingStore = useWritingStore();
   const router = useRouter();
   const store = useStore();
@@ -66,7 +66,11 @@
     return store.manifest?.paths[writingStore.currentWritingPath]?.id;
   });
   const date = computed(() => {
-    return store.manifest?.paths[writingStore.currentWritingPath]?.date;
+    const timestamp = store.manifest?.paths[writingStore.currentWritingPath]?.date;
+    if (timestamp) {
+      return dayjs.unix(timestamp).format('YYYY-MM-DD HH:mm:ss');
+    }
+    return null;
   });
   const title = computed(() => {
     if (writingStore.currentWritingPathArray.length == 1) {

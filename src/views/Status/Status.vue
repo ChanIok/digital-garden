@@ -52,24 +52,23 @@
 <script setup lang="ts">
   import { NTimeline, NTimelineItem, NH1, NH2, NScrollbar } from 'naive-ui';
   import { getLatestManifest } from '@/utils/artools';
-  import { nextTick, onMounted, ref, h, render } from 'vue';
+  import { onMounted, ref, h, render } from 'vue';
   import dayjs from 'dayjs';
-  const status = ref<any>(null);
 
+  const status = ref<any>(null);
   const writingsEdges = ref<any>(null);
   const AppEdges = ref<any>(null);
 
-  const a = async () => {
+  const getManifests = async () => {
     const [writingsResponse, appResponse] = await Promise.all([
       getLatestManifest(),
       getLatestManifest(true),
     ]);
-
     writingsEdges.value = writingsResponse.data.transactions.edges;
     AppEdges.value = appResponse.data.transactions.edges;
   };
 
-  const b = () => {
+  const setLinks = () => {
     const elements = Array.from(status.value.querySelectorAll('.n-timeline-item-content__title'));
     elements.map((item: any) => {
       const txId = item.innerHTML;
@@ -89,7 +88,7 @@
   };
 
   onMounted(async () => {
-    await a(), b();
+    await getManifests(), setLinks();
   });
 </script>
 

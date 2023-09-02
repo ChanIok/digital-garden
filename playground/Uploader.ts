@@ -13,7 +13,7 @@ interface Manifest {
   manifest: string;
   version: string;
   index?: { path: string };
-  paths: { [path: string]: { id: any; hash: string; date: string } };
+  paths: { [path: string]: { id: any; hash: string; date: number } };
 }
 
 export class Uploader {
@@ -58,7 +58,7 @@ export class Uploader {
       this.manifest.paths[item] = {
         id: hashToPath[itemHash].id,
         hash: itemHash,
-        date: dayjs(fs.statSync(itemPath).mtime).format('YYYY-MM-DD HH:mm:ss'),
+        date: fs.statSync(itemPath).mtime.getTime(),
       };
     } else {
       const res = await this.bundlr.uploadFile(itemPath);
@@ -69,7 +69,7 @@ export class Uploader {
       this.manifest.paths[item] = {
         id: res.id,
         hash: hash(fs.readFileSync(itemPath).toString()),
-        date: dayjs(fs.statSync(itemPath).mtime).format('YYYY-MM-DD HH:mm:ss'),
+        date: fs.statSync(itemPath).mtime.getTime(),
       };
     }
   }
@@ -101,7 +101,7 @@ export class Uploader {
       this.manifest.paths.manifest = {
         id: res.id,
         hash: hash(fs.readFileSync(manifestDistPath).toString()),
-        date: dayjs(fs.statSync(manifestDistPath).mtime).format('YYYY-MM-DD HH:mm:ss'),
+        date: fs.statSync(manifestDistPath).mtime.getTime(),
       };
     }
 
