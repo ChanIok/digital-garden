@@ -27,7 +27,6 @@ export default defineConfig({
             id.includes('node_modules/highlight.js') ||
             id.includes('node_modules/naive-ui') ||
             id.includes('node_modules/marked') ||
-            id.includes('node_modules/clipboard') ||
             id.includes('node_modules/dayjs')
           ) {
             return 'library';

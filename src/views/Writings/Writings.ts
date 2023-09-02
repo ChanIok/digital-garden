@@ -19,8 +19,6 @@ export const getLocalWritingByPath = async (path: string) => {
   return res;
 };
 
-
-
 export const getSubPathsList = (manifest: IManifest, targetPath: string) => {
   const paths = manifest.paths;
   const subPaths: any = {};

@@ -5,9 +5,6 @@ import { appEnv } from '@/config';
 import { Liyue } from '@/assets';
 import { Venti } from '@/assets';
 import { IManifest } from '@/typings';
-import Clipboard from 'clipboard';
-
-const clipboard = new Clipboard('.copyBtn');
 
 const imgArr = [Liyue];
 const imgArrAsync = [Venti];

@@ -1,12 +1,6 @@
 <template>
   <div id="share-button" v-if="isButtonVisible">
-    <n-button
-      size="small"
-      quaternary
-      class="copyBtn"
-      :data-clipboard-text="sharingLink"
-      @click="onClickShare"
-    >
+    <n-button size="small" quaternary @click="onClickShare">
       <template #icon>
         <n-icon>
           <ShareSocialOutline />
@@ -21,6 +15,8 @@
   import { useWritingStore, useStore } from '@/store';
   import { ShareSocialOutline } from '@vicons/ionicons5';
   import { useMessage, NButton, NIcon } from 'naive-ui';
+  import { useClipboard } from '@vueuse/core';
+  const { copy, isSupported } = useClipboard({ legacy: true });
 
   const store = useStore();
   const writingStore = useWritingStore();
@@ -50,6 +46,11 @@
   });
 
   const onClickShare = () => {
+    if (!isSupported.value || !sharingLink.value) {
+      message.error('复制失败');
+      return;
+    }
+    copy(sharingLink.value);
     message.success(`已复制链接到剪贴板：${sharingLink.value}`);
   };
 </script>
