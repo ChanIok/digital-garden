@@ -3,7 +3,6 @@ import path from 'path';
 import { sync } from 'glob';
 import hash from 'object-hash';
 import Bundlr from '@bundlr-network/client';
-import dayjs from 'dayjs';
 
 interface HashToPath {
   [hash: string]: { id: any; path: string };

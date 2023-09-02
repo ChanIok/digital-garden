@@ -68,7 +68,7 @@
   const date = computed(() => {
     const timestamp = store.manifest?.paths[writingStore.currentWritingPath]?.date;
     if (timestamp) {
-      return dayjs.unix(timestamp).format('YYYY-MM-DD HH:mm:ss');
+      return dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss');
     }
     return null;
   });
