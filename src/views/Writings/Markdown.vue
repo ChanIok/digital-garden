@@ -14,6 +14,9 @@
         </n-a>
       </div>
       <n-divider />
+      <div class="skeleton" v-if="isSkeletonVisible">
+        <n-skeleton text :repeat="2" /> <n-skeleton text style="width: 60%" />
+      </div>
       <div v-html="content" class="markdown-content vp-doc"></div>
       <n-back-top :right="width < 480 ? 30 : 50" />
     </div>
@@ -51,12 +54,14 @@
   import { ref, nextTick, watch } from 'vue';
   import { getMarkedContent } from '@/utils/marked';
   import { computed } from '@vue/reactivity';
-  import { NBackTop, NAnchor, NAnchorLink, NEllipsis, NH1, NP, NDivider, NA } from 'naive-ui';
+  import { NBackTop, NAnchor, NAnchorLink, NEllipsis, NSkeleton, NP, NDivider, NA } from 'naive-ui';
   import { useStore, useWritingStore } from '@/store';
   import { setAnchors, setLinks, setImgs } from './Markdown';
   import { useRouter } from 'vue-router';
   import { useWindowSize } from '@vueuse/core';
   import dayjs from 'dayjs';
+  const isSkeletonVisible = ref<boolean>(true);
+  let isSkeletonVisibleTimer: NodeJS.Timeout;
   const { width } = useWindowSize();
   const writingStore = useWritingStore();
   const router = useRouter();
@@ -98,7 +103,15 @@
 
   watch(
     () => content.value,
-    async () => {
+    async (val) => {
+      if (val == '') {
+        isSkeletonVisibleTimer = setTimeout(() => {
+          isSkeletonVisible.value = true;
+        }, 300);
+      } else {
+        isSkeletonVisible.value = false;
+        clearTimeout(isSkeletonVisibleTimer);
+      }
       await nextTick();
       try {
         setAnchors(anchors, markdown);

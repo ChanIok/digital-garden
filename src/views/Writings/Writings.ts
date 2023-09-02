@@ -1,12 +1,9 @@
 import { appEnv } from '@/config';
 import { useLoadingBarStore } from '@/store/modules/loading-bar';
-import { getFullPath } from '@/utils/artools';
 import { nextTick } from 'vue';
 import { useStore, useWritingStore } from '@/store';
-import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { IManifest } from '@/typings';
-import { useRouter } from 'vue-router';
 
 export const getLocalWritingByPath = async (path: string) => {
   let res = '';

@@ -54,6 +54,7 @@
     async (val) => {
       if (val.startsWith('/writings')) {
         writingStore.setCurrentWritingPath(decodeURIComponent(val.slice(10)));
+        writingStore.setCurrentWritingText('');
       } else if (val == '/') {
         await nextTick();
         writingStore.$reset();
