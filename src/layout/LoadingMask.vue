@@ -32,7 +32,7 @@
         return window.cancelAnimationFrame(update);
       }
       c += progress / (60 * time);
-      barValue.value = ((c * container.value!.offsetWidth) / 100).toFixed() + 'px';
+      barValue.value = ((Math.min(c, 100) * container.value!.offsetWidth) / 100).toFixed() + 'px';
       window.requestAnimationFrame(update);
     };
     window.requestAnimationFrame(update);
