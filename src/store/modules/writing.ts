@@ -1,18 +1,18 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 export interface IWritingStore {
   currentWritingText: string;
   currentWritingPath: string;
 }
 
-export const useWritingStore = defineStore("writing", {
+export const useWritingStore = defineStore('writing', {
   state: (): IWritingStore => ({
-    currentWritingText: "",
-    currentWritingPath: "",
+    currentWritingText: '',
+    currentWritingPath: '',
   }),
   getters: {
     currentWritingPathArray: (state) => {
-      return state.currentWritingPath.split("/");
+      return state.currentWritingPath.split('/');
     },
   },
   actions: {

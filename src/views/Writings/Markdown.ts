@@ -57,7 +57,7 @@ export const setImgs = (markdown: Ref<HTMLElement>) => {
 
 const createPopover = (writingText: string, link: HTMLAnchorElement) => {
   const maxWidth = Math.min(window.innerWidth - link.offsetLeft - 20, 720);
-  const nPStyle = `max-height: 420px;max-width: ${maxWidth}px`;
+  const nPStyle = `max-height: 420px;max-width: ${maxWidth}px;`;
   return h(
     NPopover,
     window.innerWidth < 480
@@ -81,10 +81,6 @@ const createPopover = (writingText: string, link: HTMLAnchorElement) => {
           'a',
           {
             class: 'internal-link',
-            onclick: () => {
-              const previewElement = document.querySelector('.pv-doc');
-              (previewElement as any).style.display = 'none';
-            },
           },
           link.innerHTML
         ),
@@ -122,6 +118,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     linkElement.onclick = () => {
       router.push(`/writings/${path}`);
       document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;
+      document.querySelector('.pv-doc')?.setAttribute('style', 'display: none;');
     };
   });
 
