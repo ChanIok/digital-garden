@@ -3,7 +3,7 @@ import { getLatestManifestId, getLatestState, generateLocalManifest } from './ut
 
 // 在这里改变命令
 let command = 'upload';
-// 是否只上传文章，否则上传dist
+// 是否只上传文章，'true'则上传文章，'false'则上传站点dist
 let isUploadWritings = false;
 
 const config = {

@@ -32,17 +32,32 @@
     const manifest = store.manifest;
     const currentWritingPath = writingStore.currentWritingPath;
 
+    // 如果当前写作路径不存在于 manifest 中，则返回 null
     if (!manifest?.paths[currentWritingPath]) {
-      return;
+      return null;
     }
+    // 获取链接的前 6 个字符作为分享 ID
+    const shareId = manifest.paths[currentWritingPath].id.slice(0, 6);
+    // 获取 worker 域名
+    const getWorkerDomain = () => {
+      const metaElement = document.querySelector('meta[name="x-worker-domain"]');
+      return metaElement ? metaElement.getAttribute('content') : '';
+    };
+    // 构建基础 URL
+    const buildBaseUrl = () => {
+      const { protocol, hostname, port } = window.location;
+      const workerDomain = getWorkerDomain();
+      const domain = workerDomain || hostname;
+      const portSuffix = port ? `:${port}` : '';
+      return `${protocol}//${domain}${portSuffix}`;
+    };
+    // 构建完整的分享链接
+    const buildShareLink = (baseUrl: string) => {
+      const pathname = window.location.pathname;
+      return pathname.length > 1 ? `${baseUrl}${pathname}#/${shareId}` : `${baseUrl}/#/${shareId}`;
+    };
 
-    const link = manifest.paths[currentWritingPath].id.substring(0, 6);
-    let currentURL = window.location.protocol + '//' + window.location.hostname;
-    if (window.location.port) {
-      currentURL += ':' + window.location.port;
-    }
-    currentURL += '/#/' + link;
-    return currentURL;
+    return buildShareLink(buildBaseUrl());
   });
 
   const onClickShare = () => {
