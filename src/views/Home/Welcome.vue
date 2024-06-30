@@ -65,13 +65,13 @@
 
 <style lang="less" scoped>
   @import url('@/styles/varibles.less');
-  @color: rgba(247, 247, 248, 0.8);
+  @color: rgba(252, 252, 252, 1);
 
   .light .content :deep(h1),
   .light .content :deep(li),
   .light .content :deep(p) {
     color: @color;
-    text-shadow: 3px 3px 5px rgba(196, 196, 196, 0.6);
+    text-shadow: 3px 3px 5px rgba(32, 32, 32, 0.6);
   }
 
   .light .content li :deep(a) {
