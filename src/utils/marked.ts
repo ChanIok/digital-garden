@@ -44,46 +44,52 @@ marked.use(
   })
 );
 
-const renderer = {
-  image(href: string, title: string, text: string) {
-    if (href === null) {
-      return text;
-    }
-    href = decodeURIComponent(href);
-    const store = useStore();
-    const url = appEnv.VITE_USE_LOCAL_WRITINGS
-      ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${href}`
-      : `${store.gateway}/${store.manifest?.paths[href!]?.id}`;
-
-    let out = `<img src="${url}" path="${href}" alt="${text}"`;
-    if (title) {
-      out += ` title="${title}"`;
-    }
-    out += '>';
-    return out;
-  },
-  link(href: string, title: string, text: string) {
-    if (href === null) {
-      return text;
-    }
-    if (href.startsWith('http')) {
-      let out = `<a href="${href}" path="${href}" target="_blank"`;
-      if (title) {
-        out += ' title="' + title + '"';
+const extension = {
+  useNewRenderer: true,
+  renderer: {
+    image(token: any) {
+      if (!token.href) {
+        return token.text;
       }
-      out += '>' + text + '</a>';
+
+      const href = decodeURIComponent(token.href);
+      const store = useStore();
+      const url = appEnv.VITE_USE_LOCAL_WRITINGS
+        ? `${appEnv.VITE_LOCAL_REQUEST_URL}/${href}`
+        : `${store.gateway}/${store.manifest?.paths[href]?.id}`;
+
+      let out = `<img src="${url}" path="${href}" alt="${token.text}"`;
+      if (token.title) {
+        out += ` title="${token.title}"`;
+      }
+      out += '>';
       return out;
-    }
-    let out = `<a path="${href}"`;
-    if (title) {
-      out += ' title="' + title + '"';
-    }
-    out += '>' + text + '</a>';
-    return out;
+    },
+    link(token: any) {
+      if (!token.href) {
+        return token.text;
+      }
+
+      if (token.href.startsWith('http')) {
+        let out = `<a href="${token.href}" path="${token.href}" target="_blank"`;
+        if (token.title) {
+          out += ` title="${token.title}"`;
+        }
+        out += `>${token.text}</a>`;
+        return out;
+      }
+
+      let out = `<a path="${token.href}"`;
+      if (token.title) {
+        out += ` title="${token.title}"`;
+      }
+      out += `>${token.text}</a>`;
+      return out;
+    },
   },
 };
 
-marked.use({ renderer });
+marked.use(extension);
 
 export const getMarkedContent = (value: string) => {
   return marked(value);
