@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-  import { nextTick, watch } from 'vue';
+  import { nextTick, watch, onUnmounted } from 'vue';
   import Markdown from '@/views/Writings/Markdown.vue';
   import { NScrollbar } from 'naive-ui';
   import { useStore, useWritingStore } from '@/store';
@@ -55,13 +55,14 @@
       if (val.startsWith('/writings')) {
         writingStore.setCurrentWritingPath(decodeURIComponent(val.slice(10)));
         writingStore.setCurrentWritingText('');
-      } else if (val == '/') {
-        await nextTick();
-        writingStore.$reset();
       }
     },
     { immediate: true }
   );
+  
+  onUnmounted(() => {
+    writingStore.$reset();
+  });
 </script>
 
 <style lang="less" scoped>
