@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { sync } from 'glob';
 import hash from 'object-hash';
-import Bundlr from '@bundlr-network/client';
+import Irys from '@irys/sdk';
 
 interface HashToPath {
   [hash: string]: { id: any; path: string };
@@ -17,7 +17,7 @@ interface Manifest {
 
 export class Uploader {
   private readonly jwk: any;
-  private readonly bundlr: any;
+  private readonly irys: any;
   private readonly isUploadWritings: boolean;
   private readonly resolvedBasePath: string;
   private readonly filePaths: string[];
@@ -30,7 +30,7 @@ export class Uploader {
   ) {
     this.isUploadWritings = isUploadWritings;
     this.jwk = JSON.parse(fs.readFileSync(walletPath).toString());
-    this.bundlr = new Bundlr('http://node1.bundlr.network', 'arweave', this.jwk);
+    this.irys = new Irys({ network: 'mainnet', token: 'arweave', key: this.jwk });
     this.resolvedBasePath = path.resolve(filesPath);
     this.filePaths = sync('**/*', {
       cwd: this.resolvedBasePath,
@@ -60,7 +60,7 @@ export class Uploader {
         date: fs.statSync(itemPath).mtime.getTime(),
       };
     } else {
-      const res = await this.bundlr.uploadFile(itemPath);
+      const res = await this.irys.uploadFile(itemPath);
       if (res.id == undefined) {
         throw new Error(`upload file failed:${item}`);
       }
@@ -93,7 +93,7 @@ export class Uploader {
     fs.writeFileSync(manifestDistPath, finalManifestContent);
 
     if (this.isUploadWritings) {
-      const res = await this.bundlr.uploadFile(manifestDistPath);
+      const res = await this.irys.uploadFile(manifestDistPath);
       if (res.id == undefined) {
         throw new Error(`upload manifest file failed`);
       }
@@ -114,7 +114,7 @@ export class Uploader {
 
     console.log(this.manifest);
 
-    const finalManifestUploadResponse = await this.bundlr.upload(JSON.stringify(this.manifest), {
+    const finalManifestUploadResponse = await this.irys.upload(JSON.stringify(this.manifest), {
       tags: tags,
     });
     if (finalManifestUploadResponse.id === undefined) {

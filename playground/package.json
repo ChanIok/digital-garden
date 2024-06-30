@@ -12,15 +12,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@bundlr-network/client": "^0.9.11",
     "@types/glob": "^8.1.0",
     "@types/object-hash": "^3.0.6",
     "axios": "^1.7.2",
     "glob": "^10.4.2",
     "http-server": "^14.1.1",
-    "object-hash": "^3.0.0"
-  },
-  "dependencies": {
+    "@irys/sdk": "^0.2.6",
+    "object-hash": "^3.0.0",
     "dayjs": "^1.11.11"
-  }
+  },
+  "dependencies": {}
 }
