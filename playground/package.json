@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@bundlr-network/client": "^0.10.5",
+    "@bundlr-network/client": "^0.9.11",
     "@types/glob": "^8.1.0",
     "@types/object-hash": "^3.0.6",
     "axios": "^1.7.2",

@@ -15,10 +15,10 @@ import { computed } from "vue";
 const store = useStore()
 const url = computed(() => {
     const s = store.isDark ? "dark" : "light";
-    return `https://embed.0xecho.com.ipns.page?color-theme=${s}&desc=Hi&has-h-padding=true&has-v-padding=true&modules=comment%2Ctip&receiver=chaniok.eth&target_uri=https%3A%2F%2Fchaniok.eth.limo%2Fcomments%2Fd5d20`;
+    return `https://widget.0xecho.com?color-theme=${s}&desc=Hi&has-h-padding=true&has-v-padding=true&modules=comment%2Ctip&receiver=chaniok.eth&target_uri=https%3A%2F%2Fchaniok.eth.limo%2Fcomments%2Fd5d20`;
 });
 </script>
-  
+
 <style lang="less" scoped>
 #comments {
     width: 100%;
