@@ -2,6 +2,14 @@ import path from 'path';
 import axios from 'axios';
 import * as glob from 'glob';
 import fs from 'fs';
+import tunnel from 'tunnel';
+
+const agent = tunnel.httpsOverHttp({
+  proxy: {
+    host: '127.0.0.1',
+    port: 7890,
+  },
+});
 
 export const getLatestManifestId = async (isUploadWritings: boolean) => {
   const graphql = {
@@ -19,12 +27,19 @@ export const getLatestManifestId = async (isUploadWritings: boolean) => {
     },
     operationName: 'getTransactions',
   };
-  return (await axios.post('https://arweave.net/graphql', graphql)).data.data.transactions.edges[0]
-    .node.id;
+  return (
+    await axios.post('https://arweave.net/graphql', graphql, {
+      httpsAgent: agent,
+    })
+  ).data.data.transactions.edges[0].node.id;
 };
 
 export const getLatestState = async (txId: string) => {
-  return (await axios.get(`https://arweave.net/raw/${txId}`)).data;
+  return (
+    await axios.get(`https://arweave.net/raw/${txId}`, {
+      httpsAgent: agent,
+    })
+  ).data;
 };
 
 export const generateLocalManifest = (filesPath: string, outPutPath: string) => {
