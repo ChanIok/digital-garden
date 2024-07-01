@@ -11,7 +11,7 @@
 <script setup lang="ts">
   import NavBar from '@/layout/Header/NavBar.vue';
   import Options from '@/layout/Header/Options.vue';
-  import LoadingBar from '@/layout/Header/LoadingBar.vue';
+  import LoadingBar from '@/components/LoadingBar/LoadingBar.vue';
   import { NLoadingBarProvider } from 'naive-ui';
 </script>
 

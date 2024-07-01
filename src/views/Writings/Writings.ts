@@ -1,9 +1,9 @@
 import { appEnv } from '@/config';
-import { useLoadingBarStore } from '@/store/modules/loading-bar';
 import { nextTick } from 'vue';
 import { useStore, useWritingStore } from '@/store';
 import axios from 'axios';
 import { IManifest } from '@/typings';
+import { useGlobalLoadingBar } from '@/components/LoadingBar/LoadingBar';
 
 /**
  * 根据路径获取本地写作内容
@@ -71,7 +71,7 @@ export const loadWriting = async (
 ): Promise<string | void> => {
   const store = useStore();
   const writingStore = useWritingStore();
-  const loadingBarStore = useLoadingBarStore();
+  const globalLoadingBar = useGlobalLoadingBar();
   const manifest = store.manifest;
   const currentWritingPath = isReturnTextDirectly ? path : writingStore.currentWritingPath;
 
@@ -95,7 +95,7 @@ export const loadWriting = async (
   }
 
   if (!isReturnTextDirectly) {
-    loadingBarStore.startLoadingBar();
+    globalLoadingBar.start();
   }
 
   // 根据配置获取请求 URL
@@ -114,6 +114,6 @@ export const loadWriting = async (
   }
 
   if (!isReturnTextDirectly) {
-    loadingBarStore.finishLoadingBar();
+    globalLoadingBar.finish();
   }
 };

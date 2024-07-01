@@ -9,10 +9,3 @@ export interface IManifest {
   index: { path: 'index.html' };
   paths: Record<string, IManifestPath>;
 }
-
-export interface IPosition {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-}
