@@ -106,7 +106,7 @@ const createPopover = (writingText: string, link: HTMLAnchorElement) => {
     },
     {
       default: () => h(Preview, { content: getMarkedContent(writingText) }),
-      trigger: () => h('a', { class: 'internal-link' }, link.innerHTML),
+      trigger: () => h('span', { class: 'internal-link' }, link.innerHTML),
     }
   );
 };
@@ -127,9 +127,10 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     if (!path || path?.startsWith('http')) {
       return;
     }
-    link.onclick = () => {
-      router.push(`/writings/${path}`);
-    };
+
+    // 设置 a 标签的 href 属性
+    link.setAttribute('href', `#/writings/${path}`);
+
     // 如果路径以 'index.md' 结尾且不在 store 的 manifest 路径中，直接返回
     if (path.endsWith('index.md') && !(path in store.manifest!.paths)) {
       return;
@@ -141,13 +142,13 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
       { theme: store.isDark ? darkTheme : undefined },
       { default: () => createPopover(writingText, link) }
     );
-    // 创建一个新的 div 元素来替换原始的链接
-    let linkElement = document.createElement('div');
+    // 创建一个新的 a 元素来替换原始的链接
+    let linkElement = document.createElement('a');
     render(popverInstance, linkElement);
     link.replaceWith(linkElement);
     // 设置点击事件以导航并滚动到顶部
+    linkElement.setAttribute('href', `#/writings/${path}`);
     linkElement.onclick = () => {
-      router.push(`/writings/${path}`);
       document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;
       document.querySelector('.pv-doc')?.setAttribute('style', 'display: none;');
     };
