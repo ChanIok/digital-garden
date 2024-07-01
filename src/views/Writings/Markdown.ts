@@ -72,7 +72,7 @@ export const setCopyButton = (
     </svg>
   `;
     item.appendChild(button);
-    item.onclick = () => {
+    button.onclick = () => {
       const text = item.textContent || '';
       clipboard.copy(text);
 
