@@ -6,6 +6,8 @@ import { loadWriting } from './Writings';
 import { getMarkedContent } from '@/utils/marked';
 import { useStore } from '@/store';
 import { appEnv } from '@/config';
+import { UseClipboardReturn } from '@vueuse/core';
+import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 
 export const setAnchors = (anchors: any, markdown: any) => {
   const content = markdown.value.querySelector('.markdown-content');
@@ -55,43 +57,70 @@ export const setImgs = (markdown: Ref<HTMLElement>) => {
   }
 };
 
+export const setCopyButton = (
+  markdown: Ref<HTMLElement>,
+  clipboard: UseClipboardReturn<false>,
+  message: MessageApiInjection
+) => {
+  const elements = Array.from(markdown.value.querySelectorAll<HTMLImageElement>('pre>code'));
+  elements.forEach((item) => {
+    const button = document.createElement('button');
+    button.className = 'copy-button';
+    button.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V6h2v14h11v2zm4-6V4z"/>
+    </svg>
+  `;
+    item.appendChild(button);
+    item.onclick = () => {
+      const text = item.textContent || '';
+      clipboard.copy(text);
+
+      if (!clipboard.isSupported.value || !text) {
+        message.error('写入剪贴板失败');
+        return;
+      }
+      message.success('已写入剪贴板');
+    };
+  });
+};
+
+/**
+ * 创建Markdown内容预览的弹出框组件
+ * @param writingText - 预览内容的文本
+ * @param link - 触发弹出框的链接元素
+ * @returns 弹出框组件
+ */
 const createPopover = (writingText: string, link: HTMLAnchorElement) => {
   const maxWidth = Math.min(window.innerWidth - link.offsetLeft - 20, 720);
-  const nPStyle = `max-height: 420px;max-width: ${maxWidth}px;`;
+  const nPopoverStyle = `max-height: 420px; max-width: ${maxWidth}px;`;
+
   return h(
     NPopover,
-    window.innerWidth < 480
-      ? {
-          trigger: 'hover',
-          scrollable: true,
-          style: nPStyle,
-          class: 'pv-doc',
-          show: false,
-        }
-      : {
-          trigger: 'hover',
-          scrollable: true,
-          style: nPStyle,
-          class: 'pv-doc',
-        },
+    {
+      trigger: 'hover',
+      scrollable: true,
+      style: nPopoverStyle,
+      class: 'pv-doc',
+      show: window.innerWidth < 480 ? false : undefined,
+    },
     {
       default: () => h(Preview, { content: getMarkedContent(writingText) }),
-      trigger: () =>
-        h(
-          'a',
-          {
-            class: 'internal-link',
-          },
-          link.innerHTML
-        ),
+      trigger: () => h('a', { class: 'internal-link' }, link.innerHTML),
     }
   );
 };
 
+/**
+ * 设置 Markdown 内容中的链接
+ * @param markdown - 包含 Markdown 内容的 Ref 对象
+ * @param router - Vue 路由实例
+ */
 export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
   const store = useStore();
   const elements = Array.from(markdown.value.querySelectorAll<HTMLAnchorElement>('a'));
 
+  // 处理所有链接元素
   const promises = elements.map(async (link) => {
     const path = link.getAttribute('path');
 
@@ -101,20 +130,22 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     link.onclick = () => {
       router.push(`/writings/${path}`);
     };
+    // 如果路径以 'index.md' 结尾且不在 store 的 manifest 路径中，直接返回
     if (path.endsWith('index.md') && !(path in store.manifest!.paths)) {
       return;
     }
 
-    const writingText = await loadWriting(true, path);
+    const writingText = (await loadWriting(true, path)) as string;
     const popverInstance = h(
       NConfigProvider,
       { theme: store.isDark ? darkTheme : undefined },
       { default: () => createPopover(writingText, link) }
     );
-
+    // 创建一个新的 div 元素来替换原始的链接
     let linkElement = document.createElement('div');
     render(popverInstance, linkElement);
     link.replaceWith(linkElement);
+    // 设置点击事件以导航并滚动到顶部
     linkElement.onclick = () => {
       router.push(`/writings/${path}`);
       document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;

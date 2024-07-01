@@ -25,14 +25,11 @@
   const router = useRouter();
 
   const checkPath = async () => {
-    const txId = route.params.txId;
-    if (txId == undefined || txId == '') {
-      return;
-    }
-    const path = await getFullPath(txId as string);
-    if (path == '' || path == undefined) {
-      return;
-    }
+    const txId = route.params.txId as string;
+    if (!txId) return;
+
+    const path = await getFullPath(txId);
+    if (!path) return;
     await nextTick();
     router.push(`/writings/${path}`);
   };
@@ -59,7 +56,7 @@
     },
     { immediate: true }
   );
-  
+
   onUnmounted(() => {
     writingStore.$reset();
   });

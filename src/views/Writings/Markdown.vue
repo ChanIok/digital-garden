@@ -54,12 +54,26 @@
   import { ref, nextTick, watch } from 'vue';
   import { getMarkedContent } from '@/utils/marked';
   import { computed } from '@vue/reactivity';
-  import { NBackTop, NAnchor, NAnchorLink, NEllipsis, NSkeleton, NP, NDivider, NA } from 'naive-ui';
+  import {
+    NBackTop,
+    NAnchor,
+    NAnchorLink,
+    NEllipsis,
+    NSkeleton,
+    NP,
+    NDivider,
+    NA,
+    useMessage,
+  } from 'naive-ui';
   import { useStore, useWritingStore } from '@/store';
-  import { setAnchors, setLinks, setImgs } from './Markdown';
+  import { setAnchors, setLinks, setImgs, setCopyButton } from './Markdown';
   import { useRouter } from 'vue-router';
   import { useWindowSize } from '@vueuse/core';
   import dayjs from 'dayjs';
+  import { useClipboard } from '@vueuse/core';
+
+  const clipboard = useClipboard({ legacy: true });
+  const message = useMessage();
   const isSkeletonVisible = ref<boolean>(true);
   let isSkeletonVisibleTimer: NodeJS.Timeout;
   const { width } = useWindowSize();
@@ -117,6 +131,7 @@
         setAnchors(anchors, markdown);
         await setLinks(markdown, router);
         setImgs(markdown);
+        setCopyButton(markdown, clipboard,message);
       } catch (error) {
         console.log(error);
       }
