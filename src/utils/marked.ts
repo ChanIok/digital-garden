@@ -28,7 +28,6 @@ languages.forEach((language) => {
   hljs.registerLanguage(language.name, language.lang);
 });
 
-
 marked.use(
   markedHighlight({
     langPrefix: 'hljs language-',
@@ -42,6 +41,9 @@ marked.use(
 const extension = {
   useNewRenderer: true,
   renderer: {
+    heading(token: any) {
+      return `<h${token.depth} id="${token.text}">${token.text}</h${token.depth}>`;
+    },
     image(token: any) {
       if (!token.href) {
         return token.text;
