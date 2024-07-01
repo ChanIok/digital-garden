@@ -1,13 +1,13 @@
 <template>
   <div id="home">
-    <Universe />
+    <Starfield />
     <Background />
     <Welcome />
   </div>
 </template>
 
 <script setup lang="ts">
-  import Universe from '@/views/Home/Universe.vue';
+  import Starfield from '@/views/Home/Starfield.vue';
   import Background from '@/views/Home/Background.vue';
   import Welcome from '@/views/Home/Welcome.vue';
 </script>
