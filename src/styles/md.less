@@ -72,15 +72,15 @@
 
 .vp-doc a {
   font-weight: 500;
-  color: var(--vp-c-brand); 
+  color: var(--vp-c-brand);
   text-decoration-style: none;
   transition: color 0.25s;
-  border-bottom: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9b7;
   cursor: pointer;
 }
 
 .vp-doc a:hover {
-  color: var(--vp-c-brand-dark); 
+  color: var(--vp-c-brand-dark);
   text-decoration: underline;
 }
 
@@ -178,47 +178,6 @@
 }
 
 /**
-  * Custom Block
-  * -------------------------------------------------------------------------- */
-
-.vp-doc .custom-block {
-  margin: 16px 0;
-}
-
-.vp-doc .custom-block p {
-  margin: 8px 0;
-  line-height: 24px;
-}
-
-.vp-doc .custom-block p:first-child {
-  margin: 0;
-}
-
-.vp-doc .custom-block a {
-  color: inherit;
-  font-weight: 600;
-}
-
-.vp-doc .custom-block a:hover {
-  text-decoration: underline;
-}
-
-.vp-doc .custom-block code {
-  font-size: var(--vp-custom-block-code-font-size);
-  font-weight: 700;
-  color: inherit;
-}
-
-.vp-doc .custom-block div[class*='language-'] {
-  margin: 8px 0;
-}
-
-.vp-doc .custom-block div[class*='language-'] code {
-  font-weight: 400;
-  background-color: transparent;
-}
-
-/**
   * Code
   * -------------------------------------------------------------------------- */
 
@@ -248,4 +207,46 @@
 
 .vp-doc a:hover > code {
   color: var(--vp-c-brand-dark);
+}
+
+/* block code */
+.dark .vp-doc pre > code > .copy-button {
+  background: rgba(192, 192, 192, 0.7);
+  &:hover {
+    background: rgba(192, 192, 192, 0.3);
+  }
+}
+
+.vp-doc pre > code:hover .copy-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vp-doc pre > code {
+  position: relative;
+  .copy-button {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(192, 192, 192, 0.5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+
+    svg {
+      width: 2em;
+      height: 2em;
+      fill: #666;
+    }
+
+    &:hover {
+      background: rgba(192, 192, 192, 0.9);
+    }
+  }
 }

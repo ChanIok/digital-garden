@@ -23,5 +23,8 @@
     box-sizing: border-box;
     padding: 0 10px 0 10px;
     height: 40px;
+    background-color: var(--theme-bg);
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+      background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s;
   }
 </style>

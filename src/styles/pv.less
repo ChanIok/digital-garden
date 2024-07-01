@@ -1,86 +1,108 @@
-.pv-doc img {
-  display: block;
-  max-width: 100%;
+// 通用样式
+.pv-doc {
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    font-weight: 500;
+    color: var(--vp-c-brand);
+    transition: color 0.25s;
+    border-bottom: 1px solid #d9d9d9;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  pre {
+    code {
+      background-color: var(--theme-bg-mute);
+    }
+
+    // 滚动条样式
+    &::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f6f6f6;
+      border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #aaa;
+      border-radius: 2px;
+
+      &:hover {
+        background: #747474;
+      }
+    }
+
+    &::-webkit-scrollbar-corner {
+      background: #f6f6f6;
+    }
+  }
 }
 
-.pv-doc a {
-  font-weight: 500;
-  color: var(--vp-c-brand);
-  transition: color 0.25s;
-  border-bottom: 1px solid #d9d9d9;
-  cursor: pointer;
-  text-decoration: none;
+// 内部链接样式
+.vp-doc {
+  div {
+    display: inline;
+  }
+
+  .internal-link {
+    transition: color 0.25s, background 0.2s;
+    color: var(--vp-c-green-dark);
+    background-color: rgba(192, 192, 192, 0.2);
+
+    &:hover {
+      color: var(--vp-c-green);
+      background-color: rgba(192, 192, 192, 0.4);
+    }
+  }
+
+  // 暗色主题
+  .dark & .internal-link {
+    color: var(--vp-c-green);
+    background-color: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      color: var(--vp-c-green-dark);
+      background-color: rgba(32, 32, 32, 0.9);
+    }
+  }
+
+  // 滚动条样式（与 .pv-doc pre 相同）
+  pre {
+    &::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f6f6f6;
+      border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #aaa;
+      border-radius: 2px;
+
+      &:hover {
+        background: #747474;
+      }
+    }
+
+    &::-webkit-scrollbar-corner {
+      background: #f6f6f6;
+    }
+  }
 }
 
-.pv-doc pre code {
-  background-color: var(--theme-bg-mute);
-}
-
+// 触摸设备
 @media (hover: none) {
   .internal-link {
     pointer-events: none;
-  }
-}
-
-.vp-doc .internal-link {
-  color: rgb(24, 160, 88);
-  background-color: rgba(180, 180, 180, 0.1);
-}
-.vp-doc div {
-  display: inline;
-}
-
-.dark .vp-doc .internal-link {
-  color: rgb(99, 226, 183);
-  background-color: rgba(180, 180, 180, 0.15);
-}
-
-.vp-doc pre {
-  ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #f6f6f6;
-    border-radius: 2px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #aaa;
-    border-radius: 2px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #747474;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background: #f6f6f6;
-  }
-}
-
-.pv-doc pre {
-  ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #f6f6f6;
-    border-radius: 2px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #aaa;
-    border-radius: 2px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #747474;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background: #f6f6f6;
   }
 }
