@@ -28,12 +28,7 @@ languages.forEach((language) => {
   hljs.registerLanguage(language.name, language.lang);
 });
 
-const render = new marked.Renderer();
-marked.setOptions({
-  renderer: render,
-  gfm: true,
-  pedantic: false,
-});
+
 marked.use(
   markedHighlight({
     langPrefix: 'hljs language-',

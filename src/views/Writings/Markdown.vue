@@ -131,7 +131,7 @@
         setAnchors(anchors, markdown);
         await setLinks(markdown, router);
         setImgs(markdown);
-        setCopyButton(markdown, clipboard,message);
+        setCopyButton(markdown, clipboard, message);
       } catch (error) {
         console.log(error);
       }
