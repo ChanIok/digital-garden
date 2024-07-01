@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, onUnmounted, ref } from 'vue';
   import { useStore } from '@/store';
 
   const store = useStore();
@@ -136,6 +136,9 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas, false);
     animate();
+    onUnmounted(() => {
+      window.removeEventListener('resize', resizeCanvas, false);
+    });
   };
 
   onMounted(initStarfield);
