@@ -8,14 +8,14 @@
 
 ## 技术框架
 
-- 前端部分：Vue3 + Vite2 + TypeScript + Navie UI
-- 区块链部分：Arweave + Bundlr
+- 前端部分：Vue3 + Vite + TypeScript + Navie UI
+- 区块链部分：Arweave + Irys
 
 ## 主要设计
 
 不同于传统的博客框架，我把网站本体和文章内容拆分成两部分，存放到不同的 `manifest` 中进行管理，加载网站本体时，通过 [`Arweave GraphQL`](https://arweave.net/graphql) 获取最新的 `Markdown` 文章内容，再由 `marked.js` 渲染到页面中。
 
-这样设计的原因是避免日常更新文章时，项目需要被重新打包然后重新上传到 `Arweave`，造成额外开销。在利用 `Bundlr` 的上传脚本中，我在 `manifest.json` 加入了哈希值校验，只上传有变化的文件。
+这样设计的原因是避免日常更新文章时，项目需要被重新打包然后重新上传到 `Arweave`，造成额外开销。在利用 `Irys` 的上传脚本中，我在 `manifest.json` 加入了哈希值校验，只上传有变化的文件。
 
 ## 预览
 
