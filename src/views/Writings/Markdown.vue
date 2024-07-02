@@ -67,7 +67,6 @@
   } from 'naive-ui';
   import { useStore, useWritingStore } from '@/store';
   import { setAnchors, setLinks, setImgs, setCopyButton } from './Markdown';
-  import { useRouter } from 'vue-router';
   import { useWindowSize } from '@vueuse/core';
   import dayjs from 'dayjs';
   import { useClipboard } from '@vueuse/core';
@@ -78,7 +77,6 @@
   let isSkeletonVisibleTimer: NodeJS.Timeout;
   const { width } = useWindowSize();
   const writingStore = useWritingStore();
-  const router = useRouter();
   const store = useStore();
 
   const txId = computed(() => {
@@ -129,7 +127,7 @@
       await nextTick();
       try {
         setAnchors(anchors, markdown);
-        await setLinks(markdown, router);
+        await setLinks(markdown);
         setImgs(markdown);
         setCopyButton(markdown, clipboard, message);
       } catch (error) {

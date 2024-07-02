@@ -116,7 +116,7 @@ const createPopover = (writingText: string, link: HTMLAnchorElement) => {
  * @param markdown - 包含 Markdown 内容的 Ref 对象
  * @param router - Vue 路由实例
  */
-export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
+export const setLinks = async (markdown: Ref<HTMLElement>) => {
   const store = useStore();
   const elements = Array.from(markdown.value.querySelectorAll<HTMLAnchorElement>('a'));
 
@@ -150,7 +150,7 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     // 设置点击事件以导航并滚动到顶部
     linkElement.onclick = async () => {
       // 滚动到顶部
-      document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;
+      // document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;
 
       // 定义一个函数来隐藏 .pv-doc 元素
       const hidePvDoc = () => {
