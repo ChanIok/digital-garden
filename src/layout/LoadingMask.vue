@@ -1,13 +1,15 @@
 <template>
   <transition name="loading-mask">
-    <div id="loading-mask" v-if="isShow" ref="loadingMask">
+    <div id="loading-mask" v-show="isShow" ref="loadingMask">
       <div class="container" ref="container">
         <div class="loading-bar-background"></div>
-        <div class="loading-bar-prospect"></div>
+        <div class="loading-bar-prospect" ref="progressBar"></div>
       </div>
-      <div class="loading-tips">
-        {{ tips }}
-      </div>
+      <transition name="fade">
+        <div class="loading-tips" v-if="showTip">
+          {{ tipTexts[tipState] }}
+        </div>
+      </transition>
     </div>
   </transition>
 </template>
@@ -15,62 +17,94 @@
 <script setup lang="ts">
   import { loadingbarImg } from '@/assets/loadingbarImg';
   import { useStore } from '@/store';
-  import { computed, watch, onMounted, ref } from 'vue';
+  import { computed, watch, onMounted, ref, onUnmounted } from 'vue';
 
-  const isShow = ref<boolean>(true);
-  const barValue = ref<string>('0');
-  const background = computed(() => {
-    return `url(${loadingbarImg}) no-repeat`;
-  });
-  const tips = ref<string>('');
-  const opacityRef = ref<string>('0');
-  const container = ref<HTMLElement>();
-  let c = 0;
-  const updateAnimation: any = (progress: number, time: number) => {
-    const update: any = () => {
-      if (c >= progress) {
-        return window.cancelAnimationFrame(update);
+  enum TipState {
+    Initial,
+    SlowNetwork,
+    SwitchProxy,
+    LoadError,
+  }
+  const tipTexts: Record<TipState, string> = {
+    [TipState.Initial]: '',
+    [TipState.SlowNetwork]: '嗯哼♪ 你的网络似乎有点慢',
+    [TipState.SwitchProxy]: '或者切换下代理？',
+    [TipState.LoadError]: '哎呀，你的网络无法前往区块链的大门',
+  };
+  const store = useStore();
+  const isShow = ref(true);
+  const tips = ref('');
+  const tipsOpacity = ref(0);
+  const container = ref<HTMLElement | null>(null);
+  const progressBar = ref<HTMLElement | null>(null);
+  const background = computed(() => `url(${loadingbarImg}) no-repeat`);
+  const tipState = ref<TipState>(TipState.Initial);
+  const showTip = ref(false);
+
+  let animationFrame: number | null = null;
+
+  const updateAnimation = (targetProgress: number, duration: number) => {
+    const startTime = performance.now();
+    const startWidth = progressBar.value ? progressBar.value.offsetWidth : 0;
+    const containerWidth = container.value ? container.value.offsetWidth : 400;
+    const targetWidth = (targetProgress / 100) * containerWidth;
+
+    const animate = (currentTime: number) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      const easeProgress = easeOutCubic(progress);
+      const currentWidth = (startWidth + (targetWidth - startWidth) * easeProgress).toFixed();
+      if (progressBar.value) {
+        progressBar.value.style.width = `${currentWidth}px`;
       }
-      c += progress / (60 * time);
-      barValue.value = ((Math.min(c, 100) * container.value!.offsetWidth) / 100).toFixed() + 'px';
-      window.requestAnimationFrame(update);
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
     };
-    window.requestAnimationFrame(update);
+
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+    }
+    animationFrame = requestAnimationFrame(animate);
   };
 
-  const setTips = () => {
-    const store = useStore();
-    setTimeout(() => {
-      if (store.loadingProgress <= 1) {
-        tips.value = '嗯哼♪ 你的网络似乎有点慢';
-        opacityRef.value = '1';
-        setTimeout(() => {
-          if (!store.isLoadError) {
-            opacityRef.value = '0';
-            setTimeout(() => {
-              opacityRef.value = '1';
-              tips.value = '或者切换下代理？';
-            }, 1000);
-          }
-        }, 3000);
+  const easeOutCubic = (t: number): number => {
+    return 1 - Math.pow(1 - t, 3);
+  };
+
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const setTips = async () => {
+    await delay(3000);
+    if (store.loadingProgress <= 1) {
+      tipState.value = TipState.SlowNetwork;
+      showTip.value = true;
+      await delay(3000);
+      if (!store.isLoadError) {
+        showTip.value = false;
+        await delay(1000);
+        tipsOpacity.value = 1;
+        tipState.value = TipState.SwitchProxy;
+        showTip.value = true;
       }
-    }, 3000);
+    }
   };
 
-  const start = async () => {
-    updateAnimation(80, 5);
+  const start = () => {
+    updateAnimation(80, 6000);
     setTips();
   };
 
   const finish = () => {
-    updateAnimation(100, 0.2);
+    updateAnimation(100, 200);
     setTimeout(() => {
       isShow.value = false;
     }, 300);
   };
 
   watch(
-    () => useStore().loadingProgress,
+    () => store.loadingProgress,
     (val) => {
       if (val >= 1) {
         finish();
@@ -79,14 +113,13 @@
   );
 
   watch(
-    () => useStore().isLoadError,
-    (val) => {
+    () => store.isLoadError,
+    async (val) => {
       if (val) {
-        opacityRef.value = '0';
-        setTimeout(() => {
-          opacityRef.value = '1';
-          tips.value = '哎呀，你的网络无法前往区块链的大门';
-        }, 1000);
+        showTip.value = false;
+        await delay(1000);
+        tipState.value = TipState.LoadError;
+        showTip.value = true;
       }
     }
   );
@@ -94,18 +127,32 @@
   onMounted(() => {
     const image = new Image();
     image.src = loadingbarImg;
-    image.onload = () => {
-      start();
-    };
+    image.onload = start;
+  });
+
+  onUnmounted(() => {
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+    }
   });
 </script>
 
 <style lang="less" scoped>
+  .loading-mask-enter-active,
   .loading-mask-leave-active {
     transition: opacity 0.5s;
   }
 
+  .loading-mask-enter-from,
   .loading-mask-leave-to {
+    opacity: 0;
+  }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter-from,
+  .fade-leave-to {
     opacity: 0;
   }
 
@@ -131,7 +178,6 @@
       line-height: 30px;
       overflow: hidden;
       transition: opacity 1s;
-      opacity: v-bind(opacityRef);
     }
 
     .container {
@@ -158,10 +204,11 @@
 
       .loading-bar-prospect {
         height: 50px;
-        width: v-bind(barValue);
+        width: 0;
         background: v-bind(background);
         background-size: 400px 50px;
         filter: drop-shadow(0 -50px 0 var(--theme-loadingbar-prospect-color));
+        // transition: width 0.1s linear;
       }
     }
   }
