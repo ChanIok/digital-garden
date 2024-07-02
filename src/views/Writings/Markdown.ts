@@ -146,11 +146,38 @@ export const setLinks = async (markdown: Ref<HTMLElement>, router: Router) => {
     let linkElement = document.createElement('a');
     render(popverInstance, linkElement);
     link.replaceWith(linkElement);
-    // 设置点击事件以导航并滚动到顶部
     linkElement.setAttribute('href', `#/writings/${path}`);
-    linkElement.onclick = () => {
+    // 设置点击事件以导航并滚动到顶部
+    linkElement.onclick = async () => {
+      // 滚动到顶部
       document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;
-      document.querySelector('.pv-doc')?.setAttribute('style', 'display: none;');
+
+      // 定义一个函数来隐藏 .pv-doc 元素
+      const hidePvDoc = () => {
+        const item = document.querySelector('.pv-doc');
+        if (item) {
+          item.setAttribute('style', 'display: none;');
+        }
+      };
+
+      // 首先尝试隐藏一次
+      hidePvDoc();
+
+      let startTime: number | null = null;
+      const duration = 500;
+      const checkAndHide = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        const item = document.querySelector('.pv-doc');
+        if (item) {
+          hidePvDoc();
+        }
+        if (elapsed < duration) {
+          requestAnimationFrame(checkAndHide);
+        }
+      };
+      // 开始使用 requestAnimationFrame 进行检查
+      requestAnimationFrame(checkAndHide);
     };
   });
 
