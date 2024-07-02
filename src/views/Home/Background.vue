@@ -12,19 +12,17 @@
 </template>
 
 <script setup lang="ts">
-  import { Liyue } from '@/assets';
   import { Venti } from '@/assets';
   import { computed } from 'vue';
   import { useStore } from '@/store';
   const store = useStore();
-  const backgroundTxIds = [Liyue, Venti];
 
   const backgroundImg = computed(() => {
     const isDark = store.isDark;
     if (isDark) {
-      return `${store.gateway}/${backgroundTxIds[0]}`;
+      return '/Liyue.webp';
     } else {
-      return `${store.gateway}/${backgroundTxIds[1]}`;
+      return `${store.gateway}/${Venti}`;
     }
   });
 </script>

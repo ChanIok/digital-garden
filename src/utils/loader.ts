@@ -2,20 +2,21 @@ import { useStore } from '@/store';
 import { getLatestManifestId, getLatestState } from './artools';
 import axios from 'axios';
 import { appEnv } from '@/config';
-import { Liyue } from '@/assets';
 import { Venti } from '@/assets';
 import { IManifest } from '@/typings';
 
-const imgArr = [Liyue];
+const imgArr: string[] = [];
 const imgArrAsync = [Venti];
 
 export const loadImgs = async () => {
   const store = useStore();
-  imgArrAsync.map((txId) => {
+  // 延迟加载异步图片
+  imgArrAsync.forEach((txId) => {
     const image = new Image();
     image.src = `${store.gateway}/${txId}`;
   });
-  return await Promise.all(
+  // 同步加载图片并返回 Promise
+  return Promise.all(
     imgArr.map((txId) => {
       return new Promise((resolve) => {
         const image = new Image();
