@@ -50,7 +50,18 @@
     fadingIn: boolean;
 
     constructor(canvasWidth: number, canvasHeight: number, isEarlyStage: boolean) {
-      this.reset(canvasWidth, canvasHeight, isEarlyStage);
+      this.giant = Math.random() < GIANT_STAR_CHANCE / 100;
+      this.comet = !this.giant && !isEarlyStage && Math.random() < COMET_CHANCE / 100;
+      this.x = Math.random() * canvasWidth;
+      this.y = Math.random() * canvasHeight;
+      this.r = Math.random() * 1.5 + 1.1;
+      this.dx = (Math.random() * 5 + 1) * STAR_SPEED * (this.comet ? Math.random() * 70 + 50 : 1);
+      this.dy = -this.dx;
+      this.fadingOut = false;
+      this.fadingIn = true;
+      this.opacity = 0;
+      this.opacityTresh = Math.random() * 0.8 + 0.2 - (this.comet ? 0.4 : 0);
+      this.do = Math.random() * 0.0015 + 0.0005 + (this.comet ? 0.001 : 0);
     }
 
     reset(canvasWidth: number, canvasHeight: number, isEarlyStage: boolean): void {
