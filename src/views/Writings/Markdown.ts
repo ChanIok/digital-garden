@@ -1,5 +1,4 @@
 import { Ref, h, render } from 'vue';
-import { Router } from 'vue-router';
 import { NImage, NPopover, NConfigProvider, darkTheme } from 'naive-ui';
 import Preview from './Preview.vue';
 import { loadWriting } from './Writings';

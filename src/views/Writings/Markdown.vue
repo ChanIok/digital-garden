@@ -74,7 +74,6 @@
   const clipboard = useClipboard({ legacy: true });
   const message = useMessage();
   const isSkeletonVisible = ref<boolean>(true);
-  let isSkeletonVisibleTimer: NodeJS.Timeout;
   const { width } = useWindowSize();
   const writingStore = useWritingStore();
   const store = useStore();
@@ -117,12 +116,9 @@
     () => content.value,
     async (val) => {
       if (val == '') {
-        isSkeletonVisibleTimer = setTimeout(() => {
           isSkeletonVisible.value = true;
-        }, 300);
       } else {
         isSkeletonVisible.value = false;
-        clearTimeout(isSkeletonVisibleTimer);
       }
       await nextTick();
       try {
