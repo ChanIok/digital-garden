@@ -15,9 +15,8 @@
 </template>
 
 <script setup lang="ts">
-  import { loadingbarImg } from '@/assets/loadingbarImg';
   import { useStore } from '@/store';
-  import { computed, watch, onMounted, ref, onUnmounted } from 'vue';
+  import { watch, onMounted, ref, onUnmounted } from 'vue';
 
   enum TipState {
     Initial,
@@ -33,11 +32,9 @@
   };
   const store = useStore();
   const isShow = ref(true);
-  const tips = ref('');
   const tipsOpacity = ref(0);
   const container = ref<HTMLElement | null>(null);
   const progressBar = ref<HTMLElement | null>(null);
-  const background = computed(() => `url(${loadingbarImg}) no-repeat`);
   const tipState = ref<TipState>(TipState.Initial);
   const showTip = ref(false);
 
@@ -48,7 +45,6 @@
     const startWidth = progressBar.value ? progressBar.value.offsetWidth : 0;
     const containerWidth = container.value ? container.value.offsetWidth : 400;
     const targetWidth = (targetProgress / 100) * containerWidth;
-
     const animate = (currentTime: number) => {
       const elapsedTime = currentTime - startTime;
       const progress = Math.min(elapsedTime / duration, 1);
@@ -125,9 +121,7 @@
   );
 
   onMounted(() => {
-    const image = new Image();
-    image.src = loadingbarImg;
-    image.onload = start;
+    start();
   });
 
   onUnmounted(() => {
@@ -196,7 +190,7 @@
       .loading-bar-background {
         height: 50px;
         width: 400px;
-        background: v-bind(background);
+        background: url(/loading-bar.webp) no-repeat;
         background-size: 400px 50px;
         transform: translateY(100%);
         filter: drop-shadow(0 -50px 0 var(--theme-loadingbar-background-color));
@@ -205,10 +199,9 @@
       .loading-bar-prospect {
         height: 50px;
         width: 0;
-        background: v-bind(background);
+        background: url(/loading-bar.webp) no-repeat;
         background-size: 400px 50px;
         filter: drop-shadow(0 -50px 0 var(--theme-loadingbar-prospect-color));
-        // transition: width 0.1s linear;
       }
     }
   }
