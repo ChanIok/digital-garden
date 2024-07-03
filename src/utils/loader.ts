@@ -4,6 +4,7 @@ import axios from 'axios';
 import { appEnv } from '@/config';
 import { Venti } from '@/assets';
 import { IManifest } from '@/typings';
+import { loadWriting } from '@/views/Writings/Writings';
 
 const imgArr: string[] = [];
 const imgArrAsync = [Venti];
@@ -27,6 +28,10 @@ export const loadImgs = async () => {
   );
 };
 
+// 预加载文章首页，#/writings/index.md
+export const preLoadWriting = async () => {
+  await loadWriting(true, 'index.md');
+};
 export const loadManifest = async () => {
   const store = useStore();
   const setManifest = (manifest: IManifest) => {
