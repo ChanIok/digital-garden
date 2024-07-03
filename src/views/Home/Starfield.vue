@@ -1,155 +1,191 @@
 <template>
-  <canvas id="starfield" ref="starfield"></canvas>
+  <canvas ref="universeCanvas"></canvas>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, onUnmounted, ref } from 'vue';
+  import { onMounted, ref, onUnmounted } from 'vue';
   import { useStore } from '@/store';
 
   const store = useStore();
-  const starfield = ref<HTMLCanvasElement | null>(null);
+  const universeCanvas = ref<HTMLCanvasElement | null>(null);
 
-  const createStar = (
-    canvasWidth: number,
-    canvasHeight: number,
-    speedFactor: number,
-    isGiant: boolean,
-    context: CanvasRenderingContext2D,
-    colorGiant: string,
-    colorStar: string,
-    colorComet: string
-  ) => {
-    const random = (min: number, max: number) => Math.random() * (max - min) + min;
-    const chance = (percentage: number) => Math.random() * 100 < percentage;
+  // Constants
+  const STAR_COUNT = 0.216;
+  const STAR_SPEED = 0.05;
+  const GIANT_STAR_CHANCE = 3;
+  const COMET_CHANCE = 10;
+  const GIANT_STAR_COLOR = '180,184,240';
+  const NORMAL_STAR_COLOR = '226,225,142';
+  const COMET_COLOR = '226,225,224';
 
-    return {
-      x: random(0, canvasWidth),
-      y: random(0, canvasHeight),
-      radius: random(1.1, 2.6),
-      dx:
-        random(speedFactor, 6 * speedFactor) +
-        (chance(10) ? 1 : 0) * speedFactor * random(50, 120) +
-        2 * speedFactor,
-      dy:
-        -random(speedFactor, 6 * speedFactor) -
-        (chance(10) ? 1 : 0) * speedFactor * random(50, 120),
-      opacity: 0,
-      opacityThreshold: random(0.2, 1 - 0.4 * (chance(10) ? 1 : 0)),
-      opacityIncrement: random(0.0005, 0.002) + 0.001 * (chance(10) ? 1 : 0),
-      fadingIn: true,
-      fadingOut: false,
-      giant: chance(3),
-      comet: !chance(3) && !isGiant && chance(10),
-      reset() {
-        this.x = random(0, canvasWidth - 10);
-        this.y = random(0, canvasHeight);
-        this.opacity = 0;
-        this.fadingIn = true;
-        this.fadingOut = false;
-      },
-      fadeIn() {
-        if (this.fadingIn) {
-          this.fadingIn = !(this.opacity > this.opacityThreshold);
-          this.opacity += this.opacityIncrement;
+  // Types
+  interface Star {
+    x: number;
+    y: number;
+    r: number;
+    dx: number;
+    dy: number;
+    opacity: number;
+    opacityTresh: number;
+    do: number;
+    giant: boolean;
+    comet: boolean;
+    fadingOut: boolean;
+    fadingIn: boolean;
+  }
+
+  // Star class
+  class StarClass implements Star {
+    x: number;
+    y: number;
+    r: number;
+    dx: number;
+    dy: number;
+    opacity: number;
+    opacityTresh: number;
+    do: number;
+    giant: boolean;
+    comet: boolean;
+    fadingOut: boolean;
+    fadingIn: boolean;
+
+    constructor(canvasWidth: number, canvasHeight: number, isEarlyStage: boolean) {
+      this.reset(canvasWidth, canvasHeight, isEarlyStage);
+    }
+
+    reset(canvasWidth: number, canvasHeight: number, isEarlyStage: boolean): void {
+      this.giant = Math.random() < GIANT_STAR_CHANCE / 100;
+      this.comet = !this.giant && !isEarlyStage && Math.random() < COMET_CHANCE / 100;
+      this.x = Math.random() * canvasWidth;
+      this.y = Math.random() * canvasHeight;
+      this.r = Math.random() * 1.5 + 1.1;
+      this.dx = (Math.random() * 5 + 1) * STAR_SPEED * (this.comet ? Math.random() * 70 + 50 : 1);
+      this.dy = -this.dx;
+      this.fadingOut = false;
+      this.fadingIn = true;
+      this.opacity = 0;
+      this.opacityTresh = Math.random() * 0.8 + 0.2 - (this.comet ? 0.4 : 0);
+      this.do = Math.random() * 0.0015 + 0.0005 + (this.comet ? 0.001 : 0);
+    }
+
+    fadeIn(): void {
+      if (this.fadingIn) {
+        this.fadingIn = this.opacity < this.opacityTresh;
+        this.opacity += this.do;
+      }
+    }
+
+    fadeOut(): void {
+      if (this.fadingOut) {
+        this.fadingOut = this.opacity > 0;
+        this.opacity -= this.do / 2;
+        if (this.x > window.innerWidth || this.y < 0) {
+          this.fadingOut = false;
+          this.reset(window.innerWidth, window.innerHeight, false);
         }
-      },
-      fadeOut() {
-        if (this.fadingOut) {
-          this.fadingOut = !(this.opacity < 0);
-          this.opacity -= this.opacityIncrement / 2;
-          if (this.x > canvasWidth || this.y < 0) {
-            this.fadingOut = false;
-            this.reset();
-          }
-        }
-      },
-      draw() {
-        context.beginPath();
-        if (this.giant) {
-          context.fillStyle = `rgba(${colorGiant},${this.opacity})`;
-          context.arc(this.x, this.y, 2, 0, 2 * Math.PI, false);
-        } else if (this.comet && store.isDark) {
-          context.fillStyle = `rgba(${colorComet},${this.opacity})`;
-          context.arc(this.x, this.y, 1.5, 0, 2 * Math.PI, false);
-          for (let t = 0; t < 30; t++) {
-            context.fillStyle = `rgba(${colorComet},${this.opacity - (this.opacity / 20) * t})`;
-            context.rect(this.x - (this.dx / 4) * t, this.y - (this.dy / 4) * t - 2, 2, 2);
-            context.fill();
-          }
-        } else {
-          context.fillStyle = `rgba(${colorStar},${this.opacity})`;
-          context.rect(this.x, this.y, this.radius, this.radius);
-        }
-        context.closePath();
-        context.fill();
-      },
-      move() {
-        this.x += this.dx;
-        this.y += this.dy;
-        if (!this.fadingOut) this.reset();
-        if (this.x > canvasWidth - canvasWidth / 4 || this.y < 0) this.fadingOut = true;
-      },
-    };
-  };
+      }
+    }
 
-  const initStarfield = () => {
-    const canvas = starfield.value;
-    if (!canvas) return;
+    draw(ctx: CanvasRenderingContext2D, isDark: boolean): void {
+      ctx.beginPath();
+      if (this.giant) {
+        ctx.fillStyle = `rgba(${GIANT_STAR_COLOR},${this.opacity})`;
+        ctx.arc(this.x, this.y, 2, 0, 2 * Math.PI, false);
+      } else if (this.comet && isDark) {
+        ctx.fillStyle = `rgba(${COMET_COLOR},${this.opacity})`;
+        ctx.arc(this.x, this.y, 1.5, 0, 2 * Math.PI, false);
+        for (let i = 0; i < 30; i++) {
+          ctx.fillStyle = `rgba(${COMET_COLOR},${this.opacity - (this.opacity / 20) * i})`;
+          ctx.rect(this.x - (this.dx / 4) * i, this.y - (this.dy / 4) * i - 2, 2, 2);
+          ctx.fill();
+        }
+      } else {
+        ctx.fillStyle = `rgba(${NORMAL_STAR_COLOR},${this.opacity})`;
+        ctx.rect(this.x, this.y, this.r, this.r);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
 
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = window.innerHeight;
-    const speedFactor = 0.05;
-    const numberOfStars = Math.floor(0.216 * canvasWidth);
-    const context = canvas.getContext('2d')!;
-    const colorGiant = '180,184,240';
-    const colorStar = '226,225,142';
-    const colorComet = '226,225,224';
-    const stars = Array.from({ length: numberOfStars }, () =>
-      createStar(
-        canvasWidth,
-        canvasHeight,
-        speedFactor,
-        true,
-        context,
-        colorGiant,
-        colorStar,
-        colorComet
-      )
-    );
+    move(canvasWidth: number): void {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (!this.fadingOut && (this.x > canvasWidth - canvasWidth / 4 || this.y < 0)) {
+        this.fadingOut = true;
+      }
+    }
+  }
+
+  // Main function
+  const initStarryNight = () => {
+    if (!universeCanvas.value) return;
+
+    const ctx = universeCanvas.value.getContext('2d');
+    if (!ctx) return;
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let stars: StarClass[] = [];
+    let isEarlyStage = true;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      if (universeCanvas.value) {
+        universeCanvas.value.width = width;
+        universeCanvas.value.height = height;
+      }
+      stars = [];
+      initStars();
+    };
+
+    const initStars = () => {
+      const starCount = Math.floor(width * STAR_COUNT);
+      for (let i = 0; i < starCount; i++) {
+        stars.push(new StarClass(width, height, isEarlyStage));
+      }
+    };
+
+    const drawStars = () => {
+      ctx.clearRect(0, 0, width, height);
+      stars.forEach((star) => {
+        star.move(width);
+        star.fadeIn();
+        star.fadeOut();
+        star.draw(ctx, store.isDark);
+      });
     };
 
     const animate = () => {
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-      stars.forEach((star) => {
-        star.move();
-        star.fadeIn();
-        star.fadeOut();
-        star.draw();
-      });
+      drawStars();
       requestAnimationFrame(animate);
     };
 
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas, false);
     animate();
+
+    window.addEventListener('resize', resizeCanvas);
+
+    setTimeout(() => {
+      isEarlyStage = false;
+    }, 50);
+
     onUnmounted(() => {
-      window.removeEventListener('resize', resizeCanvas, false);
+      window.removeEventListener('resize', resizeCanvas);
     });
   };
 
-  onMounted(initStarfield);
+  onMounted(() => {
+    initStarryNight();
+  });
 </script>
 
-<style lang="less">
-  #starfield {
+<style scoped>
+  canvas {
     display: block;
     position: fixed;
     box-sizing: border-box;
-    padding: 40px 0 0;
+    padding: 40px 0 0 0;
     border: 0;
     outline: 0;
     left: 0;
