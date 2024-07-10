@@ -28,16 +28,6 @@ languages.forEach((language) => {
   hljs.registerLanguage(language.name, language.lang);
 });
 
-marked.use(
-  markedHighlight({
-    langPrefix: 'hljs language-',
-    highlight(code, lang) {
-      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-      return hljs.highlight(code, { language }).value;
-    },
-  })
-);
-
 const extension = {
   useNewRenderer: true,
   renderer: {
@@ -87,7 +77,26 @@ const extension = {
 };
 
 marked.use(extension);
+marked.use(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code, lang) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
 
+      return hljs.highlight(code, { language }).value;
+    },
+  }),
+  {
+    useNewRenderer: true,
+    renderer: {
+      code(token: any) {
+        return `<pre><code class="hljs language-${token.lang ? token.lang : 'plaintext'}">${
+          token.text
+        }</code></pre>`;
+      },
+    },
+  }
+);
 export const getMarkedContent = (value: string) => {
   return marked(value);
 };
