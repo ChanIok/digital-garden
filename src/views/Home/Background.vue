@@ -20,7 +20,7 @@
   const backgroundImg = computed(() => {
     const isDark = store.isDark;
     if (isDark) {
-      return '/Liyue.webp';
+      return './Liyue.webp';
     } else {
       return `${store.gateway}/${Venti}`;
     }

@@ -8,7 +8,7 @@ import { loadWriting } from '@/views/Writings/Writings';
 
 const imgArr: string[] = [];
 const imgArrAsync = [Venti];
-const imgPreloadList = ['/Liyue.webp'];
+const imgPreloadList = ['./Liyue.webp'];
 export const loadImgs = async () => {
   const store = useStore();
   imgPreloadList.forEach((src) => {
