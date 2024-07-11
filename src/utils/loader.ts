@@ -8,9 +8,13 @@ import { loadWriting } from '@/views/Writings/Writings';
 
 const imgArr: string[] = [];
 const imgArrAsync = [Venti];
-
+const imgPreloadList = ['/Liyue.webp'];
 export const loadImgs = async () => {
   const store = useStore();
+  imgPreloadList.forEach((src) => {
+    const image = new Image();
+    image.src = `${src}`;
+  });
   // 延迟加载异步图片
   imgArrAsync.forEach((txId) => {
     const image = new Image();

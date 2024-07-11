@@ -25,11 +25,13 @@ export default defineConfig({
         manualChunks: (id) => {
           if (
             id.includes('node_modules/highlight.js') ||
-            id.includes('node_modules/naive-ui') ||
             id.includes('node_modules/marked') ||
+            id.includes('node_modules/lodash-es') ||
             id.includes('node_modules/dayjs')
           ) {
-            return 'library';
+            return 'vendor-utils';
+          } else if (id.includes('node_modules/naive-ui')) {
+            return 'vendor-ui';
           } else if (id.includes('node_modules')) {
             return 'vendor';
           }
