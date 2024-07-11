@@ -121,12 +121,12 @@ export const setLinks = async (markdown: Ref<HTMLElement>) => {
 
   // 处理所有链接元素
   const promises = elements.map(async (link) => {
-    const path = link.getAttribute('path');
+    let path = link.getAttribute('path');
 
     if (!path || path?.startsWith('http')) {
       return;
     }
-
+    path = decodeURIComponent(path);
     // 设置 a 标签的 href 属性
     link.setAttribute('href', `#/writings/${path}`);
 
@@ -148,9 +148,6 @@ export const setLinks = async (markdown: Ref<HTMLElement>) => {
     linkElement.setAttribute('href', `#/writings/${path}`);
     // 设置点击事件以导航并滚动到顶部
     linkElement.onclick = async () => {
-      // 滚动到顶部
-      // document.querySelector('.writings-container .n-scrollbar-container')!.scrollTop = 0;
-
       // 定义一个函数来隐藏 .pv-doc 元素
       const hidePvDoc = () => {
         const item = document.querySelector('.pv-doc');
