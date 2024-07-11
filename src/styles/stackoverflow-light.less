@@ -1,14 +1,8 @@
 pre code.hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 1em;
-  border-radius: 5px;
-  font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
-  line-height: 1.5;
-
   // 自定义滚动条样式
   &::-webkit-scrollbar {
-    height: 8px; // 减小滚动条高度，使其更加精致
+    height: 4px;
+    width: 4px;
   }
 
   &::-webkit-scrollbar-track {
@@ -25,13 +19,8 @@ pre code.hljs {
       background: fade(#000, 30%);
     }
   }
-  // Firefox 滚动条样式
-  scrollbar-width: thin;
-  scrollbar-color: fade(#000, 20%) fade(#000, 5%);
 }
-code.hljs {
-  padding: 3px 5px;
-} /*!
+/*!
   Theme: StackOverflow Light
   Description: Light theme as used on stackoverflow.com
   Author: stackoverflow.com

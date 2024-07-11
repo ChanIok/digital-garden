@@ -1,15 +1,9 @@
 .dark {
   pre code.hljs {
-    display: block;
-    overflow-x: auto;
-    padding: 1em;
-    border-radius: 5px;
-    font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
-    line-height: 1.5;
-
     // 自定义滚动条样式
     &::-webkit-scrollbar {
-      height: 8px; // 减小滚动条高度，使其更加精致
+      height: 4px;
+      width: 4px;
     }
 
     &::-webkit-scrollbar-track {
@@ -26,14 +20,9 @@
         background: fade(#ffffff, 30%);
       }
     }
-    // Firefox 滚动条样式
-    scrollbar-width: thin;
-    scrollbar-color: fade(#ffffff, 20%) fade(#ffffff, 5%);
   }
 
-  code.hljs {
-    padding: 3px 5px;
-  } /*!
+  /*!
     Theme: StackOverflow Dark
     Description: Dark theme as used on stackoverflow.com
     Author: stackoverflow.com

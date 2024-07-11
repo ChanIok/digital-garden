@@ -9,6 +9,7 @@ import typescript from 'highlight.js/lib/languages/typescript';
 import plaintext from 'highlight.js/lib/languages/plaintext';
 import python from 'highlight.js/lib/languages/python';
 import shell from 'highlight.js/lib/languages/shell';
+import bash from 'highlight.js/lib/languages/bash';
 import json from 'highlight.js/lib/languages/json';
 import css from 'highlight.js/lib/languages/css';
 import markdown from 'highlight.js/lib/languages/markdown';
@@ -19,6 +20,7 @@ const languages = [
   { name: 'plaintext', lang: plaintext },
   { name: 'python', lang: python },
   { name: 'shell', lang: shell },
+  { name: 'bash', lang: bash },
   { name: 'json', lang: json },
   { name: 'css', lang: css },
   { name: 'markdown', lang: markdown },

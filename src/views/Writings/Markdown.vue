@@ -90,7 +90,7 @@
   });
   const title = computed(() => {
     if (writingStore.currentWritingPathArray.length == 1) {
-      return 'ChanIok 的数字花园';
+      return '数字花园';
     }
     if (
       writingStore.currentWritingPathArray[writingStore.currentWritingPathArray.length - 1] ==
