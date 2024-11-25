@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { sync } from 'glob';
 import hash from 'object-hash';
+import mime from 'mime-types';
 import { TurboAuthenticatedClient, TurboFactory } from '@ardrive/turbo-sdk';
 
 interface HashToPath {
@@ -60,9 +61,14 @@ export class Uploader {
         date: fs.statSync(itemPath).mtime.getTime(),
       };
     } else {
+      const mimeType = mime.lookup(itemPath) || 'application/octet-stream';
+      const tags = [{ name: 'Content-Type', value: mimeType }];
       const res = await this.turbo.uploadFile({
         fileStreamFactory: () => fs.createReadStream(itemPath),
         fileSizeFactory: () => fs.statSync(itemPath).size,
+        dataItemOpts: {
+          tags: tags,
+        },
       });
       if (res.id == undefined) {
         throw new Error(`upload file failed:${item}`);
