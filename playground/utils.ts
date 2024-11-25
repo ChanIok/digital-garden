@@ -18,6 +18,7 @@ export const getLatestManifestId = async (isUploadWritings: boolean) => {
     variables: {
       owners: ['xGyL40lbKQUphARzMC7gpPMlnzxCaZ4_MWsXMd3d6ZA'],
       tags: [
+        { name: 'Content-type', values: ['application/x.arweave-manifest+json'] },
         {
           name: 'App-Name',
           values: isUploadWritings ? ['PlaneOfEuthymiaWritings'] : ['PlaneOfEuthymia'],
