@@ -118,10 +118,10 @@ export class Uploader {
     }
 
     const tags = [
-      { name: 'Content-type', value: 'application/x.arweave-manifest+json' },
+      { name: 'Content-Type', value: 'application/x.arweave-manifest+json' },
       {
         name: 'App-Name',
-        value: this.isUploadWritings ? 'PlaneOfEuthymiaWritingsForTest' : 'PlaneOfEuthymia',
+        value: this.isUploadWritings ? 'PlaneOfEuthymiaWritings' : 'PlaneOfEuthymia',
       },
     ];
 

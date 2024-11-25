@@ -2,9 +2,9 @@ import { Uploader } from './Uploader';
 import { getLatestManifestId, getLatestState, generateLocalManifest } from './utils';
 
 // 在这里改变命令
-let command = 'uploadAll';
+let command = 'upload';
 // 是否只上传文章，'true'则上传文章，'false'则上传站点dist
-let isUploadWritings = false;
+let isUploadWritings = true;
 
 const config = {
   isUploadWritings: true,

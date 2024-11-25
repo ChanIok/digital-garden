@@ -10,7 +10,7 @@ export const getLatestManifest = async (isAppName = false) => {
     variables: {
       owners: [owner],
       tags: [
-        { name: 'Content-type', values: ['application/x.arweave-manifest+json'] },
+        { name: 'Content-Type', values: ['application/x.arweave-manifest+json'] },
         {
           name: 'App-Name',
           values: [isAppName ? appName : appWritingsName],
