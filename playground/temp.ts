@@ -1,35 +1,31 @@
+import { TurboFactory, WinstonToTokenAmount } from '@ardrive/turbo-sdk';
 import fs from 'fs';
-import Irys from '@irys/sdk';
+import axios from 'axios';
+import tunnel from 'tunnel';
 
-const getIrys = async () => {
-  const network = 'mainnet';
-  const token = 'arweave';
-  const key = JSON.parse(fs.readFileSync('D:\\Environment\\arweave\\wallet.json').toString());
+const agent = tunnel.httpsOverHttp({
+  proxy: {
+    host: '127.0.0.1',
+    port: 7890,
+  },
+});
 
-  const irys = new Irys({
-    network, // "mainnet" or "devnet"
-    token, // Token used for payment and signing
-    key, // Arweave wallet
-  });
-  return irys;
-};
+// load your JWK directly to authenticate
+const jwk = JSON.parse(fs.readFileSync('D:\\Environment\\arweave\\wallet.json').toString());
 
-const test = async () => {
-  const irys = await getIrys();
+const turbo = TurboFactory.authenticated({ privateKey: jwk });
 
-  // Get loaded balance in atomic units
-  const atomicBalance = await irys.getLoadedBalance();
-  console.log(`Node balance (atomic units) = ${atomicBalance}`);
+async function main() {
+  // 充值
+  const topup = async () => {
+    const { winc, status, id, ...fundResult } = await turbo.topUpWithTokens({
+      tokenAmount: WinstonToTokenAmount(200_000_000000), // 0.2 AR
+      feeMultiplier: 1.1,
+    });
+  };
 
-  // Convert balance to standard
-  const convertedBalance = irys.utils.fromAtomic(atomicBalance);
-  console.log(`Node balance (converted) = ${convertedBalance}`);
-};
-
-
-const main = async () => {
-  const res = await test();
-  console.log(res);
-};
+  const { winc: balance } = await turbo.getBalance();
+  console.log(balance);
+}
 
 main();

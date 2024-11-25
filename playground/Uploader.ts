@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { sync } from 'glob';
 import hash from 'object-hash';
-import Irys from '@irys/sdk';
+import { TurboAuthenticatedClient, TurboFactory } from '@ardrive/turbo-sdk';
 
 interface HashToPath {
   [hash: string]: { id: any; path: string };
@@ -17,7 +17,7 @@ interface Manifest {
 
 export class Uploader {
   private readonly jwk: any;
-  private readonly irys: any;
+  private readonly turbo: TurboAuthenticatedClient;
   private readonly isUploadWritings: boolean;
   private readonly resolvedBasePath: string;
   private readonly filePaths: string[];
@@ -30,7 +30,7 @@ export class Uploader {
   ) {
     this.isUploadWritings = isUploadWritings;
     this.jwk = JSON.parse(fs.readFileSync(walletPath).toString());
-    this.irys = new Irys({ network: 'mainnet', token: 'arweave', key: this.jwk });
+    this.turbo = TurboFactory.authenticated({ privateKey: this.jwk });
     this.resolvedBasePath = path.resolve(filesPath);
     this.filePaths = sync('**/*', {
       cwd: this.resolvedBasePath,
@@ -60,7 +60,10 @@ export class Uploader {
         date: fs.statSync(itemPath).mtime.getTime(),
       };
     } else {
-      const res = await this.irys.uploadFile(itemPath);
+      const res = await this.turbo.uploadFile({
+        fileStreamFactory: () => fs.createReadStream(itemPath),
+        fileSizeFactory: () => fs.statSync(itemPath).size,
+      });
       if (res.id == undefined) {
         throw new Error(`upload file failed:${item}`);
       }
@@ -87,13 +90,15 @@ export class Uploader {
     await Promise.all(uploadPromises);
 
     // Upload the final manifest
-
     const manifestDistPath = path.resolve(this.resolvedBasePath, 'manifest.json');
     const finalManifestContent = JSON.stringify(this.manifest);
     fs.writeFileSync(manifestDistPath, finalManifestContent);
 
     if (this.isUploadWritings) {
-      const res = await this.irys.uploadFile(manifestDistPath);
+      const res = await this.turbo.uploadFile({
+        fileStreamFactory: () => fs.createReadStream(manifestDistPath),
+        fileSizeFactory: () => fs.statSync(manifestDistPath).size,
+      });
       if (res.id == undefined) {
         throw new Error(`upload manifest file failed`);
       }
@@ -102,20 +107,26 @@ export class Uploader {
         hash: hash(fs.readFileSync(manifestDistPath).toString()),
         date: fs.statSync(manifestDistPath).mtime.getTime(),
       };
+      const finalManifestContent = JSON.stringify(this.manifest);
+      fs.writeFileSync(manifestDistPath, finalManifestContent);
     }
 
     const tags = [
       { name: 'Content-type', value: 'application/x.arweave-manifest+json' },
       {
         name: 'App-Name',
-        value: this.isUploadWritings ? 'PlaneOfEuthymiaWritings' : 'PlaneOfEuthymia',
+        value: this.isUploadWritings ? 'PlaneOfEuthymiaWritingsForTest' : 'PlaneOfEuthymia',
       },
     ];
 
     console.log(this.manifest);
 
-    const finalManifestUploadResponse = await this.irys.upload(JSON.stringify(this.manifest), {
-      tags: tags,
+    const finalManifestUploadResponse = await this.turbo.uploadFile({
+      fileStreamFactory: () => fs.createReadStream(manifestDistPath),
+      fileSizeFactory: () => fs.statSync(manifestDistPath).size,
+      dataItemOpts: {
+        tags: tags,
+      },
     });
     if (finalManifestUploadResponse.id === undefined) {
       throw new Error('Failed to upload final manifest');
