@@ -31,7 +31,6 @@ languages.forEach((language) => {
 });
 
 const extension = {
-  useNewRenderer: true,
   renderer: {
     heading(token: any) {
       return `<h${token.depth} id="${token.text}">${token.text}</h${token.depth}>`;
@@ -89,7 +88,6 @@ marked.use(
     },
   }),
   {
-    useNewRenderer: true,
     renderer: {
       code(token: any) {
         return `<pre><code class="hljs language-${token.lang ? token.lang : 'plaintext'}">${
