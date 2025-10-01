@@ -3,40 +3,27 @@
     <div class="share-wrapper">
       <ShareButton></ShareButton>
     </div>
-    <n-switch v-model:value="store.isDark" size="medium" :rail-style="railStyle">
-      <template #checked-icon>
-        <n-icon :component="MoonSharp" />
+    <n-button size="small" quaternary @click="toggleTheme">
+      <template #icon>
+        <n-icon>
+          <SunnyOutline v-if="!store.isDark" />
+          <MoonSharp v-else />
+        </n-icon>
       </template>
-      <template #unchecked-icon>
-        <n-icon :component="SunnyOutline" />
-      </template>
-    </n-switch>
+    </n-button>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { CSSProperties } from 'vue';
-  import { NIcon, NSwitch } from 'naive-ui';
+  import { NButton, NIcon } from 'naive-ui';
   import { SunnyOutline, MoonSharp } from '@vicons/ionicons5';
   import { useStore } from '@/store';
   import ShareButton from './ShareButton.vue';
 
   const store = useStore();
-  const railStyle = ({ focused, checked }: { focused: boolean; checked: boolean }) => {
-    const style: CSSProperties = {};
-    if (checked) {
-      style.background = '#7E7E7E';
 
-      if (focused) {
-        style.boxShadow = '0 0 0 2px #F1F1F140';
-      }
-    } else {
-      style.background = '#F1F1F1';
-      if (focused) {
-        style.boxShadow = '0 0 0 2px #7E7E7E40';
-      }
-    }
-    return style;
+  const toggleTheme = () => {
+    store.isDark = !store.isDark;
   };
 </script>
 
@@ -47,6 +34,10 @@
 
     .share-wrapper {
       margin-right: 5px;
+    }
+
+    .n-button {
+      padding: 0 5px;
     }
   }
 </style>
