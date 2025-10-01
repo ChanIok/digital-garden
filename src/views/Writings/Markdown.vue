@@ -141,14 +141,13 @@
     justify-content: center;
 
     .markdown-container {
-      padding: 30px 40px 0 40px;
+      padding: 30px 40px 70px 40px;
       box-sizing: border-box;
       flex: 1;
       width: 100%;
       max-width: 880px;
-      margin-bottom: 30px;
       @media only screen and (max-width: 960px) {
-        padding: 10px 20px 0 20px;
+        padding: 10px 20px 70px 20px;
       }
       .markdown-header {
         .tx-id {
